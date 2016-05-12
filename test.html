@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="jquery.imgareaselect-0.9.10/css/imgareaselect-default.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.imgareaselect-0.9.10\scripts\jquery.imgareaselect.pack.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="magic-wand-min.js"></script>
+	<script type="text/javascript" src="test.js"></script>
+	<link rel="stylesheet" type="text/css" href="test.css">
+</head>
+<body>
+	<div id="mainContent">
+		<div id="toolBar">
+			<button id="hideToolButton" type="button" class="btn btn-default">Hide</button>
+			<button id="tool1" type="button" class="btn btn-default"><img src="img/crop2.png" width="100%"></button>
+			<button id="tool2" type="button" class="btn btn-default"><img src="img/MagicWand2.png" width="100%"></button>
+		</div>
+		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
+		<div id="content">
+			<div id="leftSection">
+				<button id="leftButton" type="button" class="btn btn-default btn-sm">&#9668;</button>
+				<button id="toolButton" type="button" class="btn btn-default">Tools</button>
+				<div id="imageSpace">
+					<!--<img id="uploadedImage" class="dragme" src="img/Child drawing-5.png" width="100%" style="max-height:100%">-->
+					<canvas id="uploadedImage" class="dragme" style="width: 100%; max-height:100%;" onmouseup="onMouseUp.apply(this, arguments)" onmousedown="onMouseDown.apply(this, arguments)" onmousemove="onMouseMove.apply(this, arguments)"></canvas>
+					<h2 id="preview">Preview:</h2>
+					<canvas id="previewCanvas" draggable="false" class="dragSource"></canvas>
+				</div>
+			</div>
+			<div id="centerBeam">
+				<div id="Element1">E1<canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element2">E2<canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element3">E3<canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element4">E4<canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element5">E5<canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
+			</div>
+			<div id="rightSection" style="">
+				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
+				<div class="templateDiv">
+					<h2>Template #1</h2>
+					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
+					<canvas class="clothESpot1 dragDest multiPaste1" width="100" height="100"></canvas>
+					<canvas class="clothESpot2 dragDest multiPaste2" width="100" height="100"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
