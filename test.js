@@ -89,11 +89,21 @@ $(document).ready(function() {
 		wandFlag = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
 	});
 	$("#tool2").click(function() {
 		wandFlag = true;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
+		$('#cropOut').css({display: ''});
+		$('#thresSlider').css({display: ''});
+	});
+	$("#cropOut").click(function() {
+		cropOut();
+	});
+	$("#thresSlider").click(function() {
+
 	});
 
 	$(".dragSource").each(function() {
@@ -159,13 +169,13 @@ window.onload = function() {
     img = null;
     allowDraw = false;
 
-    //slider = document.getElementById("thresSlider");
+    slider = document.getElementById("thresSlider");
 
-    /*slider.addEventListener("change", function() {
+    slider.addEventListener("change", function() {
     	currentThreshold = slider.value;
-    	showThreshold();
-    })*/
-    colorThreshold = 50;
+    	//showThreshold();
+    })
+    colorThreshold = slider.value = 50;
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
@@ -286,8 +296,9 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
     	widthScale = document.getElementById('uploadedImage').offsetWidth / img.width,
     	heightScale = document.getElementById('uploadedImage').offsetHeight / img.height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
-        y = Math.round(((e.clientY || e.pageY) - p.top) / heightScale);
+        y = Math.round(((e.pageY) - p.top) / heightScale);
         console.log(x, y);
+        console.log(e.pageY);
     return { x: x, y: y };
 };
 function onMouseDown(e) {
@@ -389,7 +400,7 @@ function cropOut() {
 		}
 	}
 	mask = null;
-	var ctx = document.getElementById("resultCanvas").getContext('2d');
+	var ctx = document.getElementById("uploadedImage").getContext('2d');
 	ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	ctx.putImageData(imageInfo.data, 0, 0);
 };
