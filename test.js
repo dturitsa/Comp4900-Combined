@@ -4,6 +4,7 @@ var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
+var ElementsFull = [false, false, false, false, false];
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -62,6 +63,29 @@ $(document).ready(function() {
 			$(this.id).css({borderColor:"#000000"});
 	});
 	
+	$("#Element1").click(function() {
+		if (ElementsFull[0]) {
+			var scaleSize = 3;
+			$('#uploadedImage').imgAreaSelect({remove:true});
+			$("#previewCanvas").attr("draggable", "false");
+			var OrigCanvas = document.getElementById($(this).children()[0].id);
+			var canvas = document.getElementById("ElementCanvas");
+			var ctx = canvas.getContext('2d');
+			var pos = $(this).offset();
+			var width = $("#" + OrigCanvas.id).width();
+			var height = $("#" + OrigCanvas.id).height();
+			$("#ElementCanvas").css({"width":width * scaleSize,
+							"height":height * scaleSize});
+			$("#ElementDisplay").animate({
+						width: (width + 10) * scaleSize,
+						height: (height + 30) * scaleSize,
+						left: pos.left, 
+						top: pos.top,
+						}).show();
+			ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
+		}
+	});
+	
 	$("#tool1").click(function() {
 		wandFlag = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
@@ -95,10 +119,8 @@ $(document).ready(function() {
 
 	//draw selection on a canvas
 	function preview(img2, selection) {
-		//console.log(img2);
 		var canvas = $('#previewCanvas')[0];
 		var selectionSource = $('#uploadedImage')[0];
-		//console.log(selectionSource);
 		var ctx = canvas.getContext("2d");  
 		var maxSize = 200;
 		var destX = 0;
@@ -107,9 +129,6 @@ $(document).ready(function() {
 		var scale = maxSize / longestSide;
 		canvas.width =  selection.width * scale;
 		canvas.height =  selection.height * scale;
-		//console.log(selection);
-		//console.log(img.naturalHeight);
-
 		ctx.drawImage(img2,
 				selection.x1 / (img2.offsetWidth / img.width),
 				selection.y1 / (img2.offsetHeight / img.height),
@@ -128,10 +147,10 @@ $(document).ready(function() {
 $(window).resize(function() {
 	var Size = parseFloat($("#content").width());
 	if (dragOrclick) {
-		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.1});
+		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
 	} else {
-		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.1});
+		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
 		dragOrclick = true;
 	}
@@ -216,9 +235,9 @@ function drop(ev) {
 	ev.preventDefault();
 	  
 	var canvas = ev.target;
-
-	var canvasId = $(canvas).id;
-	console.log(canvas);
+	if (canvas.id == "pic1") {
+		ElementsFull[0] = true;
+	}
 	drawCopiedImage(canvas, ev); 
 	//loops through multipaste elements and draws image on all of them
 	var multiPasteClasses = ["multiPaste1", "multiPaste2"];
