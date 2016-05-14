@@ -142,7 +142,92 @@ $(document).ready(function() {
 	}
 	
 	$("#imgInp").change(function(){ readURL(this); });
-});
+
+	//make elements resizable
+	$(".resizable").each(function() { 
+    var handle = $(this).find('.resizeGrip');
+    	$(this).resizable({
+    		aspectRatio: true,
+      		handles: {
+        	'se': handle}
+    	});
+  	});
+
+   //makes element draggable in the template div
+   $( ".draggable" ).draggable();
+   $(".templateDiv").mouseout(function() {
+   		$( '.draggable' ).draggable().trigger( 'mouseup' );
+	});
+
+ 	//textBox stuff
+    $('select#fonts').fontSelector({
+          fontChange: function(e, ui) {
+            // Update signature according to the font that's set in the widget options:
+        $('#signature').css({
+            fontFamily: ui.font,         
+        });
+        font =  ui.font;
+        $(".multiPaste3").each(function() {
+            drawSignature(this);
+        });
+        },
+          styleChange: function(e, ui) {
+            // signature according to what's set in the widget options:
+            if(ui.value == true) {
+              if(ui.style == 'bold') $('#signature').css({fontWeight: 'bold'});
+              if(ui.style == 'italic') $('#signature').css({fontStyle: 'italic'});
+              if(ui.style == 'underline') $('#signature').css({textDecoration: 'underline'});
+            } else {
+              if(ui.style == 'bold') $('#signature').css({fontWeight: 'normal'});
+              if(ui.style == 'italic') $('#signature').css({fontStyle: 'normal'});
+              if(ui.style == 'underline') $('#signature').css({textDecoration: 'none'});
+            }
+          }
+        });
+
+        $('p a.style').click(function(){
+          var style = $(this).attr('id'); // This will be bold, italic or underline.
+          var current = $('select#fonts').fontSelector('option', style);
+          var setTo = true;
+          if(current == true) setTo = false;
+          $('select#fonts').fontSelector('option', style, setTo);
+          return false;
+        });
+
+       $( "#signature" ).keyup(function() {
+          $(".multiPaste3").each(function() {
+            drawSignature(this);
+          });      
+      });
+
+}); //document.ready function closing tag
+
+//draws the signature text on the specified canvas
+function drawSignature(canvas){  
+  canvas.width = 1500;
+  canvas.height = 500;
+  var maxFontSize = canvas.height;
+  var fontSize;
+  var text = $('#signature').val()
+  var ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = maxFontSize + "px " + font;
+  var textSize = ctx.measureText(text);
+
+  if(textSize.width > canvas.width){
+    fontSize = Math.floor(maxFontSize * (canvas.width / textSize.width));
+    ctx.font = fontSize + "px " + font;
+    console.log(fontSize);
+  }
+    
+  else
+    fontSize = maxFontSize;
+  //console.log(metrics.width);
+  
+
+  //console.log(canvas.width);
+  ctx.fillText(text, 10, fontSize);
+}
 
 $(window).resize(function() {
 	var Size = parseFloat($("#content").width());
@@ -239,11 +324,19 @@ function drop(ev) {
 		}  
 	}
 }
-//draws copied image on the canvas
-function drawCopiedImage(canvas, ev){
-	var ctx = canvas.getContext("2d");
-	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
-}
+  //draws copied image on the canvas
+  function drawCopiedImage(canvas, ev){
+    canvas.width = 1000;
+    canvas.height = 1000;
+    var ctx = canvas.getContext("2d");
+ 
+    var longestSide = Math.max(draggedElement.width, draggedElement.height)
+    if(draggedElement.width >= draggedElement.height){
+      ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
+    } else{
+      ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
+    }
+  }
 
 function imgChange (inp) {
     if (inp.files && inp.files[0]) {

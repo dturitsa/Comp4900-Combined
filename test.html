@@ -7,6 +7,9 @@
 	<script type="text/javascript" src="jquery.imgareaselect-0.9.10\scripts\jquery.imgareaselect.pack.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="magic-wand-min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="jquery.ui.fontSelector.min.js" type="text/javascript"></script><!--font selection widget-->
 	<script type="text/javascript" src="test.js"></script>
 	<link rel="stylesheet" type="text/css" href="test.css">
 </head>
@@ -41,14 +44,44 @@
 				<div id="Element3">E3<canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
 				<div id="Element4">E4<canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
 				<div id="Element5">E5<canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div>
+					<input type="text" id="signature" placeholder="Signature">
+    				<select id="fonts">
+      					<option value="" selected>Default (Droid Serif)</option>
+      					<option value="Chelsea Market">Chelsea Market</option>
+      					<option value="Ruluko">Ruluko</option>
+      					<option value="Ruda">Ruda</option>
+      					<option value="Magra">Magra</option>
+      					<option value="Esteban">Esteban</option>
+      					<option value="Lora">Lora</option>
+      					<option value="Jura">Jura</option>
+    				</select>
+    				<p>
+      					<a class="style" id="bold" href="#" title="Bold">Bold</a> |
+      					<a class="style" id="italic" href="#" title="Italic">Italic</a> |
+      					<a class="style" id="underline" href="#" title="Underline">Underline</a>
+    				</p>
+    			</div>
 			</div>
 			<div id="rightSection" style="">
 				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
 				<div class="templateDiv">
 					<h2>Template #1</h2>
 					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
-					<canvas class="clothESpot1 dragDest multiPaste1" width="100" height="100"></canvas>
-					<canvas class="clothESpot2 dragDest multiPaste2" width="100" height="100"></canvas>
+					<div class="draggable resizable clothESpot1wrap">
+    					<canvas class="clothESpot dragDest multiPaste1"></canvas>
+    					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+   
+  					<div class="draggable resizable clothESpot2wrap">
+     					<canvas class="clothESpot dragDest multiPaste2"></canvas>
+      					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+
+   					<div class="draggable resizable clothESpot3wrap">
+     					<canvas class="clothESpot dragDest multiPaste3"></canvas>
+      					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
 				</div>
 			</div>
 		</div>
