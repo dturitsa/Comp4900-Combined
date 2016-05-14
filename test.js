@@ -5,7 +5,7 @@ var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
 var ElementsFull = [false, false, false, false, false];
-var whichElement = 0;
+var whichElement;
 var font;
 $(document).ready(function() {
 	var item = 0;
@@ -39,6 +39,7 @@ $(document).ready(function() {
 	
 	$("#ExitButton").click(function() {
 		$("#ElementDisplay").fadeOut();
+		whichElement = null;
 	});
 	
 	$("#toolButton").click(function() {
@@ -77,35 +78,31 @@ $(document).ready(function() {
 		switch(this.id) {
 			case "Element1":
 				if (ElementsFull[0]) {
-					ShowEditCanvas(this);
-					whichElement = 0;
+					whichElement = this;
 				}
 				break;
 			case "Element2":
 				if (ElementsFull[1]) {
-					ShowEditCanvas(this);
-					whichElement = 1;
+					whichElement = this;
 				}
 				break;
 			case "Element3":
 				if (ElementsFull[2]) {
-					ShowEditCanvas(this);
-					whichElement = 2;
+					whichElement = this;
 				}
 				break;
 			case "Element4":
 				if (ElementsFull[3]) {
-					ShowEditCanvas(this);
-					whichElement = 3;
+					whichElement = this;
 				}
 				break;
 			case "Element5":
 				if (ElementsFull[4]) {
-					ShowEditCanvas(this);
-					whichElement = 4;
+					whichElement = this;
 				}
 				break;
 		}
+		ShowEditCanvas(whichElement);
 	});
 	
 	$("#tool1").click(function() {
@@ -233,36 +230,23 @@ function drawSignature(canvas){
 
 $(window).resize(function() {
 	var Size = parseFloat($("#content").width());
-	switch (whichElement) {
-		case 0:
-			var ele = "#Element1";
-			break;
-		case 1:
-			var ele = "#Element2";
-			break;
-		case 2:
-			var ele = "#Element3";
-			break;
-		case 3:
-			var ele = "#Element4";
-			break;
-		case 4:
-			var ele = "#Element5";
-			break;
-	}
 	if (dragOrclick) {
-		var pos = $(ele).offset();
-		var size = $("#ElementDisplay").width();
+		if (whichElement != null) {
+			var pos = $("#" + whichElement.id).offset();
+			var size = $("#ElementDisplay").width();
+			$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
+		}
 		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
-		$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
+
 	} else {
 		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
 			{step: function() {
-					var pos = $(ele).offset();
-					var size = $("#ElementDisplay").width();
-					console.log(size);
-					$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
+					if (whichElement != null) {
+						var pos = $("#" + whichElement.id).offset();
+						var size = $("#ElementDisplay").width();
+						$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
+					}
 				}
 			});
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
