@@ -1,5 +1,6 @@
 var toolFlag = false;
 var wandFlag = false;
+var colorElimFlag = false;
 var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
@@ -88,6 +89,7 @@ $(document).ready(function() {
 	
 	$("#tool1").click(function() {
 		wandFlag = false;
+		colorElimFlag = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
 		$('#cropOut').css({display: 'none'});
@@ -95,6 +97,7 @@ $(document).ready(function() {
 	});
 	$("#tool2").click(function() {
 		wandFlag = true;
+		colorElimFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: ''});
@@ -103,10 +106,14 @@ $(document).ready(function() {
 	$("#cropOut").click(function() {
 		cropOut();
 	});
-	$("#thresSlider").click(function() {
-
+	$("#tool3").click(function() {
+		wandFlag = false;
+		colorElimFlag = true;
+		$('#uploadedImage').imgAreaSelect({remove:true});
+		$("#previewCanvas").attr("draggable", "false");
+		$('#cropOut').css({display: ''});
+		$('#thresSlider').css({display: ''});
 	});
-
 	$(".dragSource").each(function() {
 		this.onmousedown = mousedown;
 		this.ondragstart = dragstart;
@@ -307,7 +314,7 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
 };
 function onMouseDown(e) {
 	//console.log('Test');
-	if(wandFlag) {
+	if(wandFlag || colorElimFlag) {
 	    if (e.button == 0) {
 	        allowDraw = true;
 	        downPoint = getMousePosition(e);
@@ -349,8 +356,11 @@ function drawMask(x, y) {
         height: imageInfo.height,
         bytes: 4
     };
-
-    mask = MagicWand.floodFill(image, x, y, currentThreshold);
+    if(wandFlag) {
+    	mask = MagicWand.floodFill(image, x, y, currentThreshold);
+	} else if(colorElimFlag) {
+    	mask = colorElimination(image, x, y, currentThreshold);
+	}
     mask = MagicWand.gaussBlurOnlyBorder(mask, blurRadius);
     drawBorder();
 };
@@ -407,4 +417,44 @@ function cropOut() {
 	var ctx = document.getElementById("uploadedImage").getContext('2d');
 	ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	ctx.putImageData(imageInfo.data, 0, 0);
+};
+
+function colorElimination(image, x, y, threshold)
+{
+    // used for testing purposes
+    /*for(var i = 0, value = 1, size = image.width*image.height,
+         array = new Uint8Array(size); i < size; i++) array[i] = value;*/
+    var tmp, f, ipix = (y * image.width * 4) + x * 4,
+        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]],
+        b = image.bytes;
+    //console.log(x);
+    ///console.log(y);
+    //console.log(ipix);
+    //console.log(pixel);
+    //console.log(image.data.length);
+    //console.log(4 * image.width * image.height);
+    for(var i = 0, size = image.width*image.height,
+        array = new Uint8Array(size); i < size; i++) {
+        
+        //ipix = (y * i) + b;
+        tmp = image.data[i*4] - pixel[0];
+        //console.log(image.data[i*4]);
+        //console.log(pixel[0]);
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+1] - pixel[1];
+        //console.log(image.data[(i*4)+1]);
+        //console.log(pixel[1]);
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+2] - pixel[2];
+        //console.log(image.data[(i*4)+2]);
+        //console.log(pixel[2]);
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+
+        array[i] = 1;
+    }
+    //console.log('Done');
+    return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
 };
