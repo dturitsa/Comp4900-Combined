@@ -63,6 +63,7 @@ $(document).ready(function() {
 	
 	$("#hideToolButton").click(function() {
 		toolFlag = false;
+		$('#tool2, #tool1').css({"backgroundColor":"black"});
 		$("#toolBar").slideUp( function() {
 			$("#toolButton").fadeIn();
 			$("#content").stop().animate({paddingLeft: 0},
@@ -85,30 +86,35 @@ $(document).ready(function() {
 			case "Element1":
 				if (ElementsFull[0]) {
 					whichElement = this;
+					ShowEditCanvas(whichElement);
 				}
 				break;
 			case "Element2":
 				if (ElementsFull[1]) {
 					whichElement = this;
+					ShowEditCanvas(whichElement);
 				}
 				break;
 			case "Element3":
 				if (ElementsFull[2]) {
 					whichElement = this;
+					ShowEditCanvas(whichElement);
 				}
 				break;
 			case "Element4":
 				if (ElementsFull[3]) {
 					whichElement = this;
+					ShowEditCanvas(whichElement);
 				}
 				break;
 			case "Element5":
 				if (ElementsFull[4]) {
 					whichElement = this;
+					ShowEditCanvas(whichElement);
 				}
 				break;
 		}
-		ShowEditCanvas(whichElement);
+		
 	});
 	
 	$("#tool1").click(function() {
@@ -119,6 +125,8 @@ $(document).ready(function() {
 		$("#previewCanvas").attr("draggable", "true");
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
+		$('#tool2').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
@@ -133,11 +141,14 @@ $(document).ready(function() {
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: ''});
 		$('#thresSlider').css({display: ''});
+		$('#tool1').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
 	});
+	
 	$("#tool3").click(function() {
 		colourFlag = true;
 		colorElimFlag = false;
@@ -325,7 +336,6 @@ $(window).resize(function() {
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
 		dragOrclick = true;
 	}
-		
 });
 /*
     Onload function for the window. initializes the globals and listeners
@@ -382,7 +392,7 @@ function setToBlack() {
 
 //uploading image function
 function ShowEditCanvas(element) {
-	var scaleSize = 3;
+	var scaleSize = 2;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
@@ -391,13 +401,12 @@ function ShowEditCanvas(element) {
 	var height = $("#" + OrigCanvas.id).height();
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
-	$("#previewCanvas").attr("draggable", "false");
 	$("#ElementCanvas").css({"width":width * scaleSize,
 					"height":height * scaleSize});
 	$("#ElementDisplay").stop().animate({
 				width: (width + 10) * scaleSize,
 				height: (height + 30) * scaleSize,
-				left: pos.left - 252, 
+				left: pos.left - (width + 10) * scaleSize, 
 				top: pos.top,
 				}).slideDown();
 	ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
@@ -491,16 +500,28 @@ function drop(ev) {
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
-	canvas.width = 1000;
-	canvas.height = 1000;
+	canvas.width = $("#previewCanvas").width();
+	canvas.height = $("#previewCanvas").height();
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	var longestSide = Math.max(draggedElement.width, draggedElement.height)
-	if(draggedElement.width >= draggedElement.height){
-	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
-	} else{
-	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
+	var longestSide = Math.max(draggedElement.width, draggedElement.height);
+	switch (canvas.id) {
+		case "pic1":
+		case "pic2":
+		case "pic3":
+		case "pic4":
+		case "pic5":
+			ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
+			break;
+		default:
+			if(draggedElement.width >= draggedElement.height){
+			  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
+			} else{
+			  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
+			}
+			break;
 	}
+	
 }
 
 // loads the image and draws it on the canvas.

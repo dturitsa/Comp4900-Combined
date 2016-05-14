@@ -9,10 +9,7 @@
 }
 
 #pic1, #pic2, #pic3, #pic4, #pic5 {
-	width: 74px;
-	height: 84px;
-	margin-top: -70px;
-
+	margin-top: -59px;
 }
 
 #EditButton1, #DeleteButton1, #EditButton2, #DeleteButton2,
@@ -22,6 +19,16 @@
 	height: 30px;
 	margin: 5px;
 	display: inline-block;
+}
+
+#paint, #erase {
+	background-color:transparent;
+	border-color: transparent;
+	color: white;
+}
+
+#paint {
+	margin-left: 10px;
 }
 
 #Element1, #Element2, #Element3, #Element4, #Element5 {
@@ -36,6 +43,7 @@
 	font-size: 24px;
 	font-weight: bold;
 	padding-top: 25px;
+	overflow: hidden;
 }
 
 #Element1:hover, #Element2:hover, #Element3:hover, #Element4:hover, #Element5:hover {
@@ -87,7 +95,11 @@
 	border-color:#000000;
 }
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover {
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #paint:hover, #erase:hover {
+	background-color:#555555;
+}
+
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:hover, #undoButton:hover,  #paint:focus, #erase:focus {
 	background-color:#555555;
 }
 
@@ -178,15 +190,21 @@
 	text-align: center;
 }
 
+#templateNum {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	width: 30%;
+	margin-top: 70px;
+}
+
 .templateDiv{
-	margin-top:75px; 
+	margin-top: 40px; 
 	margin-left:auto; 
 	margin-right:auto; 
 	position: relative;
 	overflow: hidden;
-	padding: 10px;
-	width: 100%;
-	height: inherit;
+	width: 90%;
 }
 
 .shirtOverlay { position:relative;
@@ -200,39 +218,43 @@
 	pointer-events: none;
 } 
 
-  .clothESpot1wrap{
-    padding:0px;
-    position:absolute;
-    top: 80px;
-    left: 100px;
-    z-index: 1;
-    width: 100px;
-    height: 100px;
-    background-color: green;
-  }
-    
-    .clothESpot2wrap{
-      padding:0px;
-      position:absolute;
-      top: 80px;
-      left: 390px;
-      z-index: 1;
-      width: 100px;
-      height: 100px;
-      background-color: green;
-  }
+.clothESpot1wrap{
+	padding:0px;
+	position:absolute;
+	top: 80px;
+	left: 100px;
+	z-index: 1;
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
 
-      .clothESpot3wrap{
-      padding:0px;
-      position:absolute;
-      top: 200px;
-      left: 120px;
-      z-index: 1;
-      width: 150px;
-      height: 50px;
-      background-color: green;
-  }
-    
+.clothESpot2wrap{
+	padding:0px;
+	position:absolute;
+	top: 80px;
+	left: 390px;
+	z-index: 1;
+	z-index: 1;
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+
+.clothESpot3wrap{
+	padding:0px;
+	position:absolute;
+	top: 200px;
+	left: 120px;
+	z-index: 1;
+	width: 150px;
+	height: 50px;
+	background-color: green;
+}
+
+.fonts {
+	display: none;
+} 
     
 .clothESpot {          
       width: 100%;
