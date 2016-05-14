@@ -5,6 +5,8 @@ var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
 var ElementsFull = [false, false, false, false, false];
+var whichElement;
+var font;
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -22,6 +24,7 @@ $(document).ready(function() {
 		dragOrclick = false;
 		$(window).trigger('resize');
 	});
+	
 	$("#rightButton").click(function() {
 		if (item2 == 0) {
 			item = 1;item2 = 2;
@@ -33,6 +36,12 @@ $(document).ready(function() {
 		dragOrclick = false;
 		$(window).trigger('resize');
 	});
+	
+	$("#ExitButton").click(function() {
+		$("#ElementDisplay").fadeOut();
+		whichElement = null;
+	});
+	
 	$("#toolButton").click(function() {
 		toolFlag = true;
 		$(this).fadeOut();
@@ -45,6 +54,7 @@ $(document).ready(function() {
 			$("#toolBar").slideDown();
 		});
 	});
+	
 	$("#hideToolButton").click(function() {
 		toolFlag = false;
 		$("#toolBar").slideUp( function() {
@@ -57,33 +67,42 @@ $(document).ready(function() {
 		});
 		
 	});
+	
 	$("#Element1, #Element2, #Element3, #Element4, #Element5").hover(function() {
 			$(this.id).css({borderColor:"#0000ff"});
 		}, function() {
 			$(this.id).css({borderColor:"#000000"});
 	});
 	
-	$("#Element1").click(function() {
-		if (ElementsFull[0]) {
-			var scaleSize = 3;
-			$('#uploadedImage').imgAreaSelect({remove:true});
-			$("#previewCanvas").attr("draggable", "false");
-			var OrigCanvas = document.getElementById($(this).children()[0].id);
-			var canvas = document.getElementById("ElementCanvas");
-			var ctx = canvas.getContext('2d');
-			var pos = $(this).offset();
-			var width = $("#" + OrigCanvas.id).width();
-			var height = $("#" + OrigCanvas.id).height();
-			$("#ElementCanvas").css({"width":width * scaleSize,
-							"height":height * scaleSize});
-			$("#ElementDisplay").animate({
-						width: (width + 10) * scaleSize,
-						height: (height + 30) * scaleSize,
-						left: pos.left, 
-						top: pos.top,
-						}).show();
-			ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
+	$("#Element1, #Element2, #Element3, #Element4, #Element5").click(function() {
+		switch(this.id) {
+			case "Element1":
+				if (ElementsFull[0]) {
+					whichElement = this;
+				}
+				break;
+			case "Element2":
+				if (ElementsFull[1]) {
+					whichElement = this;
+				}
+				break;
+			case "Element3":
+				if (ElementsFull[2]) {
+					whichElement = this;
+				}
+				break;
+			case "Element4":
+				if (ElementsFull[3]) {
+					whichElement = this;
+				}
+				break;
+			case "Element5":
+				if (ElementsFull[4]) {
+					whichElement = this;
+				}
+				break;
 		}
+		ShowEditCanvas(whichElement);
 	});
 	
 	$("#tool1").click(function() {
@@ -93,6 +112,7 @@ $(document).ready(function() {
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
 	});
+	
 	$("#tool2").click(function() {
 		wandFlag = true;
 		$('#uploadedImage').imgAreaSelect({remove:true});
@@ -100,9 +120,11 @@ $(document).ready(function() {
 		$('#cropOut').css({display: ''});
 		$('#thresSlider').css({display: ''});
 	});
+	
 	$("#cropOut").click(function() {
 		cropOut();
 	});
+	
 	$("#thresSlider").click(function() {
 
 	});
@@ -116,30 +138,6 @@ $(document).ready(function() {
 		this.ondrop = drop;
 		this.ondragover = allowDrop;
 	});
-
-	//draw selection on a canvas
-	function preview(img2, selection) {
-		var canvas = $('#previewCanvas')[0];
-		var selectionSource = $('#uploadedImage')[0];
-		var ctx = canvas.getContext("2d");  
-		var maxSize = 200;
-		var destX = 0;
-		var destY = 0;
-		var longestSide = Math.max(selection.width, selection.height);
-		var scale = maxSize / longestSide;
-		canvas.width =  selection.width * scale;
-		canvas.height =  selection.height * scale;
-		ctx.drawImage(img2,
-				selection.x1 / (img2.offsetWidth / img.width),
-				selection.y1 / (img2.offsetHeight / img.height),
-				selection.width / (img2.offsetWidth / img.width),
-				selection.height / (img2.offsetHeight / img.height),
-				destX,
-				destY, 
-				selection.width * scale,
-				selection.height * scale
-				);               
-	}
 	
 	$("#imgInp").change(function(){ readURL(this); });
 
@@ -155,6 +153,7 @@ $(document).ready(function() {
 
    //makes element draggable in the template div
    $( ".draggable" ).draggable();
+   
    $(".templateDiv").mouseout(function() {
    		$( '.draggable' ).draggable().trigger( 'mouseup' );
 	});
@@ -232,13 +231,28 @@ function drawSignature(canvas){
 $(window).resize(function() {
 	var Size = parseFloat($("#content").width());
 	if (dragOrclick) {
+		if (whichElement != null) {
+			var pos = $("#" + whichElement.id).offset();
+			var size = $("#ElementDisplay").width();
+			$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
+		}
 		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
+
 	} else {
-		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5});
+		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
+			{step: function() {
+					if (whichElement != null) {
+						var pos = $("#" + whichElement.id).offset();
+						var size = $("#ElementDisplay").width();
+						$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
+					}
+				}
+			});
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
 		dragOrclick = true;
 	}
+		
 });
 
 window.onload = function() {
@@ -278,6 +292,52 @@ window.onclick = function(e) {
 	}
 };
 
+function ShowEditCanvas(element) {
+	var scaleSize = 3;
+	var OrigCanvas = document.getElementById($(element).children()[0].id);
+	var canvas = document.getElementById("ElementCanvas");
+	var ctx = canvas.getContext('2d');
+	var pos = $(element).offset();
+	var width = $("#" + OrigCanvas.id).width();
+	var height = $("#" + OrigCanvas.id).height();
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	$('#uploadedImage').imgAreaSelect({remove:true});
+	$("#previewCanvas").attr("draggable", "false");
+	$("#ElementCanvas").css({"width":width * scaleSize,
+					"height":height * scaleSize});
+	$("#ElementDisplay").stop().animate({
+				width: (width + 10) * scaleSize,
+				height: (height + 30) * scaleSize,
+				left: pos.left - 252, 
+				top: pos.top,
+				}).slideDown();
+	ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
+}
+
+//draw selection on a canvas
+function preview(img2, selection) {
+	var canvas = $('#previewCanvas')[0];
+	var selectionSource = $('#uploadedImage')[0];
+	var ctx = canvas.getContext("2d");  
+	var maxSize = 200;
+	var destX = 0;
+	var destY = 0;
+	var longestSide = Math.max(selection.width, selection.height);
+	var scale = maxSize / longestSide;
+	canvas.width =  selection.width * scale;
+	canvas.height =  selection.height * scale;
+	ctx.drawImage(img2,
+			selection.x1 / (img2.offsetWidth / img.width),
+			selection.y1 / (img2.offsetHeight / img.height),
+			selection.width / (img2.offsetWidth / img.width),
+			selection.height / (img2.offsetHeight / img.height),
+			destX,
+			destY, 
+			selection.width * scale,
+			selection.height * scale
+			);               
+}
+
   //uploading image function
 function readURL(input) {
 	if (input.files && input.files[0]) {
@@ -309,8 +369,22 @@ function drop(ev) {
 	ev.preventDefault();
 	  
 	var canvas = ev.target;
-	if (canvas.id == "pic1") {
-		ElementsFull[0] = true;
+	switch (canvas.id) {
+		case "pic1":
+			ElementsFull[0] = true;
+			break;
+		case "pic2":
+			ElementsFull[1] = true;
+			break;
+		case "pic3":
+			ElementsFull[2] = true;
+			break;
+		case "pic4":
+			ElementsFull[3] = true;
+			break;
+		case "pic5":
+			ElementsFull[4] = true;
+			break;
 	}
 	drawCopiedImage(canvas, ev); 
 	//loops through multipaste elements and draws image on all of them
@@ -324,19 +398,22 @@ function drop(ev) {
 		}  
 	}
 }
-  //draws copied image on the canvas
-  function drawCopiedImage(canvas, ev){
-    canvas.width = 1000;
-    canvas.height = 1000;
-    var ctx = canvas.getContext("2d");
- 
-    var longestSide = Math.max(draggedElement.width, draggedElement.height)
-    if(draggedElement.width >= draggedElement.height){
-      ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
-    } else{
-      ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-    }
-  }
+
+
+//draws copied image on the canvas
+function drawCopiedImage(canvas, ev){
+	canvas.width = 1000;
+	canvas.height = 1000;
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	var longestSide = Math.max(draggedElement.width, draggedElement.height)
+	if(draggedElement.width >= draggedElement.height){
+	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
+	} else{
+	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
+	}
+}
+  
 
 function imgChange (inp) {
     if (inp.files && inp.files[0]) {
@@ -355,7 +432,7 @@ function imgChange (inp) {
         }
         reader.readAsDataURL(inp.files[0]);
     }
-};
+}
 
 function initCanvas(img) {
     var cvs = document.getElementById("uploadedImage");
@@ -374,7 +451,7 @@ function initCanvas(img) {
     tempCtx.canvas.height = imageInfo.height;
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
-};
+}
 
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
 
@@ -386,7 +463,8 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
         console.log(x, y);
         console.log(e.pageY);
     return { x: x, y: y };
-};
+}
+
 function onMouseDown(e) {
 	//console.log('Test');
 	if(wandFlag) {
@@ -399,7 +477,8 @@ function onMouseDown(e) {
 	    }
 	    else allowDraw = false;
 	}
-};
+}
+
 function onMouseMove(e) {
     if (allowDraw) {
         var p = getMousePosition(e);
@@ -415,11 +494,13 @@ function onMouseMove(e) {
             //var thres = Math.min(colorThreshold + Math.floor(len / 3), 255);
         }
     }
-};
+}
+
 function onMouseUp(e) {
     allowDraw = false;
     //currentThreshold = colorThreshold;
-};
+}
+
 function drawMask(x, y) {
     if (!imageInfo) return;
     
@@ -435,11 +516,13 @@ function drawMask(x, y) {
     mask = MagicWand.floodFill(image, x, y, currentThreshold);
     mask = MagicWand.gaussBlurOnlyBorder(mask, blurRadius);
     drawBorder();
-};
+}
+
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
-};
+}
+
 function drawBorder(noBorder) {
     if (!mask) return;
     
@@ -472,7 +555,8 @@ function drawBorder(noBorder) {
     }
 
     ctx.putImageData(imgData, 0, 0);
-};
+}
+
 function cropOut() {
 	if(mask == null) return;
 	
@@ -489,4 +573,4 @@ function cropOut() {
 	var ctx = document.getElementById("uploadedImage").getContext('2d');
 	ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	ctx.putImageData(imageInfo.data, 0, 0);
-};
+}
