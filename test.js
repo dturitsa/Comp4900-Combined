@@ -4,6 +4,7 @@ var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
+var font;
 var ElementsFull = [false, false, false, false, false];
 $(document).ready(function() {
 	var item = 0;
@@ -144,17 +145,31 @@ $(document).ready(function() {
 	$("#imgInp").change(function(){ readURL(this); });
 
 	//make elements resizable
-	$(".resizable").each(function() { 
-    var handle = $(this).find('.resizeGrip');
-    	$(this).resizable({
-    		aspectRatio: true,
-      		handles: {
-        	'se': handle}
-    	});
-  	});
+  	$( ".resizable" ).resizable({
 
-   //makes element draggable in the template div
-   $( ".draggable" ).draggable();
+  		//forces resizable height and width to use % instead of px 
+  		stop: function( event, ui ) {
+   		$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
+   		$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
+  		},
+
+  		//locks the aspect ratio when resizing
+  		aspectRatio:true,
+
+  		//sets the resize handle in the bottom right corner
+  		handles: {
+  			'se': $('.resizeGrip')
+  		}
+	});
+
+   //makes element draggable in the template div (uses % instead of px to scale when template is resized)
+   $( ".draggable" ).draggable({
+  stop: function( event, ui ) {
+   $(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
+   $(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
+  }
+});
+
    $(".templateDiv").mouseout(function() {
    		$( '.draggable' ).draggable().trigger( 'mouseup' );
 	});
