@@ -1,5 +1,6 @@
 var toolFlag = false;
 var wandFlag = false;
+var colorElimFlag = false;
 var colourFlag = false;
 var leftPercent = 0.5;
 var rightPercent = 0.5;
@@ -118,6 +119,7 @@ $(document).ready(function() {
 	
 	$("#tool1").click(function() {
 		wandFlag = false;
+		colorElimFlag = false;
 		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
@@ -133,6 +135,7 @@ $(document).ready(function() {
 	
 	$("#tool2").click(function() {
 		wandFlag = true;
+		colorElimFlag = false;
 		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
@@ -148,6 +151,7 @@ $(document).ready(function() {
 	
 	$("#tool3").click(function() {
 		colourFlag = true;
+		colorElimFlag = false;
 		wandFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
@@ -162,9 +166,14 @@ $(document).ready(function() {
 	$("#cropOut").click(function() {
 		cropOut();
 	});
-	
-	$("#thresSlider").click(function() {
-
+	$("#tool4").click(function() {
+		wandFlag = false;
+		colorElimFlag = true;
+		colourFlag = false;
+		$('#uploadedImage').imgAreaSelect({remove:true});
+		$("#previewCanvas").attr("draggable", "false");
+		$('#cropOut').css({display: ''});
+		$('#thresSlider').css({display: ''});
 	});
 	
 	$('#undoButton').click(function() {
@@ -328,7 +337,10 @@ $(window).resize(function() {
 		dragOrclick = true;
 	}
 });
-
+/*
+    Onload function for the window. initializes the globals and listeners
+    for the magic wand select.
+*/
 window.onload = function() {
     blurRadius = 5;
     simplifyTolerant = 0;
@@ -358,7 +370,7 @@ window.onload = function() {
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
 }
-
+// Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
 	if(e.target.id != "uploadedImage") {
 		mask = null;
@@ -370,6 +382,15 @@ window.onclick = function(e) {
 	}
 };
 
+function setToBlack() {
+	$("#Element1").css({borderColor:"#000000"});
+	$("#Element2").css({borderColor:"#000000"});
+	$("#Element3").css({borderColor:"#000000"});
+	$("#Element4").css({borderColor:"#000000"});
+	$("#Element5").css({borderColor:"#000000"});
+}
+
+//uploading image function
 function ShowEditCanvas(element) {
 	var scaleSize = 2;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
@@ -415,7 +436,7 @@ function preview(img2, selection) {
 			);               
 }
 
-  //uploading image function
+//uploading image function
 function readURL(input) {
 	if (input.files && input.files[0]) {
 		var reader = new FileReader();
@@ -502,8 +523,8 @@ function drawCopiedImage(canvas, ev){
 	}
 	
 }
-  
 
+// loads the image and draws it on the canvas.
 function imgChange (inp) {
 
 	
@@ -524,8 +545,8 @@ function imgChange (inp) {
         reader.readAsDataURL(inp.files[0]);
 		
     }
-}
-
+};
+// Initializes the canvas and image info
 function initCanvas(img) {
     var cvs = document.getElementById("uploadedImage");
     cvs.width = img.width;
@@ -548,12 +569,9 @@ function initCanvas(img) {
     tempCtx.canvas.height = imageInfo.height;
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
-	
-
 };
-
-
 
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
 
@@ -562,14 +580,14 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
     	heightScale = document.getElementById('uploadedImage').offsetHeight / img.height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY) - p.top) / heightScale);
-        console.log(x, y);
-        console.log(e.pageY);
+        //console.log(x, y);
+        //console.log(e.pageY);
     return { x: x, y: y };
 }
 
 function onMouseDown(e) {
 	//console.log('Test');
-	if(wandFlag) {
+	if(wandFlag || colorElimFlag) {
 	    if (e.button == 0) {
 	        allowDraw = true;
 	        downPoint = getMousePosition(e);
@@ -614,8 +632,11 @@ function drawMask(x, y) {
         height: imageInfo.height,
         bytes: 4
     };
-
-    mask = MagicWand.floodFill(image, x, y, currentThreshold);
+    if(wandFlag) {
+    	mask = MagicWand.floodFill(image, x, y, currentThreshold);
+	} else if(colorElimFlag) {
+    	mask = colorElimination(image, x, y, currentThreshold);
+	}
     mask = MagicWand.gaussBlurOnlyBorder(mask, blurRadius);
     drawBorder();
 }
@@ -675,7 +696,46 @@ function cropOut() {
 	var ctx = document.getElementById("uploadedImage").getContext('2d');
 	ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	ctx.putImageData(imageInfo.data, 0, 0);
+};
 
+function colorElimination(image, x, y, threshold)
+{
+    // used for testing purposes
+    /*for(var i = 0, value = 1, size = image.width*image.height,
+         array = new Uint8Array(size); i < size; i++) array[i] = value;*/
+    var tmp, f, ipix = (y * image.width * 4) + x * 4,
+        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]],
+        b = image.bytes;
+    //console.log(x);
+    ///console.log(y);
+    //console.log(ipix);
+    //console.log(pixel);
+    //console.log(image.data.length);
+    //console.log(4 * image.width * image.height);
+    for(var i = 0, size = image.width*image.height,
+        array = new Uint8Array(size); i < size; i++) {
+        
+        //ipix = (y * i) + b;
+        tmp = image.data[i*4] - pixel[0];
+        //console.log(image.data[i*4]);
+        //console.log(pixel[0]);
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+1] - pixel[1];
+        //console.log(image.data[(i*4)+1]);
+        //console.log(pixel[1]);
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+2] - pixel[2];
+        //console.log(image.data[(i*4)+2]);
+        //console.log(pixel[2]);
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+
+        array[i] = 1;
+    }
+    //console.log('Done');
+    return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
 };
 
 // Swaps the old data with the new, "undoing" their last action
@@ -729,4 +789,3 @@ function greyScale() {
 	console.log("Grey");
 	
 };
-
