@@ -74,11 +74,12 @@ $(document).ready(function() {
 			var pos = $(this).offset();
 			var width = $("#" + OrigCanvas.id).width();
 			var height = $("#" + OrigCanvas.id).height();
-			$("#ElementCanvas").css({"width":width * scaleSize, "height":height * scaleSize});
+			$("#ElementCanvas").css({"width":width * scaleSize,
+							"height":height * scaleSize});
 			$("#ElementDisplay").animate({
 						width: (width + 10) * scaleSize,
 						height: (height + 30) * scaleSize,
-						right: pos.left + 95, 
+						left: pos.left, 
 						top: pos.top,
 						}).show();
 			ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
@@ -146,10 +147,10 @@ $(document).ready(function() {
 $(window).resize(function() {
 	var Size = parseFloat($("#content").width());
 	if (dragOrclick) {
-		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.1});
+		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
 	} else {
-		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.1});
+		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
 		dragOrclick = true;
 	}
@@ -191,14 +192,6 @@ window.onclick = function(e) {
 		}
 	}
 };
-
-function setToBlack() {
-	$("#Element1").css({borderColor:"#000000"});
-	$("#Element2").css({borderColor:"#000000"});
-	$("#Element3").css({borderColor:"#000000"});
-	$("#Element4").css({borderColor:"#000000"});
-	$("#Element5").css({borderColor:"#000000"});
-}
 
   //uploading image function
 function readURL(input) {
