@@ -75,7 +75,7 @@
 	float:left;
 }
 
-#hideToolButton, #tool1, #tool2 {
+#hideToolButton, #tool1, #tool2, #tool3, #undoButton {
 	border-radius:50%;
 	display:block; 
 	margin-top:10px; 
@@ -87,11 +87,11 @@
 	border-color:#000000;
 }
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover {
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover {
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:hover {
 	outline:none;
 }
 
