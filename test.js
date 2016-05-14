@@ -136,7 +136,10 @@ $(window).resize(function() {
 		dragOrclick = true;
 	}
 });
-
+/*
+    Onload function for the window. initializes the globals and listeners
+    for the magic wand select.
+*/
 window.onload = function() {
     blurRadius = 5;
     simplifyTolerant = 0;
@@ -162,7 +165,7 @@ window.onload = function() {
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
 }
-
+// Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
 	if(e.target.id != "uploadedImage") {
 		mask = null;
@@ -182,7 +185,7 @@ function setToBlack() {
 	$("#Element5").css({borderColor:"#000000"});
 }
 
-  //uploading image function
+//uploading image function
 function readURL(input) {
 	if (input.files && input.files[0]) {
 		var reader = new FileReader();
@@ -233,7 +236,7 @@ function drawCopiedImage(canvas, ev){
 	var ctx = canvas.getContext("2d");
 	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
 }
-
+// loads the image and draws it on the canvas.
 function imgChange (inp) {
     if (inp.files && inp.files[0]) {
         var reader = new FileReader();
@@ -252,7 +255,7 @@ function imgChange (inp) {
         reader.readAsDataURL(inp.files[0]);
     }
 };
-
+// Initializes the canvas and image info
 function initCanvas(img) {
     var cvs = document.getElementById("uploadedImage");
     cvs.width = img.width;
@@ -271,7 +274,7 @@ function initCanvas(img) {
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 };
-
+// Gets the position of the mouse on the canvas, and adjusts its scale.
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
@@ -279,8 +282,8 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
     	heightScale = document.getElementById('uploadedImage').offsetHeight / img.height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY) - p.top) / heightScale);
-        console.log(x, y);
-        console.log(e.pageY);
+        //console.log(x, y);
+        //console.log(e.pageY);
     return { x: x, y: y };
 };
 function onMouseDown(e) {
