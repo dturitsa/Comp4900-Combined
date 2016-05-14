@@ -6,6 +6,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery.imgareaselect-0.9.10\scripts\jquery.imgareaselect.pack.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	
 	<script type="text/javascript" src="magic-wand-min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -17,11 +18,18 @@
 	<div id="mainContent">
 		<div id="toolBar">
 			<button id="hideToolButton" type="button" class="btn btn-default">Hide</button>
+			<button id="undoButton" type="button" class="btn btn-inverted">Undo</button>
 			<button id="tool1" type="button" class="btn btn-default"><img src="img/crop2.png" width="100%"></button>
 			<button id="tool2" type="button" class="btn btn-default"><img src="img/MagicWand2.png" width="100%"></button>
 			<button id="cropOut" type="button" class="btn btn-default" style="display: none;"><img src="img/MagicWand.png" width="100%"></button>
 			<input id="thresSlider" type="range" min="1" max="100" value="50" style="display: none;"/>
-			<button id="tool3" type="button" class="btn btn-default"><img src="img/crop.png" width="100%"></button>
+			<button id="tool4" type="button" class="btn btn-default"><img src="img/crop.png" width="100%"></button>
+			<button id="tool3" type="button" class="btn btn-default"><img src="img/colour2.png" width="100%"></button>
+			
+			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
+			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
+			<label for="greyScaleButton" id="greyScaleLabel" style="display: none;">Black and White</label>
+			<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>
 		</div>
 		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 		<div id="content">
