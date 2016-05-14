@@ -44,7 +44,7 @@
 
 #ElementDisplay {
 	display: none;
-	background-color: #999999;
+	background-color: #000000;
 	position: absolute;
 	z-index: 20;
 	height: 0px;
@@ -64,6 +64,7 @@
 	);
 	margin: auto;
 	margin-top: 15px;
+	border: 3px solid #fff;
 }
 
 #toolBar {
@@ -132,7 +133,14 @@
 	background-color: #999999;
 }
 
-#leftButton:focus, #rightButton:focus {
+#ExitButton {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	
+}
+
+#leftButton:focus, #rightButton:focus, #ExitButton:focus {
 	outline: none;
 }
 
