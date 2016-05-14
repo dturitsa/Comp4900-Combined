@@ -660,6 +660,8 @@ function drawBorder(noBorder) {
 }
 
 function cropOut() {
+
+	copyImageData();
 	if(mask == null) return;
 	
 	for(i = 0; i < mask.data.length; i++) {

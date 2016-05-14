@@ -75,7 +75,7 @@
 	float:left;
 }
 
-#hideToolButton, #tool1, #tool2, #tool3, #undoButton {
+#hideToolButton, #tool1, #tool2, #tool3, #undoButton, #greyScaleButton, #tool4 {
 	border-radius:50%;
 	display:block; 
 	margin-top:10px; 
@@ -87,11 +87,11 @@
 	border-color:#000000;
 }
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover {
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover {
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:hover {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus {
 	outline:none;
 }
 
