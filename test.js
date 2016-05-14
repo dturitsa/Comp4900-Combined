@@ -1,9 +1,14 @@
 var toolFlag = false;
 var wandFlag = false;
+var colourFlag = false;
 var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
+var brightness = 0;
+var contrast = 0;
+var hue = 0;
+var saturation = 0;
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
@@ -113,22 +118,50 @@ $(document).ready(function() {
 	
 	$("#tool1").click(function() {
 		wandFlag = false;
+		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
+<<<<<<< HEAD
 		$('#tool2').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
+=======
+		$('#brightLabel').css({display: 'none'});
+		$('#brightnessSlider').css({display: 'none'});
+		$('#greyScaleLabel').css({display: 'none'});
+		$('#greyScaleButton').css({display: 'none'});
+>>>>>>> 5ebb12a9d5ac60981d496bb2a4d4aeab2f214890
 	});
 	
 	$("#tool2").click(function() {
 		wandFlag = true;
+		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: ''});
 		$('#thresSlider').css({display: ''});
+<<<<<<< HEAD
 		$('#tool1').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
+=======
+		$('#brightLabel').css({display: 'none'});
+		$('#brightnessSlider').css({display: 'none'});
+		$('#greyScaleLabel').css({display: 'none'});
+		$('#greyScaleButton').css({display: 'none'});
+	});
+	$("#tool3").click(function() {
+		colourFlag = true;
+		wandFlag = false;
+		$('#uploadedImage').imgAreaSelect({remove:true});
+		$("#previewCanvas").attr("draggable", "false");
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
+		$('#brightLabel').css({display: ''});
+		$('#brightnessSlider').css({display: ''});
+		$('#greyScaleLabel').css({display: ''});
+		$('#greyScaleButton').css({display: ''});
+>>>>>>> 5ebb12a9d5ac60981d496bb2a4d4aeab2f214890
 	});
 	
 	$("#cropOut").click(function() {
@@ -137,6 +170,14 @@ $(document).ready(function() {
 	
 	$("#thresSlider").click(function() {
 
+	});
+	
+	$('#undoButton').click(function() {
+		undo();
+	});
+	
+	$('#greyScaleButton').click(function() {
+		greyScale();
 	});
 
 	$(".dragSource").each(function() {
@@ -149,6 +190,35 @@ $(document).ready(function() {
 		this.ondragover = allowDrop;
 	});
 	
+
+	//draw selection on a canvas
+	function preview(img2, selection) {
+		//console.log(img2);
+		var canvas = $('#previewCanvas')[0];
+		var selectionSource = $('#uploadedImage')[0];
+		//console.log(selectionSource);
+		var ctx = canvas.getContext("2d");  
+		var maxSize = 200;
+		var destX = 0;
+		var destY = 0;
+		var longestSide = Math.max(selection.width, selection.height);
+		var scale = maxSize / longestSide;
+		canvas.width =  selection.width * scale;
+		canvas.height =  selection.height * scale;
+		//console.log(selection);
+		//console.log(img.naturalHeight);
+
+		ctx.drawImage(img2,
+				selection.x1 / (img2.offsetWidth / img.width),
+				selection.y1 / (img2.offsetHeight / img.height),
+				selection.width / (img2.offsetWidth / img.width),
+				selection.height / (img2.offsetHeight / img.height),
+				destX,
+				destY, 
+				selection.width * scale,
+				selection.height * scale
+				);               
+	}
 	$("#imgInp").change(function(){ readURL(this); });
 
 	//make elements resizable
@@ -270,14 +340,18 @@ window.onload = function() {
     simplifyCount = 30;
     hatchLength = 4;
     hatchOffset = 0;
-
+	oldImageInfo = null;
     imageInfo = null;
     cacheInd = null;
     mask = null;
     downPoint = null;
     img = null;
     allowDraw = false;
-
+	/*
+	brightnessSlider = document.getElementById("brightnessSlider");
+	
+	brightnessSlider.addEventListener("change", greyScale());
+	*/
     slider = document.getElementById("thresSlider");
 
     slider.addEventListener("change", function() {
@@ -436,6 +510,8 @@ function drawCopiedImage(canvas, ev){
   
 
 function imgChange (inp) {
+
+	
     if (inp.files && inp.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -451,6 +527,7 @@ function imgChange (inp) {
             };
         }
         reader.readAsDataURL(inp.files[0]);
+		
     }
 }
 
@@ -459,6 +536,11 @@ function initCanvas(img) {
     cvs.width = img.width;
     cvs.height = img.height;
     //console.log(img);
+	oldImageInfo = {
+		width: img.width,
+        height: img.height,
+        context: cvs.getContext("2d")
+	};
     imageInfo = {
         width: img.width,
         height: img.height,
@@ -471,7 +553,12 @@ function initCanvas(img) {
     tempCtx.canvas.height = imageInfo.height;
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
-}
+	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	
+
+};
+
+
 
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
 
@@ -593,4 +680,58 @@ function cropOut() {
 	var ctx = document.getElementById("uploadedImage").getContext('2d');
 	ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	ctx.putImageData(imageInfo.data, 0, 0);
+
+};
+
+// Swaps the old data with the new, "undoing" their last action
+
+function undo() {
+	imageInfo.data.data.set(oldImageInfo.data.data);
+	console.log("undo");
+
+};
+
+// Copy the data before making a change in case the user needs to "undo" their action
+
+function copyImageData() {
+	oldImageInfo.data.data = new Uint8ClampedArray(imageInfo.data.data);
 }
+
+// Filters and colour manipulation
+
+// Brightness Hook
+
+function changeBrightness() {
+	
+};
+
+function greyScale() {
+	
+	//imageInfo = imageInfo.context.getImageData(0, 0, image.width, image.height);
+	//oldImageInfo = imageInfo;
+	copyImageData();
+	console.log(imageInfo.data.data.length);
+	
+	for(var i = 0; i < imageInfo.data.data.length; i += 4)
+	{
+        var red = imageInfo.data.data[i];
+        var green = imageInfo.data.data[i + 1];
+        var blue = imageInfo.data.data[i + 2];
+        var alpha = imageInfo.data.data[i + 3];
+            
+        var gray = (red + green + blue) / 3;
+            
+        imageInfo.data.data[i] = gray;
+        imageInfo.data.data[i + 1] = gray;
+        imageInfo.data.data[i + 2] = gray;
+        imageInfo.data.data[i + 3] = alpha; // not changing the transparency
+	}
+	
+	ctx = document.getElementById("uploadedImage").getContext('2d');
+	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
+	//ctx.putImageData(dataArray, 0, 0);
+	
+	console.log("Grey");
+	
+};
+
