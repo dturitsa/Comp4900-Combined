@@ -170,7 +170,7 @@ $(document).ready(function() {
   }
 });
 
-   $(".templateDiv").mouseout(function() {
+   $(".templateBacground").mouseout(function() {
    		$( '.draggable' ).draggable().trigger( 'mouseup' );
 	});
 
@@ -215,6 +215,13 @@ $(document).ready(function() {
           });      
       });
 
+       $('button').click(function(){
+       		$( ".templateDiv" ).each(function() {
+  				$( this ).css('display', 'none');
+			});
+			var currentTemplate =  $(this).attr("value");
+			$('#' + currentTemplate ).css('display', 'block');
+       });
 }); //document.ready function closing tag
 
 //draws the signature text on the specified canvas
