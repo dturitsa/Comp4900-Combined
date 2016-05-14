@@ -123,15 +123,12 @@ $(document).ready(function() {
 		$("#previewCanvas").attr("draggable", "true");
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
-<<<<<<< HEAD
 		$('#tool2').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
-=======
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
->>>>>>> 5ebb12a9d5ac60981d496bb2a4d4aeab2f214890
 	});
 	
 	$("#tool2").click(function() {
@@ -141,15 +138,14 @@ $(document).ready(function() {
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: ''});
 		$('#thresSlider').css({display: ''});
-<<<<<<< HEAD
 		$('#tool1').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
-=======
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
 	});
+	
 	$("#tool3").click(function() {
 		colourFlag = true;
 		wandFlag = false;
@@ -161,7 +157,6 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
 		$('#greyScaleButton').css({display: ''});
->>>>>>> 5ebb12a9d5ac60981d496bb2a4d4aeab2f214890
 	});
 	
 	$("#cropOut").click(function() {
