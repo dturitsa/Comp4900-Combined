@@ -193,12 +193,22 @@
 	text-align: center;
 }
 
+#template2{
+	display: none;
+}
+
+.templateBacground{
+	background-color: red;
+	position: relative;
+}
+
 #templateNum {
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
 	width: 30%;
 	margin-top: 70px;
+
 }
 
 .templateDiv{
@@ -207,7 +217,10 @@
 	margin-right:auto; 
 	position: relative;
 	overflow: hidden;
-	width: 90%;
+
+	padding: 0px;
+	width: 100%;
+	height: inherit;
 }
 
 .shirtOverlay { position:relative;
@@ -221,39 +234,39 @@
 	pointer-events: none;
 } 
 
-.clothESpot1wrap{
-	padding:0px;
-	position:absolute;
-	top: 80px;
-	left: 100px;
-	z-index: 1;
-	width: 100px;
-	height: 100px;
-	background-color: green;
-}
+  .clothESpot1wrap{
+    padding:0px;
+    position:absolute;
+    top: 20%;
+    left: 20%;
+    z-index: 1;
+    width: 15%;
+    height: 25%;
+    background-color: blue;
+  }
+    
+    .clothESpot2wrap{
+      padding:0px;
+      position:absolute;
+      top: 80px;
+      left: 390px;
+      z-index: 1;
+      width: 100px;
+      height: 100px;
+      background-color: green;
+  }
 
-.clothESpot2wrap{
-	padding:0px;
-	position:absolute;
-	top: 80px;
-	left: 390px;
-	z-index: 1;
-	z-index: 1;
-	width: 100px;
-	height: 100px;
-	background-color: green;
-}
-
-.clothESpot3wrap{
-	padding:0px;
-	position:absolute;
-	top: 200px;
-	left: 120px;
-	z-index: 1;
-	width: 150px;
-	height: 50px;
-	background-color: green;
-}
+      .clothESpot3wrap{
+      padding:0px;
+      position:absolute;
+      top: 200px;
+      left: 120px;
+      z-index: 1;
+      width: 150px;
+      height: 50px;
+      background-color: green;
+  }
+    
 
 .fonts {
 	display: none;
