@@ -24,12 +24,13 @@
 			<button id="cropOut" type="button" class="btn btn-default" style="display: none;"><img src="img/MagicWand.png" width="100%"></button>
 			<input id="thresSlider" type="range" min="1" max="100" value="50" style="display: none;"/>
 			<button id="tool4" type="button" class="btn btn-default"><img src="img/crop.png" width="100%"></button>
+			<!-- not sure where the source files are for these buttons - Denis
 			<button id="tool3" type="button" class="btn btn-default"><img src="img/colour2.png" width="100%"></button>
-			
+			-->
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
 			<label for="greyScaleButton" id="greyScaleLabel" style="display: none;">Black and White</label>
-			<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>
+			<!--<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>-->
 		</div>
 		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 		<div id="content">
@@ -77,8 +78,31 @@
 			</div>
 			<div id="rightSection" style="">
 				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
-				<h2 id="templateNum">Template #1</h2>
-				<div class="templateDiv">
+
+				<button class="templateButtons" value="template1">template 1</button>
+				<button class="templateButtons" value="template2">template 2</button>
+				<button class="templateButtons" value="template3">template 3</button>
+				<h2 id="templateTitle">Template #1</h2>
+				<div class="templateDiv" id="template1" value="Template #1">
+					<div class="templateBacground">
+					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
+					<div class="draggable resizable clothESpot1wrap">
+    					<canvas class="clothESpot dragDest multiPaste1"></canvas>
+    					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+   
+  					<div class="draggable resizable clothESpot2wrap">
+     					<canvas class="clothESpot dragDest multiPaste2"></canvas>
+      					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+
+   					<div class="draggable resizable clothESpot3wrap">
+     					<canvas class="clothESpot dragDest multiPaste3"></canvas>
+      					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+  				</div>
+				</div>
+				<div class="templateDiv" id="template2" value="Template #2"> 
 					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 					<div class="draggable resizable clothESpot1wrap">
     					<canvas class="clothESpot dragDest multiPaste1"></canvas>
@@ -95,6 +119,24 @@
       					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
   					</div>
 				</div>
+				<div class="templateDiv" id="template3" value="Template #3">
+					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
+					<div class="draggable resizable clothESpot1wrap">
+    					<canvas class="clothESpot dragDest multiPaste1"></canvas>
+    					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+   
+  					<div class="draggable resizable clothESpot2wrap">
+     					<canvas class="clothESpot dragDest multiPaste2"></canvas>
+      					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+
+   					<div class="draggable resizable clothESpot3wrap">
+     					<canvas class="clothESpot dragDest multiPaste3"></canvas>
+      					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
+  					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
