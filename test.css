@@ -8,6 +8,10 @@
 	width: 100%;
 }
 
+#uploadedImage {
+	border: 2px solid black;
+}
+
 #pic1, #pic2, #pic3, #pic4, #pic5 {
 	margin-top: -59px;
 }
@@ -159,8 +163,6 @@
 #imageSpace {
 	width:87%; 
 	margin-top:50px; 
-	margin-left:auto; 
-	margin-right:auto; 
 	max-width:800px;
 }
 
@@ -177,11 +179,8 @@
 }
 
 #previewCanvas {
-	margin-left:auto;
-	margin-right:auto;
 	border: 2px solid black;
 	margin-top: 5px;
-	display: block;
 	max-width: 100%;
 }
 
@@ -190,12 +189,15 @@
 	text-align: center;
 }
 
-#templateNum {
+#templateNum, #previewCanvas, #imageSpace {
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
-	width: 30%;
+}
+
+#templateNum {
 	margin-top: 70px;
+	width: 30%;
 }
 
 .templateDiv{
@@ -214,7 +216,7 @@
 	opacity: 0.7;
 	border-color: #000000;
 	border-style: solid;
-	border-width: 1px;
+	border-width: 2px;
 	pointer-events: none;
 } 
 
@@ -257,15 +259,15 @@
 } 
     
 .clothESpot {          
-      width: 100%;
-      height: 100%; 
-      } 
+	width: 100%;
+	height: 100%; 
+} 
 
 .resizeGrip {
-      width: 20px;
-      height: 20px;
-      background-color: red;
-      border: 1px solid #000000;
-      bottom: -10px;
-      right:-10px;
+	width: 20px;
+	height: 20px;
+	background-color: red;
+	border: 1px solid #000000;
+	bottom: -10px;
+	right:-10px;
 }
