@@ -297,7 +297,7 @@ $(document).ready(function() {
           });      
       });
 
-       $('button').click(function(){
+       $('.templateButtons').click(function(){
        		$( ".templateDiv" ).each(function() {
   				$( this ).css('display', 'none');
 			});
