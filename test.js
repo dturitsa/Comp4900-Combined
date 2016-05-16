@@ -6,6 +6,7 @@ var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
+var allowDraw;
 var font;
 var brightness = 0;
 var contrast = 0;
@@ -19,6 +20,8 @@ $(document).ready(function() {
 	var item2 = 0;
 	// this is the mouse position within the drag element
 	var startOffsetX, startOffsetY;
+	
+	$("#mainContent").css({"height":$(window).height() - 22});
 	
 	$("#leftButton").click(function() {
 		if (item == 0) {
@@ -86,32 +89,27 @@ $(document).ready(function() {
 		switch(this.id) {
 			case "Element1":
 				if (ElementsFull[0]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element2":
 				if (ElementsFull[1]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element3":
 				if (ElementsFull[2]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element4":
 				if (ElementsFull[3]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element5":
 				if (ElementsFull[4]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 		}
@@ -253,11 +251,16 @@ $(document).ready(function() {
 		$('#' + currentTemplate ).css('display', 'block');
     });
 	
-	$("#shirtButton").hover(function() {
+	$("#shirtButton").stop().hover(function() {
 		$('.dropdown-content').slideDown();
 	});
 	
-	$('.dropdown-content').click(function() {
+	$('.dropdown-content').stop().click(function() {
+		$(this).slideUp();
+	});
+	
+	$('.dropdown-content').stop().mouseleave(function() {
+		console.log("EHEE");
 		$(this).slideUp();
 	});
 
@@ -312,7 +315,6 @@ function updateFont(){
     	$('#signature').css('font-style', 'normal')
     }
 
-
 	$(".multiPaste3").each(function() {
 		drawSignature(this, style, fontFamily);
 	});
@@ -350,7 +352,6 @@ $(window).resize(function() {
 		}
 		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
-
 	} else {
 		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
 			{step: function() {
@@ -365,6 +366,7 @@ $(window).resize(function() {
 		dragOrclick = true;
 	}
 });
+
 /*
     Onload function for the window. initializes the globals and listeners
     for the magic wand select.
@@ -414,6 +416,7 @@ window.onclick = function(e) {
 function ShowEditCanvas(element) {
 	var scaleSize = 4;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
+	console.log(OrigCanvas);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
 	var pos = $(element).offset();
@@ -520,8 +523,9 @@ function drop(ev) {
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
-	canvas.width = draggedElement.width;
-	canvas.height = draggedElement.height;
+	canvas.width = 1000;
+	canvas.height = 1000;
+	console.log(canvas.width);
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);

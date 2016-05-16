@@ -1,6 +1,7 @@
 #mainContent {
 	width:100%;
-	height:700px;
+	height:753px;
+	overflow: hidden;
 }
 
 #content {
@@ -115,13 +116,7 @@
 	padding-right: 5px;
 }
 
-#leftSection {
-	width:calc(50% - 50px); 
-	height:inherit; 
-	float:left;
-}
-
-#rightSection {
+#leftSection, #rightSection {
 	width:calc(50% - 50px); 
 	height:inherit; 
 	float:left;
@@ -197,14 +192,28 @@
 	display: none;
 }
 
-.templateBacground{
-	background-color: red;
-	position: relative;
-}
 
 #templateNum {
 	margin-top: 70px;
 	width: 30%;
+}
+
+#fontStyleButtons{
+	display: inline;
+}
+
+#fontSelect {
+	width: 100px;
+}
+
+#textEditing {
+	width: 100%;
+	text-align: center;
+}
+
+.templateBacground{
+	background-color: red;
+	position: relative;
 }
 
 .dropdown-content {
@@ -230,14 +239,6 @@
 	position: relative;
 }
 
-#fontStyleButtons{
-	display: inline;
-}
-
-#fontSelect {
-	width: 100px;
-}
-
 .templateDiv{
 	margin-top: 10px; 
 	margin-left:auto; 
@@ -245,7 +246,7 @@
 	position: relative;
 	overflow: hidden;
 	padding: 0px;
-	width: 100%;
+	width: 80%;
 }
 
 .shirtOverlay { position:relative;
