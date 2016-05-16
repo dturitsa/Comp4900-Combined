@@ -8,17 +8,14 @@
 	width: 100%;
 }
 
-#pic1, #pic2, #pic3, #pic4, #pic5 {
-	margin-top: -59px;
+#uploadedImage {
+	border: 2px solid black;
 }
 
-#EditButton1, #DeleteButton1, #EditButton2, #DeleteButton2,
-#EditButton3, #DeleteButton3, #EditButton4, #DeleteButton4,
-#EditButton5, #DeleteButton5 {
-	width: 60px;
-	height: 30px;
-	margin: 5px;
-	display: inline-block;
+#pic1, #pic2, #pic3, #pic4, #pic5 {
+	width: 74px;
+	height: 84px;
+	margin-top: -59px;
 }
 
 #paint, #erase {
@@ -31,7 +28,7 @@
 	margin-left: 10px;
 }
 
-#Element1, #Element2, #Element3, #Element4, #Element5 {
+.Elements {
 	width: 80px;
 	margin: auto;
 	margin-top: 30px;
@@ -46,7 +43,7 @@
 	overflow: hidden;
 }
 
-#Element1:hover, #Element2:hover, #Element3:hover, #Element4:hover, #Element5:hover {
+.Elements:hover {
 	border-color:#0000ff;
 }
 
@@ -54,7 +51,7 @@
 	display: none;
 	background-color: #000000;
 	position: absolute;
-	z-index: 20;
+	z-index: 5;
 	height: 0px;
 	width: 0px;
 	right: 55%;
@@ -97,12 +94,10 @@
 
 
 #hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover {
-
 	background-color:#555555;
 }
 
 #hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:hover, #undoButton:hover,  #paint:focus, #erase:focus {
-
 	background-color:#555555;
 }
 
@@ -152,7 +147,6 @@
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	
 }
 
 #leftButton:focus, #rightButton:focus, #ExitButton:focus {
@@ -162,8 +156,6 @@
 #imageSpace {
 	width:87%; 
 	margin-top:50px; 
-	margin-left:auto; 
-	margin-right:auto; 
 	max-width:800px;
 }
 
@@ -180,11 +172,8 @@
 }
 
 #previewCanvas {
-	margin-left:auto;
-	margin-right:auto;
 	border: 2px solid black;
 	margin-top: 5px;
-	display: block;
 	max-width: 100%;
 }
 
@@ -193,10 +182,20 @@
 	text-align: center;
 }
 
-#template2{
-	display: none;
+#templateNum, #previewCanvas, #imageSpace {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
 }
 
+#templateTitle {
+	text-align: center;
+	margin-top: 40px;
+}
+
+#template2, #template3{
+	display: none;
+}
 
 .templateBacground{
 	background-color: red;
@@ -204,12 +203,31 @@
 }
 
 #templateNum {
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	width: 30%;
 	margin-top: 70px;
+	width: 30%;
+}
 
+.dropdown-content {
+	display:none;
+	position: absolute;
+	min-width: 40px;
+}
+
+.dropdown {
+	position:relative;
+	display: inline-block;
+}
+
+.templateButtons {
+	width: 40px;
+	height: 40px;
+	background-color: black;
+	border: none;
+}
+
+.templateBacground{
+	background-color: red;
+	position: relative;
 }
 
 #fontStyleButtons{
@@ -221,15 +239,13 @@
 }
 
 .templateDiv{
-	margin-top: 40px; 
+	margin-top: 10px; 
 	margin-left:auto; 
 	margin-right:auto; 
 	position: relative;
 	overflow: hidden;
-
 	padding: 0px;
 	width: 100%;
-	height: inherit;
 }
 
 .shirtOverlay { position:relative;
@@ -239,58 +255,57 @@
 	opacity: 0.7;
 	border-color: #000000;
 	border-style: solid;
-	border-width: 1px;
+	border-width: 2px;
 	pointer-events: none;
 } 
 
-  .clothESpot1wrap{
-    padding:0px;
-    position:absolute;
-    top: 20%;
-    left: 20%;
-    z-index: 1;
-    width: 15%;
-    height: 25%;
-    background-color: blue;
-  }
-    
-  .clothESpot2wrap{
-    padding:0px;
-    position:absolute;
-    top: 20%;
-    left: 60%;
-    z-index: 1;
-    width: 15%;
-    height: 25%;
-    background-color: blue;
-  }
+.clothESpot1wrap{
+	padding:0px;
+	position:absolute;
+	top: 20%;
+	left: 20%;
+	z-index: 1;
+	width: 15%;
+	height: 25%;
+	background-color: blue;
+}
 
-  .clothESpot3wrap{
-    padding:0px;
-    position:absolute;
-    top: 50%;
-    left: 15%;
-    z-index: 1;
-    width: 25%;
-    height: 15%;
-    background-color: green;
-  }
-    
+.clothESpot2wrap{
+	padding:0px;
+	position:absolute;
+	top: 80px;
+	left: 390px;
+	z-index: 1;
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+
+.clothESpot3wrap{
+	padding:0px;
+	position:absolute;
+	top: 200px;
+	left: 120px;
+	z-index: 1;
+	width: 150px;
+	height: 50px;
+	background-color: green;
+}
 
 .fonts {
 	display: none;
 } 
     
 .clothESpot {          
-      width: 100%;
-      height: 100%; 
-      } 
+	width: 100%;
+	height: 100%; 
+} 
 
 .resizeGrip {
-      width: 20px;
-      height: 20px;
-      background-color: red;
-      border: 1px solid #000000;
-      bottom: -10px;
-      right:-10px;
+	width: 20px;
+	height: 20px;
+	background-color: red;
+	border: 1px solid #000000;
+	bottom: -10px;
+	right:-10px;
 }
