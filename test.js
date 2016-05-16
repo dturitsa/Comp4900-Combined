@@ -124,7 +124,10 @@ $(document).ready(function() {
 		$("#previewCanvas").attr("draggable", "true");
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
 		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool1').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -140,7 +143,10 @@ $(document).ready(function() {
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: ''});
 		$('#thresSlider').css({display: ''});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
 		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -156,6 +162,8 @@ $(document).ready(function() {
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
 		$('#brightLabel').css({display: ''});
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
@@ -164,6 +172,11 @@ $(document).ready(function() {
 	
 	$("#cropOut").click(function() {
 		cropOut();
+
+	});
+	$("#cropOut2").click(function() {
+		cropOut();
+		
 	});
 	$("#tool4").click(function() {
 		wandFlag = false;
@@ -171,8 +184,17 @@ $(document).ready(function() {
 		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: ''});
-		$('#thresSlider').css({display: ''});
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: ''});
+		$('#thresSlider2').css({display: ''});
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
+		$('#brightLabel').css({display: 'none'});
+		$('#brightnessSlider').css({display: 'none'});
+		$('#greyScaleLabel').css({display: 'none'});
+		$('#greyScaleButton').css({display: 'none'});
 	});
 	
 	$('#undoButton').click(function() {
@@ -392,10 +414,17 @@ window.onload = function() {
     slider = document.getElementById("thresSlider");
 
     slider.addEventListener("change", function() {
-    	currentThreshold = slider.value;
+    	currentThreshold = slider2.value = slider.value;
     	//showThreshold();
-    })
-    colorThreshold = slider.value = 50;
+    });
+
+    slider2 = document.getElementById("thresSlider2");
+
+    slider2.addEventListener("change", function() {
+    	currentThreshold = slider.value = slider2.value;
+    	//showThreshold();
+    });
+    colorThreshold = slider.value = slider2.value = 50;
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
@@ -581,7 +610,6 @@ function initCanvas(img) {
     tempCtx.canvas.height = imageInfo.height;
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
-
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 };
 
@@ -694,22 +722,27 @@ function drawBorder(noBorder) {
 
 function cropOut() {
 
-	copyImageData();
 	if(mask == null) return;
-	
-	for(i = 0; i < mask.data.length; i++) {
-		if(mask.data[i] != 0) {
-			var tmp = i * 4;
-			imageInfo.data.data[tmp] = 0;
-			imageInfo.data.data[tmp + 1] = 0;
-			imageInfo.data.data[tmp + 2] = 0;
-			imageInfo.data.data[tmp + 3] = 0;
-		}
-	}
+	var tmpMask = mask;
 	mask = null;
-	var ctx = document.getElementById("uploadedImage").getContext('2d');
-	ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
-	ctx.putImageData(imageInfo.data, 0, 0);
+
+	setTimeout(function() {
+		copyImageData();
+
+		for(i = 0; i < tmpMask.data.length; i++) {
+			if(tmpMask.data[i] != 0) {
+				var tmp = i * 4;
+				imageInfo.data.data[tmp] = 0;
+				imageInfo.data.data[tmp + 1] = 0;
+				imageInfo.data.data[tmp + 2] = 0;
+				imageInfo.data.data[tmp + 3] = 0;
+			}
+		}
+		//mask = null;
+		var ctx = document.getElementById("uploadedImage").getContext('2d');
+		ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
+		ctx.putImageData(imageInfo.data, 0, 0);
+	}, 300);
 };
 
 function colorElimination(image, x, y, threshold)
@@ -745,6 +778,8 @@ function colorElimination(image, x, y, threshold)
         //console.log(pixel[2]);
         //console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+3] - pixel[3];
+        if(tmp > threshold || tmp < -threshold) continue;
 
         array[i] = 1;
     }
@@ -756,13 +791,12 @@ function colorElimination(image, x, y, threshold)
 
 function undo() {
 	imageInfo.data.data.set(oldImageInfo.data.data);
-
 };
 
 // Copy the data before making a change in case the user needs to "undo" their action
 
 function copyImageData() {
-	oldImageInfo.data.data = new Uint8ClampedArray(imageInfo.data.data);
+	oldImageInfo.data =  document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
 // Filters and colour manipulation
