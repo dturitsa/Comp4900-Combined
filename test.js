@@ -76,13 +76,13 @@ $(document).ready(function() {
 		
 	});
 	
-	$("#Element1, #Element2, #Element3, #Element4, #Element5").hover(function() {
+	$(".Elements").hover(function() {
 			$(this.id).css({borderColor:"#0000ff"});
 		}, function() {
 			$(this.id).css({borderColor:"#000000"});
 	});
 	
-	$("#Element1, #Element2, #Element3, #Element4, #Element5").click(function() {
+	$(".Elements").click(function() {
 		switch(this.id) {
 			case "Element1":
 				if (ElementsFull[0]) {
@@ -195,35 +195,6 @@ $(document).ready(function() {
 		this.ondragover = allowDrop;
 	});
 	
-
-	//draw selection on a canvas
-	function preview(img2, selection) {
-		//console.log(img2);
-		var canvas = $('#previewCanvas')[0];
-		var selectionSource = $('#uploadedImage')[0];
-		//console.log(selectionSource);
-		var ctx = canvas.getContext("2d");  
-		var maxSize = 200;
-		var destX = 0;
-		var destY = 0;
-		var longestSide = Math.max(selection.width, selection.height);
-		var scale = maxSize / longestSide;
-		canvas.width =  selection.width * scale;
-		canvas.height =  selection.height * scale;
-		//console.log(selection);
-		//console.log(img.naturalHeight);
-
-		ctx.drawImage(img2,
-				selection.x1 / (img2.offsetWidth / img.width),
-				selection.y1 / (img2.offsetHeight / img.height),
-				selection.width / (img2.offsetWidth / img.width),
-				selection.height / (img2.offsetHeight / img.height),
-				destX,
-				destY, 
-				selection.width * scale,
-				selection.height * scale
-				);               
-	}
 	$("#imgInp").change(function(){ readURL(this); });
 
 	//make elements resizable
@@ -244,11 +215,11 @@ $(document).ready(function() {
 
    //makes element draggable in the template div (uses % instead of px to scale when template is resized)
    $( ".draggable" ).draggable({
-  stop: function( event, ui ) {
-   $(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
-   $(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
-  }
-});
+		stop: function( event, ui ) {
+		   $(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
+		   $(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
+		}
+	});
 
    $(".templateBackground").mouseout(function() {
    		$( '.draggable' ).draggable().trigger( 'mouseup' );
@@ -278,11 +249,48 @@ $(document).ready(function() {
   			$( this ).css('display', 'none');
 		});
 		var currentTemplate =  $(this).attr("value");
+		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
     });
+	
+	$("#shirtButton").hover(function() {
+		$('.dropdown-content').slideDown();
+	});
+	
+	$('.dropdown-content').click(function() {
+		$(this).slideUp();
+	});
 
-    
 }); //document.ready function closing tag
+
+//draw selection on a canvas
+function preview(img2, selection) {
+	//console.log(img2);
+	var canvas = $('#previewCanvas')[0];
+	var selectionSource = $('#uploadedImage')[0];
+	//console.log(selectionSource);
+	var ctx = canvas.getContext("2d");  
+	var maxSize = 200;
+	var destX = 0;
+	var destY = 0;
+	var longestSide = Math.max(selection.width, selection.height);
+	var scale = maxSize / longestSide;
+	canvas.width =  selection.width * scale;
+	canvas.height =  selection.height * scale;
+	//console.log(selection);
+	//console.log(img.naturalHeight);
+
+	ctx.drawImage(img2,
+			selection.x1 / (img2.offsetWidth / img.width),
+			selection.y1 / (img2.offsetHeight / img.height),
+			selection.width / (img2.offsetWidth / img.width),
+			selection.height / (img2.offsetHeight / img.height),
+			destX,
+			destY, 
+			selection.width * scale,
+			selection.height * scale
+			);               
+}
 
 //update signature font style and family, then draw it on multiple canvases 
 function updateFont(){
@@ -305,9 +313,9 @@ function updateFont(){
     }
 
 
-	 $(".multiPaste3").each(function() {
-            drawSignature(this, style, fontFamily);
-        });
+	$(".multiPaste3").each(function() {
+		drawSignature(this, style, fontFamily);
+	});
 }
 
 //draws the signature text on the specified canvas
@@ -402,17 +410,9 @@ window.onclick = function(e) {
 	}
 };
 
-function setToBlack() {
-	$("#Element1").css({borderColor:"#000000"});
-	$("#Element2").css({borderColor:"#000000"});
-	$("#Element3").css({borderColor:"#000000"});
-	$("#Element4").css({borderColor:"#000000"});
-	$("#Element5").css({borderColor:"#000000"});
-}
-
 //uploading image function
 function ShowEditCanvas(element) {
-	var scaleSize = 2;
+	var scaleSize = 4;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
@@ -520,33 +520,21 @@ function drop(ev) {
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
-	canvas.width = $("#previewCanvas").width();
-	canvas.height = $("#previewCanvas").height();
+	canvas.width = draggedElement.width;
+	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	switch (canvas.id) {
-		case "pic1":
-		case "pic2":
-		case "pic3":
-		case "pic4":
-		case "pic5":
-			ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
-			break;
-		default:
-			if(draggedElement.width >= draggedElement.height){
-			  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
-			} else{
-			  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-			}
-			break;
+	console.log(canvas);
+	if(draggedElement.width >= draggedElement.height){
+	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
+	} else{
+	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
 	}
-	
 }
 
 // loads the image and draws it on the canvas.
 function imgChange (inp) {
-
 	
     if (inp.files && inp.files[0]) {
         var reader = new FileReader();
@@ -764,7 +752,6 @@ function colorElimination(image, x, y, threshold)
 
 function undo() {
 	imageInfo.data.data.set(oldImageInfo.data.data);
-	console.log("undo");
 
 };
 

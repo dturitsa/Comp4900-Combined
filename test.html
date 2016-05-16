@@ -6,14 +6,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="jquery.imgareaselect-0.9.10\scripts\jquery.imgareaselect.pack.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	
 	<script type="text/javascript" src="magic-wand-min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript" src="test.js"></script>
-
 	<link href='https://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'> <!--google font-->
-
 	<link rel="stylesheet" type="text/css" href="test.css">
 </head>
 <body>
@@ -54,19 +51,29 @@
 				</div>
 			</div>
 			<div id="centerBeam">
-				<div id="Element1">E1<canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element2">E2<canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element3">E3<canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element4">E4<canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element5">E5<canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element1" class="Elements">E1<canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element2" class="Elements">E2<canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element3" class="Elements">E3<canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element4" class="Elements">E4<canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element5" class="Elements">E5<canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
 			</div>
-			<div id="rightSection" style="">
+			<div id="rightSection">
 				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
-
-				<button class="templateButtons" value="template1">template 1</button>
-				<button class="templateButtons" value="template2">template 2</button>
-				<button class="templateButtons" value="template3">template 3</button>
-
+				<div class="dropdown">
+					<button id="shirtButton" class="templateButtons"><img src="img/T-Shirt-icon2.png" width="100%"></button>
+					<div id="myDropdown" class="dropdown-content" style="z-index: 5;">
+						<div width="40px" height="40px" style="background-color:black;">
+							<button class="templateButtons" value="template1" style="background-color:red; border-radius:50%; z-index: 5; margin-top:5px;"></button>
+						</div>
+						<div width="40px" height="40px" style="background-color:black;">
+							<button class="templateButtons" value="template2" style="background-color:blue; border-radius:50%; z-index: 5;"></button>
+						</div>
+						<div width="40px" height="40px" style="background-color:black;">
+							<button class="templateButtons" value="template3" style="background-color:green; border-radius:50%; z-index: 5;"></button>
+						</div>
+					</div>
+				</div>
+				<h2 id="templateTitle">Template #1</h2>
 				<div id="textEditing">
 					<input type="text" id="signature" placeholder="Signature">
 					<select id="fontSelect">
@@ -82,9 +89,8 @@
 					</div>
 					
 				</div>
-
-				<div class="templateDiv" id="template1">
-					<h2>Template #1</h2>
+				
+				<div class="templateDiv" id="template1" value="Template #1">
 					<div class="templateBacground">
 					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 					<div class="draggable resizable clothESpot1wrap">
@@ -103,10 +109,7 @@
   					</div>
   				</div>
 				</div>
-
-				<div class="templateDiv" id="template2">
-					<h2>Template #2</h2>
-
+				<div class="templateDiv" id="template2" value="Template #2"> 
 					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 					<div class="draggable resizable clothESpot1wrap">
     					<canvas class="clothESpot dragDest multiPaste1"></canvas>
@@ -123,10 +126,7 @@
       					<div class="ui-resizable-handle ui-resizable-se resizeGrip"></div>
   					</div>
 				</div>
-
-
-				<div class="templateDiv" id="template3">
-					<h2>Template #3</h2>
+				<div class="templateDiv" id="template3" value="Template #3">
 					<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 					<div class="draggable resizable clothESpot1wrap">
     					<canvas class="clothESpot dragDest multiPaste1"></canvas>
