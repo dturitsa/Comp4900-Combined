@@ -701,6 +701,8 @@ function drawBorder(noBorder) {
 }
 
 function cropOut() {
+
+	copyImageData();
 	if(mask == null) return;
 	
 	for(i = 0; i < mask.data.length; i++) {
@@ -727,7 +729,7 @@ function colorElimination(image, x, y, threshold)
         pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]],
         b = image.bytes;
     //console.log(x);
-    ///console.log(y);
+    //console.log(y);
     //console.log(ipix);
     //console.log(pixel);
     //console.log(image.data.length);
