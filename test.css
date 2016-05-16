@@ -13,16 +13,9 @@
 }
 
 #pic1, #pic2, #pic3, #pic4, #pic5 {
+	width: 74px;
+	height: 84px;
 	margin-top: -59px;
-}
-
-#EditButton1, #DeleteButton1, #EditButton2, #DeleteButton2,
-#EditButton3, #DeleteButton3, #EditButton4, #DeleteButton4,
-#EditButton5, #DeleteButton5 {
-	width: 60px;
-	height: 30px;
-	margin: 5px;
-	display: inline-block;
 }
 
 #paint, #erase {
@@ -35,7 +28,7 @@
 	margin-left: 10px;
 }
 
-#Element1, #Element2, #Element3, #Element4, #Element5 {
+.Elements {
 	width: 80px;
 	margin: auto;
 	margin-top: 30px;
@@ -50,7 +43,7 @@
 	overflow: hidden;
 }
 
-#Element1:hover, #Element2:hover, #Element3:hover, #Element4:hover, #Element5:hover {
+.Elements:hover {
 	border-color:#0000ff;
 }
 
@@ -58,7 +51,7 @@
 	display: none;
 	background-color: #000000;
 	position: absolute;
-	z-index: 20;
+	z-index: 5;
 	height: 0px;
 	width: 0px;
 	right: 55%;
@@ -101,12 +94,10 @@
 
 
 #hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover {
-
 	background-color:#555555;
 }
 
 #hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:hover, #undoButton:hover,  #paint:focus, #erase:focus {
-
 	background-color:#555555;
 }
 
@@ -198,9 +189,9 @@
 	display: block;
 }
 
-
 #templateTitle {
 	text-align: center;
+	margin-top: 40px;
 }
 
 #template2, #template3{
@@ -210,6 +201,24 @@
 #templateNum {
 	margin-top: 70px;
 	width: 30%;
+}
+
+.dropdown-content {
+	display:none;
+	position: absolute;
+	min-width: 40px;
+}
+
+.dropdown {
+	position:relative;
+	display: inline-block;
+}
+
+.templateButtons {
+	width: 40px;
+	height: 40px;
+	background-color: black;
+	border: none;
 }
 
 .templateBacground{
@@ -238,39 +247,38 @@
 	pointer-events: none;
 } 
 
-  .clothESpot1wrap{
-    padding:0px;
-    position:absolute;
-    top: 20%;
-    left: 20%;
-    z-index: 1;
-    width: 15%;
-    height: 25%;
-    background-color: blue;
-  }
-    
-    .clothESpot2wrap{
-      padding:0px;
-      position:absolute;
-      top: 80px;
-      left: 390px;
-      z-index: 1;
-      width: 100px;
-      height: 100px;
-      background-color: green;
-  }
+.clothESpot1wrap{
+	padding:0px;
+	position:absolute;
+	top: 20%;
+	left: 20%;
+	z-index: 1;
+	width: 15%;
+	height: 25%;
+	background-color: blue;
+}
 
-      .clothESpot3wrap{
-      padding:0px;
-      position:absolute;
-      top: 200px;
-      left: 120px;
-      z-index: 1;
-      width: 150px;
-      height: 50px;
-      background-color: green;
-  }
-    
+.clothESpot2wrap{
+	padding:0px;
+	position:absolute;
+	top: 80px;
+	left: 390px;
+	z-index: 1;
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+
+.clothESpot3wrap{
+	padding:0px;
+	position:absolute;
+	top: 200px;
+	left: 120px;
+	z-index: 1;
+	width: 150px;
+	height: 50px;
+	background-color: green;
+}
 
 .fonts {
 	display: none;

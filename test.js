@@ -247,10 +247,10 @@ $(document).ready(function() {
    //makes element draggable in the template div (uses % instead of px to scale when template is resized)
    $( ".draggable" ).draggable({
 		stop: function( event, ui ) {
-   $(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
-   $(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
-  }
-});
+		   $(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
+		   $(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
+		}
+	});
 
    $(".templateBackground").mouseout(function() {
    		$( '.draggable' ).draggable().trigger( 'mouseup' );
@@ -282,29 +282,37 @@ $(document).ready(function() {
           }
         });
 
-        $('p a.style').click(function(){
-          var style = $(this).attr('id'); // This will be bold, italic or underline.
-          var current = $('select#fonts').fontSelector('option', style);
-          var setTo = true;
-          if(current == true) setTo = false;
-          $('select#fonts').fontSelector('option', style, setTo);
-          return false;
-        });
+	$('p a.style').click(function(){
+		var style = $(this).attr('id'); // This will be bold, italic or underline.
+		var current = $('select#fonts').fontSelector('option', style);
+		var setTo = true;
+		if(current == true) setTo = false;
+		$('select#fonts').fontSelector('option', style, setTo);
+		return false;
+	});
 
-       $( "#signature" ).keyup(function() {
-          $(".multiPaste3").each(function() {
-            drawSignature(this);
-          });      
-      });
+	$( "#signature" ).keyup(function() {
+		$(".multiPaste3").each(function() {
+		drawSignature(this);
+		});      
+	});
 
-       $('.templateButtons').click(function(){
-       		$( ".templateDiv" ).each(function() {
-  				$( this ).css('display', 'none');
-			});
-			var currentTemplate =  $(this).attr("value");
-			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
-			$('#' + currentTemplate ).css('display', 'block');
-       });
+	$('.templateButtons').click(function(){
+		$( ".templateDiv" ).each(function() {
+			$( this ).css('display', 'none');
+		});
+		var currentTemplate =  $(this).attr("value");
+		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
+		$('#' + currentTemplate ).css('display', 'block');
+	});
+
+	$("#shirtButton").hover(function() {
+		$('.dropdown-content').slideDown();
+	});
+	
+	$('.dropdown-content').click(function() {
+		$(this).slideUp();
+	});
 }); //document.ready function closing tag
 
 //draws the signature text on the specified canvas
@@ -414,7 +422,7 @@ function setToBlack() {
 
 //uploading image function
 function ShowEditCanvas(element) {
-	var scaleSize = 2;
+	var scaleSize = 4;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
@@ -522,33 +530,22 @@ function drop(ev) {
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
-	canvas.width = $("#previewCanvas").width();
-	canvas.height = $("#previewCanvas").height();
+	canvas.width = draggedElement.width;
+	canvas.height = draggedElement.height
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	switch (canvas.id) {
-		case "pic1":
-		case "pic2":
-		case "pic3":
-		case "pic4":
-		case "pic5":
-			ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
-			break;
-		default:
-			if(draggedElement.width >= draggedElement.height){
-			  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
-			} else{
-			  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-			}
-			break;
+	console.log(canvas);
+	if(draggedElement.width >= draggedElement.height){
+	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
+	} else{
+	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
 	}
 	
 }
 
 // loads the image and draws it on the canvas.
 function imgChange (inp) {
-
 	
     if (inp.files && inp.files[0]) {
         var reader = new FileReader();
@@ -766,7 +763,6 @@ function colorElimination(image, x, y, threshold)
 
 function undo() {
 	imageInfo.data.data.set(oldImageInfo.data.data);
-	console.log("undo");
 
 };
 
