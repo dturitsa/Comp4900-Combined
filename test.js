@@ -76,13 +76,13 @@ $(document).ready(function() {
 		
 	});
 	
-	$("#Element1, #Element2, #Element3, #Element4, #Element5").hover(function() {
+	$(".Elements").hover(function() {
 			$(this.id).css({borderColor:"#0000ff"});
 		}, function() {
 			$(this.id).css({borderColor:"#000000"});
 	});
 	
-	$("#Element1, #Element2, #Element3, #Element4, #Element5").click(function() {
+	$(".Elements").click(function() {
 		switch(this.id) {
 			case "Element1":
 				if (ElementsFull[0]) {
@@ -195,53 +195,22 @@ $(document).ready(function() {
 		this.ondragover = allowDrop;
 	});
 	
-
-	//draw selection on a canvas
-	function preview(img2, selection) {
-		//console.log(img2);
-		var canvas = $('#previewCanvas')[0];
-		var selectionSource = $('#uploadedImage')[0];
-		//console.log(selectionSource);
-		var ctx = canvas.getContext("2d");  
-		var maxSize = 200;
-		var destX = 0;
-		var destY = 0;
-		var longestSide = Math.max(selection.width, selection.height);
-		var scale = maxSize / longestSide;
-		canvas.width =  selection.width * scale;
-		canvas.height =  selection.height * scale;
-		//console.log(selection);
-		//console.log(img.naturalHeight);
-
-		ctx.drawImage(img2,
-				selection.x1 / (img2.offsetWidth / img.width),
-				selection.y1 / (img2.offsetHeight / img.height),
-				selection.width / (img2.offsetWidth / img.width),
-				selection.height / (img2.offsetHeight / img.height),
-				destX,
-				destY, 
-				selection.width * scale,
-				selection.height * scale
-				);               
-	}
 	$("#imgInp").change(function(){ readURL(this); });
 
 	//make elements resizable
   	$( ".resizable" ).resizable({
+  		//locks the aspect ratio when resizing
+  		aspectRatio:true,
+  		containment: ".templateBacground",
+  		//sets the resize handle in the bottom right corner
+  		//handles: {'se': $(".resizeGrip")},
 
   		//forces resizable height and width to use % instead of px 
   		stop: function( event, ui ) {
    		$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
    		$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
   		},
-
-  		//locks the aspect ratio when resizing
-  		aspectRatio:true,
-
-  		//sets the resize handle in the bottom right corner
-  		handles: {
-  			'se': $('.resizeGrip')
-  		}
+  		
 	});
 
    //makes element draggable in the template div (uses % instead of px to scale when template is resized)
@@ -257,55 +226,33 @@ $(document).ready(function() {
 	});
 
  	//textBox stuff
-    $('select#fonts').fontSelector({
-          fontChange: function(e, ui) {
-            // Update signature according to the font that's set in the widget options:
-        $('#signature').css({
-            fontFamily: ui.font,         
-        });
-        font =  ui.font;
-        $(".multiPaste3").each(function() {
-            drawSignature(this);
-        });
-        },
-          styleChange: function(e, ui) {
-            // signature according to what's set in the widget options:
-            if(ui.value == true) {
-              if(ui.style == 'bold') $('#signature').css({fontWeight: 'bold'});
-              if(ui.style == 'italic') $('#signature').css({fontStyle: 'italic'});
-              if(ui.style == 'underline') $('#signature').css({textDecoration: 'underline'});
-            } else {
-              if(ui.style == 'bold') $('#signature').css({fontWeight: 'normal'});
-              if(ui.style == 'italic') $('#signature').css({fontStyle: 'normal'});
-              if(ui.style == 'underline') $('#signature').css({textDecoration: 'none'});
-            }
-          }
-        });
-
-	$('p a.style').click(function(){
-		var style = $(this).attr('id'); // This will be bold, italic or underline.
-		var current = $('select#fonts').fontSelector('option', style);
-		var setTo = true;
-		if(current == true) setTo = false;
-		$('select#fonts').fontSelector('option', style, setTo);
-		return false;
+	$( "#fontStyleButtons" ).buttonset();
+	$( "#fontSelect" ).change(function(){
+		updateFont();
 	});
 
-	$( "#signature" ).keyup(function() {
-		$(".multiPaste3").each(function() {
-		drawSignature(this);
-		});      
+	$("#fontSelect").find("option").each(function(){
+		$(this).css('fontFamily', $(this).val());
 	});
 
-	$('.templateButtons').click(function(){
-		$( ".templateDiv" ).each(function() {
-			$( this ).css('display', 'none');
+    $( "#signature" ).keyup(function() {
+		updateFont();  
+     });
+
+    $("#fontStyleButtons").change(function(){
+    	updateFont();  
+    }); 
+
+    //switch between templates
+    $('.templateButtons').click(function(){
+       	$( ".templateDiv" ).each(function() {
+  			$( this ).css('display', 'none');
 		});
 		var currentTemplate =  $(this).attr("value");
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
-	});
-
+    });
+	
 	$("#shirtButton").hover(function() {
 		$('.dropdown-content').slideDown();
 	});
@@ -313,10 +260,66 @@ $(document).ready(function() {
 	$('.dropdown-content').click(function() {
 		$(this).slideUp();
 	});
+
 }); //document.ready function closing tag
 
+//draw selection on a canvas
+function preview(img2, selection) {
+	//console.log(img2);
+	var canvas = $('#previewCanvas')[0];
+	var selectionSource = $('#uploadedImage')[0];
+	//console.log(selectionSource);
+	var ctx = canvas.getContext("2d");  
+	var maxSize = 200;
+	var destX = 0;
+	var destY = 0;
+	var longestSide = Math.max(selection.width, selection.height);
+	var scale = maxSize / longestSide;
+	canvas.width =  selection.width * scale;
+	canvas.height =  selection.height * scale;
+	//console.log(selection);
+	//console.log(img.naturalHeight);
+
+	ctx.drawImage(img2,
+			selection.x1 / (img2.offsetWidth / img.width),
+			selection.y1 / (img2.offsetHeight / img.height),
+			selection.width / (img2.offsetWidth / img.width),
+			selection.height / (img2.offsetHeight / img.height),
+			destX,
+			destY, 
+			selection.width * scale,
+			selection.height * scale
+			);               
+}
+
+//update signature font style and family, then draw it on multiple canvases 
+function updateFont(){
+	var fontFamily = $("#fontSelect").val();
+	var style = '';
+	$('#signature').css('font-family', fontFamily)
+
+	if($('#bCheck').is(":checked")){
+        $('#signature').css('font-weight', 'bold')
+        style += 'bold ';
+    } else{
+    	$('#signature').css('font-weight', 'normal')
+    }
+
+    if($('#iCheck').is(":checked")){
+        $('#signature').css('font-style', 'italic')
+        style += 'italic ';
+    } else{
+    	$('#signature').css('font-style', 'normal')
+    }
+
+
+	$(".multiPaste3").each(function() {
+		drawSignature(this, style, fontFamily);
+	});
+}
+
 //draws the signature text on the specified canvas
-function drawSignature(canvas){  
+function drawSignature(canvas, style, fontFamily){  
   canvas.width = 1500;
   canvas.height = 500;
   var maxFontSize = canvas.height;
@@ -324,21 +327,16 @@ function drawSignature(canvas){
   var text = $('#signature').val()
   var ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = maxFontSize + "px " + font;
+  ctx.font = style + maxFontSize + "px " + fontFamily;
   var textSize = ctx.measureText(text);
 
   if(textSize.width > canvas.width){
     fontSize = Math.floor(maxFontSize * (canvas.width / textSize.width));
-    ctx.font = fontSize + "px " + font;
+    ctx.font = style + fontSize + "px " + fontFamily;
     console.log(fontSize);
+  } else{
+  	fontSize = maxFontSize;
   }
-    
-  else
-    fontSize = maxFontSize;
-  //console.log(metrics.width);
-  
-
-  //console.log(canvas.width);
   ctx.fillText(text, 10, fontSize);
 }
 
@@ -411,14 +409,6 @@ window.onclick = function(e) {
 		}
 	}
 };
-
-function setToBlack() {
-	$("#Element1").css({borderColor:"#000000"});
-	$("#Element2").css({borderColor:"#000000"});
-	$("#Element3").css({borderColor:"#000000"});
-	$("#Element4").css({borderColor:"#000000"});
-	$("#Element5").css({borderColor:"#000000"});
-}
 
 //uploading image function
 function ShowEditCanvas(element) {
@@ -531,7 +521,7 @@ function drop(ev) {
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	canvas.width = draggedElement.width;
-	canvas.height = draggedElement.height
+	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);
@@ -541,7 +531,6 @@ function drawCopiedImage(canvas, ev){
 	} else{
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
 	}
-	
 }
 
 // loads the image and draws it on the canvas.

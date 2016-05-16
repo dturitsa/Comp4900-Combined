@@ -147,7 +147,6 @@
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	
 }
 
 #leftButton:focus, #rightButton:focus, #ExitButton:focus {
@@ -198,6 +197,11 @@
 	display: none;
 }
 
+.templateBacground{
+	background-color: red;
+	position: relative;
+}
+
 #templateNum {
 	margin-top: 70px;
 	width: 30%;
@@ -224,6 +228,14 @@
 .templateBacground{
 	background-color: red;
 	position: relative;
+}
+
+#fontStyleButtons{
+	display: inline;
+}
+
+#fontSelect {
+	width: 100px;
 }
 
 .templateDiv{
