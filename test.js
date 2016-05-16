@@ -228,20 +228,18 @@ $(document).ready(function() {
 
 	//make elements resizable
   	$( ".resizable" ).resizable({
+  		//locks the aspect ratio when resizing
+  		aspectRatio:true,
+  		containment: ".templateBacground",
+  		//sets the resize handle in the bottom right corner
+  		//handles: {'se': $(".resizeGrip")},
 
   		//forces resizable height and width to use % instead of px 
   		stop: function( event, ui ) {
    		$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
    		$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
   		},
-
-  		//locks the aspect ratio when resizing
-  		aspectRatio:true,
-
-  		//sets the resize handle in the bottom right corner
-  		handles: {
-  			'se': $('.resizeGrip')
-  		}
+  		
 	});
 
    //makes element draggable in the template div (uses % instead of px to scale when template is resized)
@@ -257,57 +255,63 @@ $(document).ready(function() {
 	});
 
  	//textBox stuff
-    $('select#fonts').fontSelector({
-          fontChange: function(e, ui) {
-            // Update signature according to the font that's set in the widget options:
-        $('#signature').css({
-            fontFamily: ui.font,         
-        });
-        font =  ui.font;
-        $(".multiPaste3").each(function() {
-            drawSignature(this);
-        });
-        },
-          styleChange: function(e, ui) {
-            // signature according to what's set in the widget options:
-            if(ui.value == true) {
-              if(ui.style == 'bold') $('#signature').css({fontWeight: 'bold'});
-              if(ui.style == 'italic') $('#signature').css({fontStyle: 'italic'});
-              if(ui.style == 'underline') $('#signature').css({textDecoration: 'underline'});
-            } else {
-              if(ui.style == 'bold') $('#signature').css({fontWeight: 'normal'});
-              if(ui.style == 'italic') $('#signature').css({fontStyle: 'normal'});
-              if(ui.style == 'underline') $('#signature').css({textDecoration: 'none'});
-            }
-          }
-        });
+	$( "#fontStyleButtons" ).buttonset();
+	$( "#fontSelect" ).change(function(){
+		updateFont();
+	});
 
-        $('p a.style').click(function(){
-          var style = $(this).attr('id'); // This will be bold, italic or underline.
-          var current = $('select#fonts').fontSelector('option', style);
-          var setTo = true;
-          if(current == true) setTo = false;
-          $('select#fonts').fontSelector('option', style, setTo);
-          return false;
-        });
+	$("#fontSelect").find("option").each(function(){
+		$(this).css('fontFamily', $(this).val());
+	});
 
-       $( "#signature" ).keyup(function() {
-          $(".multiPaste3").each(function() {
-            drawSignature(this);
-          });      
-      });
+    $( "#signature" ).keyup(function() {
+		updateFont();  
+     });
 
-       $('.templateButtons').click(function(){
-       		$( ".templateDiv" ).each(function() {
-  				$( this ).css('display', 'none');
-			});
-			var currentTemplate =  $(this).attr("value");
-			$('#' + currentTemplate ).css('display', 'block');
-       });
+    $("#fontStyleButtons").change(function(){
+    	updateFont();  
+    }); 
+
+    //switch between templates
+    $('.templateButtons').click(function(){
+       	$( ".templateDiv" ).each(function() {
+  			$( this ).css('display', 'none');
+		});
+		var currentTemplate =  $(this).attr("value");
+		$('#' + currentTemplate ).css('display', 'block');
+    });
+
+    
 }); //document.ready function closing tag
 
+//update signature font style and family, then draw it on multiple canvases 
+function updateFont(){
+	var fontFamily = $("#fontSelect").val();
+	var style = '';
+	$('#signature').css('font-family', fontFamily)
+
+	if($('#bCheck').is(":checked")){
+        $('#signature').css('font-weight', 'bold')
+        style += 'bold ';
+    } else{
+    	$('#signature').css('font-weight', 'normal')
+    }
+
+    if($('#iCheck').is(":checked")){
+        $('#signature').css('font-style', 'italic')
+        style += 'italic ';
+    } else{
+    	$('#signature').css('font-style', 'normal')
+    }
+
+
+	 $(".multiPaste3").each(function() {
+            drawSignature(this, style, fontFamily);
+        });
+}
+
 //draws the signature text on the specified canvas
-function drawSignature(canvas){  
+function drawSignature(canvas, style, fontFamily){  
   canvas.width = 1500;
   canvas.height = 500;
   var maxFontSize = canvas.height;
@@ -315,21 +319,16 @@ function drawSignature(canvas){
   var text = $('#signature').val()
   var ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = maxFontSize + "px " + font;
+  ctx.font = style + maxFontSize + "px " + fontFamily;
   var textSize = ctx.measureText(text);
 
   if(textSize.width > canvas.width){
     fontSize = Math.floor(maxFontSize * (canvas.width / textSize.width));
-    ctx.font = fontSize + "px " + font;
+    ctx.font = style + fontSize + "px " + fontFamily;
     console.log(fontSize);
+  } else{
+  	fontSize = maxFontSize;
   }
-    
-  else
-    fontSize = maxFontSize;
-  //console.log(metrics.width);
-  
-
-  //console.log(canvas.width);
   ctx.fillText(text, 10, fontSize);
 }
 
