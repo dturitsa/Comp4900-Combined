@@ -61,6 +61,7 @@ $(document).ready(function() {
 		.promise().done(function() {
 			$("#toolBar").slideDown();
 		});
+		$("#centerBeam").stop().animate({'marginLeft' : '+=10px'});
 	});
 	
 	$("#hideToolButton").click(function() {
@@ -70,6 +71,7 @@ $(document).ready(function() {
 			$("#toolButton").fadeIn();
 			$("#content").stop().animate({paddingLeft: 0},
 				{step: function() {
+					//$("#centerBeam").stop().css({marginLeft: -50});
 					$(window).trigger('resize');
 				}
 			});
@@ -296,6 +298,15 @@ $(document).ready(function() {
 		$('#' + currentTemplate ).css('display', 'block');
     });
 	
+	$('.buttonDiv')
+	.mouseenter(function() {
+		$(this).css({"backgroundColor":"#444444"})
+	})
+	.mouseleave(function() {
+		$(this).css({"backgroundColor":"#5555555"})
+	});
+	
+	
 	$("#shirtButton").hover(function() {
 		$('.dropdown-content').stop().slideDown();
 	});
@@ -405,7 +416,6 @@ function drawSignature(canvas, style, fontFamily){
   if(textSize.width > canvas.width){
     fontSize = Math.floor(maxFontSize * (canvas.width / textSize.width));
     ctx.font = style + fontSize + "px " + fontFamily;
-    console.log(fontSize);
   } else{
   	fontSize = maxFontSize;
   }
@@ -422,6 +432,7 @@ $(window).resize(function() {
 		}
 		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
+		$("#centerBeam").stop().css({left:(Size * leftPercent)});
 	} else {
 		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
 			{step: function() {
@@ -433,6 +444,7 @@ $(window).resize(function() {
 				}
 			});
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
+		$("#centerBeam").stop().animate({left:(Size * leftPercent)});
 		dragOrclick = true;
 	}
 });
@@ -493,7 +505,6 @@ window.onclick = function(e) {
 function ShowEditCanvas(element) {
 	var scaleSize = 4;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
-	console.log(OrigCanvas);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
 	var pos = $(element).offset();
@@ -602,11 +613,9 @@ function drop(ev, canvas = ev.target) {
 function drawCopiedImage(canvas, ev){
 	canvas.width = 1000;
 	canvas.height = 1000;
-	console.log(canvas.width);
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	console.log(canvas);
 	if(draggedElement.width >= draggedElement.height){
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
 	} else{
@@ -862,7 +871,6 @@ function greyScale() {
 	//imageInfo = imageInfo.context.getImageData(0, 0, image.width, image.height);
 	//oldImageInfo = imageInfo;
 	copyImageData();
-	console.log(imageInfo.data.data.length);
 	
 	for(var i = 0; i < imageInfo.data.data.length; i += 4)
 	{
@@ -882,7 +890,5 @@ function greyScale() {
 	ctx = document.getElementById("uploadedImage").getContext('2d');
 	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	//ctx.putImageData(dataArray, 0, 0);
-	
-	console.log("Grey");
 	
 };

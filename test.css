@@ -103,7 +103,7 @@
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus, #undoButton:focus {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus, #undoButton:focus, .templateButtons:focus {
 	outline:none;
 }
 
@@ -117,10 +117,28 @@
 	padding-right: 5px;
 }
 
-#leftSection, #rightSection {
+#leftSection {
 	width:calc(50% - 50px); 
 	height:inherit; 
 	float:left;
+}
+
+#rightSection {
+	width:calc(50% - 50px); 
+	height:inherit; 
+	float:left;
+	position: relative;
+	left: 100px;
+}
+
+#centerBeam {
+	background-color:#999999; 
+	width:100px; 
+	height:inherit; 
+	float:left;
+	position: absolute;
+	margin-left: -50px;
+	left: 50%;
 }
 
 #leftButton {
@@ -153,13 +171,6 @@
 	width:87%; 
 	margin-top:50px; 
 	max-width:800px;
-}
-
-#centerBeam {
-	background-color:#999999; 
-	width:100px; 
-	height:inherit; 
-	float:left;
 }
 
 #draggable {
@@ -227,23 +238,22 @@
 	display: inline-block;
 }
 
-.templateButtons, .templateHover {
-	width: 40px;
+.templateButtons {
+	width: 50px;
 	height: 40px;
-	background-color: black;
+	background-color: #555555;
 	border: none;
 	z-index: 5;
-
-}
-
-.templateButtons {
 	border-radius: 50%;
 }
 
 .templateHover {
 	color: white;
 	font-weight: bold;
-	width: 50px;
+	width: 60px;
+	background-color: #555555;
+	border: none;
+	height: 40px;
 }
 
 .templateBacground{
