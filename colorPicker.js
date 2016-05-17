@@ -14,6 +14,7 @@ $(function(){
 
     // select desired colorwheel
     var imagesrc="img/colorwheel1.png";
+
     switch ($(canvas).attr('var')) {
         case '2':
             imagesrc="img/colorwheel2.png";
