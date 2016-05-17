@@ -93,7 +93,7 @@
 }
 
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover {
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover {
 	background-color:#555555;
 }
 
@@ -101,7 +101,7 @@
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus, #eraserButton:focus {
 	outline:none;
 }
 

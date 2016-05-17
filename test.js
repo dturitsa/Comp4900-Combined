@@ -8,9 +8,7 @@ var dragOrclick = true;
 var draggedElement;
 var font;
 var brightness = 0;
-var contrast = 0;
-var hue = 0;
-var saturation = 0;
+var erasing = false;
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
@@ -122,6 +120,7 @@ $(document).ready(function() {
 		wandFlag = false;
 		colorElimFlag = false;
 		colourFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
 		$('#cropOut').css({display: 'none'});
@@ -135,12 +134,14 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: 'none'});
 	});
 	
 	$("#tool2").click(function() {
 		wandFlag = true;
 		colorElimFlag = false;
 		colourFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: ''});
@@ -154,12 +155,14 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: 'none'});
 	});
 	
 	$("#tool3").click(function() {
 		colourFlag = true;
 		colorElimFlag = false;
 		wandFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: 'none'});
@@ -170,6 +173,7 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
 		$('#greyScaleButton').css({display: ''});
+		$('#eraserSlider').css({display: 'none'});
 	});
 	
 	$("#cropOut").click(function() {
@@ -184,6 +188,7 @@ $(document).ready(function() {
 		wandFlag = false;
 		colorElimFlag = true;
 		colourFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: 'none'});
@@ -197,6 +202,7 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: 'none'});
 	});
 	
 	$('#undoButton').click(function() {
@@ -205,6 +211,24 @@ $(document).ready(function() {
 	
 	$('#greyScaleButton').click(function() {
 		greyScale();
+	});
+	
+	$('#eraserButton').click(function() {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = false;
+		erasing = true;
+		$('#uploadedImage').imgAreaSelect({remove:true});
+		$("#previewCanvas").attr("draggable", "false");
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
+		$('#brightLabel').css({display: 'none'});
+		$('#brightnessSlider').css({display: 'none'});
+		$('#greyScaleLabel').css({display: 'none'});
+		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: ''});
 	});
 
 	$(".dragSource").each(function() {
@@ -403,6 +427,7 @@ window.onload = function() {
     mask = null;
     downPoint = null;
     img = null;
+	currentCanvas = null;
     allowDraw = false;
 	/*
 	brightnessSlider = document.getElementById("brightnessSlider");
@@ -430,7 +455,7 @@ window.onload = function() {
 // Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
 	if(e.target.id != "uploadedImage") {
-		mask = null;
+		mask = null;	
 		var ctx = document.getElementById("uploadedImage").getContext('2d');
 		if(imageInfo != null) {
 			ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
@@ -459,6 +484,9 @@ function ShowEditCanvas(element) {
 				top: pos.top,
 				}).slideDown();
 	ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
+	
+	
+	
 }
 
 //draw selection on a canvas
@@ -607,6 +635,7 @@ function initCanvas(img) {
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	
 };
 
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
@@ -632,28 +661,72 @@ function onMouseDown(e) {
 	        //console.log(mask.data.length);
 	    }
 	    else allowDraw = false;
+	} else if(erasing) {
+		allowDraw = true;
+		downPoint = getMousePosition(e);
+		//ctx = document.getElementById("uploadedImage").getContext("2d");
+		ctx = imageInfo.context;
+		radius = document.getElementById("eraserSlider").value;
+		ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.globalCompositeOperation = "source-atop";
+			ctx.fillRect(0,0,50,50);
+		ctx.closePath();
+		
+		//console.log("Click");
+		
+		//imageInfo.data.putImageData(cData, 0, 0);
 	}
 }
 
 function onMouseMove(e) {
     if (allowDraw) {
-        var p = getMousePosition(e);
-        if (p.x != downPoint.x || p.y != downPoint.y) {
-            var dx = p.x - downPoint.x,
-                dy = p.y - downPoint.y,
-                len = Math.sqrt(dx * dx + dy * dy),
-                adx = Math.abs(dx),
-                ady = Math.abs(dy),
-                sign = adx > ady ? dx / adx : dy / ady;
-            sign = sign < 0 ? sign / 5 : sign / 3;
-            //var thres = Math.min(Math.max(colorThreshold + Math.floor(sign * len), 1), 255);
-            //var thres = Math.min(colorThreshold + Math.floor(len / 3), 255);
+		if(erasing) {
+			//ctx = document.getElementById("uploadedImage").getContext("2d");
+			ctx = imageInfo.context;
+			radius = document.getElementById("eraserSlider").value;
+			downPoint = getMousePosition(e);
+			ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.closePath();
+			imageInfo.context = ctx;
+			//ctx.fillRect(downPoint.x,downPoint.y,75,50);
+			//console.log("Fill");
+		} else {
+			
+			var p = getMousePosition(e);
+			if (p.x != downPoint.x || p.y != downPoint.y) {
+				var dx = p.x - downPoint.x,
+					dy = p.y - downPoint.y,
+					len = Math.sqrt(dx * dx + dy * dy),
+					adx = Math.abs(dx),
+					ady = Math.abs(dy),
+					sign = adx > ady ? dx / adx : dy / ady;
+				sign = sign < 0 ? sign / 5 : sign / 3;
+				//var thres = Math.min(Math.max(colorThreshold + Math.floor(sign * len), 1), 255);
+				//var thres = Math.min(colorThreshold + Math.floor(len / 3), 255);
+			}
         }
     }
-}
+} 
 
 function onMouseUp(e) {
     allowDraw = false;
+	imageInfo.context.globalCompositeOperation = "source-atop";
+	//console.log(imageInfo.data.data);
+	imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	if(erasing) {
+		//var ctx = document.getElementById("uploadedImage").getContext('2d');
+		//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
+		//ctx.putImageData(imageInfo.data, 0, 0);
+		
+	}
     //currentThreshold = colorThreshold;
 }
 
@@ -825,10 +898,17 @@ function greyScale() {
         imageInfo.data.data[i + 3] = alpha; // not changing the transparency
 	}
 	
-	ctx = document.getElementById("uploadedImage").getContext('2d');
+	//ctx = document.getElementById("uploadedImage").getContext('2d');
 	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	//ctx.putImageData(dataArray, 0, 0);
 	
-	console.log("Grey");
+	//console.log("Grey");
+	
+};
+
+// Eraser tool
+
+function erase() {
+	
 	
 };

@@ -25,13 +25,16 @@
 			<button id="tool4" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" width="100%"></button>
 			<button id="cropOut2" type="button" class="btn btn-default" style="background-color:black; border:none; display: none;"><img src="img/cut-icon.png" width="100%"></button>
 			<input id="thresSlider2" type="range" orient="vertical" min="1" max="100" value="50" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
-			<!-- not sure where the source files are for these buttons - Denis
-			<button id="tool3" type="button" class="btn btn-default"><img src="img/colour2.png" width="100%"></button>
-			-->
+			<button id="eraserButton" type="button" class="btn btn-default"><img src="img/eraser.png" width="100%"></button>
+			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
+			<button id="tool3" type="button" class="btn btn-default"><img src="img/colour.png" width="100%"></button>
+			<!--
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
+			
 			<label for="greyScaleButton" id="greyScaleLabel" style="display: none;">Black and White</label>
-			<!--<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>-->
+			-->
+			<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>
 		</div>
 		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 		<div id="content">
