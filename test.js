@@ -313,8 +313,17 @@ $(document).ready(function() {
     		//sets position of new element
     		var xPos = event.pageX - $(ev.target).offset().left - newElement.width() / 2;
     		var yPos = event.pageY - $(ev.target).offset().top - newElement.width() / 2;
-    		newElement.css("left", xPos / ($(this).width() / 100)+"%");
-   			newElement.css("top", yPos / ($(this).height() / 100)+"%");
+    		var leftPercent = xPos / ($(this).width() / 100);
+    		var topPercent = yPos / ($(this).height() / 100);
+    		newElement.css("left", leftPercent + "%");
+   			newElement.css("top", topPercent +"%");
+
+   			//flips upside down if in top part of a flipTop class
+   			if($(this).hasClass("flipTop") && topPercent < 50){
+   				newElement.css('-ms-transform', 'rotate(180deg)'); //IE9
+   				newElement.css('-webkit-transform', 'rotate(180deg)'); //Safari
+   				newElement.css('transform', 'rotate(180deg)');
+  			}
 
     		//enable drop on new element
     		$(newElement).find(".dragDest").each(function() {
@@ -340,6 +349,8 @@ $(document).ready(function() {
    					$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
   				}
   			});
+
+  			
   			//draws image in the newly created canvas
   			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
     	}	

@@ -312,6 +312,41 @@
 	right:-10px;
 }
 
+  .t2ESpot1wrap{
+    padding:0px;
+    position:absolute;
+    top: 7%;
+    left: 35%;
+    z-index: 1;
+    width: 40%;
+    height: 18%;
+    background-color: blue;
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+  }
+    
+  .t2ESpot2wrap{
+    padding:0px;
+    position:absolute;
+    top: 77%;
+    left: 30%;
+    z-index: 1;
+    width: 40%;
+    height: 18%;
+    background-color: red;
+  }
+    .t2ESpot3wrap{
+    padding:0px;
+    position:absolute;
+    top: 92%;
+    left: 48%;
+    z-index: 1;
+    width: 25%;
+    height: 3%;
+    background-color: green;
+  }
+
   .t3ESpot1wrap{
     padding:0px;
     position:absolute;
