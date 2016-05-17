@@ -8,7 +8,9 @@
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="magic-wand-min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="colorPicker.js"></script>
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
 	<script type="text/javascript" src="test.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'> <!--google font-->
 	<link rel="stylesheet" type="text/css" href="test.css">
@@ -25,13 +27,18 @@
 			<button id="tool4" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" width="100%"></button>
 			<button id="cropOut2" type="button" class="btn btn-default" style="background-color:black; border:none; display: none;"><img src="img/cut-icon.png" width="100%"></button>
 			<input id="thresSlider2" type="range" orient="vertical" min="1" max="100" value="50" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
-			<!-- not sure where the source files are for these buttons - Denis
-			<button id="tool3" type="button" class="btn btn-default"><img src="img/colour2.png" width="100%"></button>
-			-->
+			<button id="tool5" type="button" class="btn btn-default" style="background-color:black; border: none"><img src="img/whiteOut-icon.png" width="100%"></button>
+
+			<button id="eraserButton" type="button" class="btn btn-default"><img src="img/eraser.png" width="100%"></button>
+			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
+			<button id="tool3" type="button" class="btn btn-default"><img src="img/colour.png" width="100%"></button>
+			<!--
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
+			
 			<label for="greyScaleButton" id="greyScaleLabel" style="display: none;">Black and White</label>
-			<!--<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>-->
+			-->
+			<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>
 		</div>
 		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 		<div id="content">
@@ -76,6 +83,20 @@
 					</div>
 				</div>
 				<div id="textEditing">
+					<!-- colorpicker element -->
+					</div>
+					<div class="preview"></div>
+						<div class="colorpicker" style="display:none; z-index: 10;">
+						    <canvas id="picker" var="3" width="300" height="300"></canvas>
+
+						    <div class="controls">
+						        <div><label>R</label> <input type="text" id="rVal" /></div>
+						        <div><label>G</label> <input type="text" id="gVal" /></div>
+						        <div><label>B</label> <input type="text" id="bVal" /></div>
+						        <div><label>RGB</label> <input type="text" id="rgbVal" /></div>
+						        <div><label>HEX</label> <input type="text" id="hexVal" /></div>
+						    </div>
+						</div>	
 					<input type="text" id="signature" placeholder="Signature">
 					<select id="fontSelect">
 						<option value="Arial">Arial</option>
@@ -87,7 +108,7 @@
 					<div id="fontStyleButtons">
   						<input type="checkbox" id="bCheck"><label for="bCheck">B</label>
   						<input type="checkbox" id="iCheck"><label for="iCheck">I</label>
-					</div>
+					</div
 					
 				</div>
 
