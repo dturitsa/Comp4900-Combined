@@ -206,6 +206,7 @@
 
 .templateBackground{
 	position: relative;
+	height: auto;
 }
 
 #templateNum {
@@ -231,9 +232,9 @@
 	border: none;
 }
 
-.templateBacground{
-	background-color: red;
+.templateBackground{
 	position: relative;
+
 }
 
 #signature {
@@ -254,19 +255,21 @@
 	margin-left:auto; 
 	margin-right:auto; 
 	position: relative;
+	overflow: hidden;
 	padding: 0px;
 	width: 100%;
 }
 
-.shirtOverlay { position:relative;
+.shirtOverlay { 
+	position:relative;
 	z-index: 2;
-	width: 100%;
 	height: auto;
 	opacity: 0.7;
 	border-color: #000000;
 	border-style: solid;
 	border-width: 2px;
 	pointer-events: none;
+	width: 100%;
 } 
 
 .clothESpot1wrap{
@@ -309,6 +312,7 @@
 .clothESpot {          
 	width: 100%;
 	height: 100%; 
+	border: 2px solid black;
 } 
 
 .resizeGrip {
@@ -320,7 +324,42 @@
 	right:-10px;
 }
 
-/* colorpicker styles */
+  .t2ESpot1wrap{
+    padding:0px;
+    position:absolute;
+    top: 7%;
+    left: 35%;
+    z-index: 1;
+    width: 40%;
+    height: 18%;
+    background-color: blue;
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+  }
+    
+  .t2ESpot2wrap{
+    padding:0px;
+    position:absolute;
+    top: 77%;
+    left: 30%;
+    z-index: 1;
+    width: 40%;
+    height: 18%;
+    background-color: red;
+  }
+    .t2ESpot3wrap{
+    padding:0px;
+    position:absolute;
+    top: 92%;
+    left: 48%;
+    z-index: 1;
+    width: 25%;
+    height: 3%;
+    background-color: green;
+  }
+
+ /* colorpicker styles */
 .colorpicker {
     background-color: #222222;
     border-radius: 5px 5px 5px 5px;
