@@ -4,13 +4,13 @@
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="jquery.imgareaselect-0.9.10/css/imgareaselect-default.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script type="text/javascript" src="jquery.imgareaselect-0.9.10\scripts\jquery.imgareaselect.pack.js"></script>
+	<script type="text/javascript" src="jquery.imgareaselect-0.9.10/scripts/jquery.imgareaselect.pack.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="magic-wand-min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="colorPicker.js"></script>
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
+	
 	<script type="text/javascript" src="test.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'> <!--google font-->
 	<link rel="stylesheet" type="text/css" href="test.css">
@@ -37,8 +37,9 @@
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
 			
 			<label for="greyScaleButton" id="greyScaleLabel" style="display: none;">Black and White</label>
-			-->
+			
 			<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>
+			-->
 		</div>
 		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 		<div id="content">
@@ -59,32 +60,31 @@
 					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
 			</div>
-			<div id="centerBeam">
-				<div id="Element1" class="Elements">E1<canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element2" class="Elements">E2<canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element3" class="Elements">E3<canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element4" class="Elements">E4<canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element5" class="Elements">E5<canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
-			</div>
 			<div id="rightSection">
 				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
 				<div class="dropdown">
-					<button id="shirtButton" class="templateButtons"><img src="img/T-Shirt-icon2.png" width="100%"></button>
+					<button id="shirtButton" class="templateHover"><p style="margin: 0px; display:inline;">Ties</p>&#x25BC;</button>
 					<div id="myDropdown" class="dropdown-content" style="z-index: 5;">
-						<div width="40px" height="40px" style="background-color:black;">
-							<button class="templateButtons" value="template1" style="background-color:red; border-radius:50%; z-index: 5; margin-top:5px;"></button>
+						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
+							<button class="templateButtons" value="template1" style="background-color:red; margin-top:5px;">
+								<img src="img/Tie2.png" width="100%">
+							</button>
 						</div>
-						<div width="40px" height="40px" style="background-color:black;">
-							<button class="templateButtons" value="template2" style="background-color:blue; border-radius:50%; z-index: 5;"></button>
+						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
+							<button class="templateButtons" value="template2" style="background-color:blue;">
+								<img src="img/Tie2.png" width="100%">
+							</button>
 						</div>
-						<div width="40px" height="40px" style="background-color:black;">
-							<button class="templateButtons" value="template3" style="background-color:green; border-radius:50%; z-index: 5;"></button>
+						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
+							<button class="templateButtons" value="template3" style="background-color:green;">
+								<img src="img/Tie2.png" width="100%">
+							</button>
 						</div>
 					</div>
 				</div>
 				<div id="textEditing">
 					<!-- colorpicker element -->
-					</div>
+					<h2 id="templateTitle">Shirt, Color White</h2>
 					<div class="preview"></div>
 						<div class="colorpicker" style="display:none; z-index: 10;">
 						    <canvas id="picker" var="3" width="300" height="300"></canvas>
@@ -108,12 +108,12 @@
 					<div id="fontStyleButtons">
   						<input type="checkbox" id="bCheck"><label for="bCheck">B</label>
   						<input type="checkbox" id="iCheck"><label for="iCheck">I</label>
-					</div
+					</div>
 					
 				</div>
 
-				<div class="templateDiv" id="template1">
-					<div class="templateBackground freeDropZone" id='template1Background'>
+				<div class="templateDiv" id="template1" value="Shirt, Color Red">
+					<div class="templateBackground freeDropZone" id="template1Background">
 						<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 						<div class="draggable resizable clothESpot1wrap">
     						<canvas class="clothESpot dragDest multiPaste1"></canvas>	
@@ -128,8 +128,7 @@
   						</div>
   					</div>
 				</div>
-
-				<div class="templateDiv" id="template2">
+				<div class="templateDiv" id="template2" value="Scarf, Color Blue">
 					<div class="templateBackground freeDropZone flipTop" id="template2Background">
 						<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
 						<div class="draggable resizable t2ESpot1wrap">
@@ -146,7 +145,7 @@
   					</div>
 				</div>
 
-				<div class="templateDiv" id="template3">
+				<div class="templateDiv" id="template3" value="Tie, Color Green">
 					<div class="templateBackground" id="template3Background">
 						<img src="img/Tie2_Template_Empty_Small.png" class="shirtOverlay" />
 						<div class="draggable resizable t3ESpot1wrap">
@@ -170,7 +169,13 @@
   						</div>
   					</div>
 				</div>
-
+			</div>
+			<div id="centerBeam">
+				<div id="Element1" class="Elements"><canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element2" class="Elements"><canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element3" class="Elements"><canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element4" class="Elements"><canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element5" class="Elements"><canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
 			</div>
 		</div>
 	</div>

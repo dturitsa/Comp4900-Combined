@@ -6,6 +6,7 @@ var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
+var allowDraw;
 var font;
 var brightness = 0;
 var erasing = false;
@@ -63,7 +64,7 @@ $(document).ready(function() {
 	
 	$("#hideToolButton").click(function() {
 		toolFlag = false;
-		$('#tool2, #tool1').css({"backgroundColor":"black"});
+		$('#tool2, #tool1, #tool4').css({"backgroundColor":"black"});
 		$("#toolBar").slideUp( function() {
 			$("#toolButton").fadeIn();
 			$("#content").stop().animate({paddingLeft: 0},
@@ -85,32 +86,27 @@ $(document).ready(function() {
 		switch(this.id) {
 			case "Element1":
 				if (ElementsFull[0]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element2":
 				if (ElementsFull[1]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element3":
 				if (ElementsFull[2]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element4":
 				if (ElementsFull[3]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element5":
 				if (ElementsFull[4]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 		}
@@ -124,12 +120,18 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#tool2').css({"backgroundColor":"black"});
-		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -145,10 +147,16 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: ''});
-		$('#thresSlider').css({display: ''});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#cropOut')
+			.slideDown()
+			.promise().done(function() {
+				$('#thresSlider').slideDown();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -166,10 +174,16 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#brightLabel').css({display: ''});
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
@@ -211,10 +225,16 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: ''});
-		$('#thresSlider2').css({display: ''});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#cropOut2')
+			.slideDown()
+			.promise().done(function() {
+				$('#thresSlider2').slideDown();
+		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool2').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -267,6 +287,11 @@ $(document).ready(function() {
 	  
 	$(".dragDest").each(function() {
 		this.ondrop = drop;
+		this.ondragover = allowDrop;
+	});
+
+	$(".freeDropZone").each(function() {
+		this.ondrop = freeDrop;
 		this.ondragover = allowDrop;
 	});
 	
@@ -324,26 +349,37 @@ $(document).ready(function() {
   			$( this ).css('display', 'none');
 		});
 		var currentTemplate =  $(this).attr("value");
+		$(".templateDiv").css({"backgroundColor":$(this).css("backgroundColor")});
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
     });
 	
+	$('.buttonDiv')
+	.mouseenter(function() {
+		$(this).css({"backgroundColor":"#444444"})
+	})
+	.mouseleave(function() {
+		$(this).css({"backgroundColor":"#5555555"})
+	});
+	
+	
 	$("#shirtButton").hover(function() {
-		$('.dropdown-content').slideDown();
+		$('.dropdown-content').stop().slideDown();
 	});
 	
 	$('.dropdown-content').click(function() {
-		$(this).slideUp();
+		$(this).stop().slideUp();
 	});
+	
+	$('.dropdown-content').mouseleave(function() {
+		$(this).stop().slideUp();
+	});
+    
+    
+}); //document.ready function closing tag
 
-	// allow dropping into background div (for dynamically creating elements)
-     $(".freeDropZone").on("dragover", function(ev){
-     	 ev.preventDefault();
-
-     });
-
-     //create element dynamically
-    $(".freeDropZone").on("drop", function(ev) {
+//create elements dynamically
+    function freeDrop(ev) {
     	ev.preventDefault();
 		
     	var newElement = $(
@@ -364,8 +400,9 @@ $(document).ready(function() {
     		newElement.css("height", widthPercent * widthHeightRatio + "%");
 
     		//sets position of new element
-    		var xPos = event.pageX - $(ev.target).offset().left - newElement.width() / 2;
-    		var yPos = event.pageY - $(ev.target).offset().top - newElement.width() / 2;
+    		
+    		var xPos = ev.pageX - $(ev.target).offset().left - newElement.width() / 2;
+    		var yPos = ev.pageY - $(ev.target).offset().top - newElement.width() / 2;
     		var leftPercent = xPos / ($(this).width() / 100);
     		var topPercent = yPos / ($(this).height() / 100);
     		newElement.css("left", leftPercent + "%");
@@ -406,11 +443,10 @@ $(document).ready(function() {
   			
   			//draws image in the newly created canvas
   			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
-    	}	
-    });
-    
-    
-}); //document.ready function closing tag
+    	}
+    	ev.stopPropagation();
+    	 return false;
+    }
 
 //update signature font style and family, then draw it on multiple canvases 
 function updateFont(){
@@ -432,9 +468,9 @@ function updateFont(){
     	$('#signature').css('font-style', 'normal')
     }
 
-	 $(".signatureCanvas").each(function() {
-            drawSignature(this, style, fontFamily);
-        });
+	$(".signatureCanvas").each(function() {
+		drawSignature(this, style, fontFamily);
+	});
 }
 
 //draws the signature text on the specified canvas
@@ -452,7 +488,6 @@ function drawSignature(canvas, style, fontFamily){
   if(textSize.width > canvas.width){
     fontSize = Math.floor(maxFontSize * (canvas.width / textSize.width));
     ctx.font = style + fontSize + "px " + fontFamily;
-    console.log(fontSize);
   } else{
   	fontSize = maxFontSize;
   }
@@ -469,7 +504,7 @@ $(window).resize(function() {
 		}
 		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
-
+		$("#centerBeam").stop().css({left:(Size * leftPercent)});
 	} else {
 		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
 			{step: function() {
@@ -481,9 +516,11 @@ $(window).resize(function() {
 				}
 			});
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
+		$("#centerBeam").stop().animate({left:(Size * leftPercent)});
 		dragOrclick = true;
 	}
 });
+
 /*
     Onload function for the window. initializes the globals and listeners
     for the magic wand select.
@@ -649,12 +686,12 @@ function drop(ev, canvas = ev.target) {
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
+	
 	canvas.width = 1000;
 	canvas.height = 1000;
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	console.log(canvas);
 	if(draggedElement.width >= draggedElement.height){
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
 	} else{
@@ -1022,7 +1059,9 @@ function eliminateWhite(image, threshold) {
 // Swaps the old data with the new, "undoing" their last action
 
 function undo() {
-	imageInfo.data.data.set(oldImageInfo.data.data);
+	if (imageInfo != null) {
+		imageInfo.data.data.set(oldImageInfo.data.data);
+	}
 };
 
 // Copy the data before making a change in case the user needs to "undo" their action
@@ -1044,7 +1083,6 @@ function greyScale() {
 	//imageInfo = imageInfo.context.getImageData(0, 0, image.width, image.height);
 	//oldImageInfo = imageInfo;
 	copyImageData();
-	console.log(imageInfo.data.data.length);
 	
 	for(var i = 0; i < imageInfo.data.data.length; i += 4)
 	{
@@ -1064,7 +1102,6 @@ function greyScale() {
 	//ctx = document.getElementById("uploadedImage").getContext('2d');
 	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	//ctx.putImageData(dataArray, 0, 0);
-	
 	//console.log("Grey");
 	
 };
