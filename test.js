@@ -59,7 +59,6 @@ $(document).ready(function() {
 		.promise().done(function() {
 			$("#toolBar").slideDown();
 		});
-		$("#centerBeam").stop().animate({'marginLeft' : '+=10px'});
 	});
 	
 	$("#hideToolButton").click(function() {
@@ -69,7 +68,6 @@ $(document).ready(function() {
 			$("#toolButton").fadeIn();
 			$("#content").stop().animate({paddingLeft: 0},
 				{step: function() {
-					//$("#centerBeam").stop().css({marginLeft: -50});
 					$(window).trigger('resize');
 				}
 			});

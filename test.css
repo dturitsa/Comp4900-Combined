@@ -23,7 +23,9 @@
 #pic1, #pic2, #pic3, #pic4, #pic5 {
 	width: 74px;
 	height: 84px;
-	margin-top: -59px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }
 
 #paint, #erase {
@@ -48,7 +50,15 @@
 	font-size: 24px;
 	font-weight: bold;
 	padding-top: 25px;
-	overflow: hidden;
+	position: relative;
+	display: block;
+	background: repeating-linear-gradient(
+	  45deg,
+	  #cccccc,
+	  #cccccc 10px,
+	  #aaaaaa 10px,
+	  #aaaaaa 20px
+	);
 }
 
 .Elements:hover {
@@ -142,10 +152,10 @@
 	background-color:#999999; 
 	width:100px; 
 	height:inherit; 
-	float:left;
-	position: absolute;
+	position: relative;
 	margin-left: -50px;
 	left: 50%;
+	padding-top:1px;
 }
 
 #leftButton {
