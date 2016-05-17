@@ -11,6 +11,13 @@
 
 #uploadedImage {
 	border: 2px solid black;
+	background: repeating-linear-gradient(
+	  45deg,
+	  #cccccc,
+	  #cccccc 10px,
+	  #aaaaaa 10px,
+	  #aaaaaa 20px
+	);
 }
 
 #pic1, #pic2, #pic3, #pic4, #pic5 {
@@ -95,7 +102,7 @@
 }
 
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover {
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover {
 	background-color:#555555;
 }
 
@@ -103,7 +110,7 @@
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus, #undoButton:focus, .templateButtons:focus {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus, #eraserButton:focus, #undoButton:focus, .templateButtons:focus {
 	outline:none;
 }
 
@@ -204,6 +211,11 @@
 	display: none;
 }
 
+.templateBackground{
+	position: relative;
+	height: auto;
+}
+
 #templateNum {
 	margin-top: 70px;
 	width: 30%;
@@ -220,11 +232,6 @@
 #textEditing {
 	width: 100%;
 	text-align: center;
-}
-
-.templateBacground{
-	background-color: red;
-	position: relative;
 }
 
 .dropdown-content {
@@ -256,9 +263,22 @@
 	height: 40px;
 }
 
-.templateBacground{
-	background-color: red;
+.templateBackground{
 	position: relative;
+
+}
+
+#signature {
+	display: inline-block;
+}
+
+#fontStyleButtons{
+	display: inline-block;
+}
+
+#fontSelect {
+	width: 100px;
+	display: inline-block;
 }
 
 .templateDiv{
@@ -266,19 +286,21 @@
 	margin-left:auto; 
 	margin-right:auto; 
 	position: relative;
+	overflow: hidden;
 	padding: 0px;
 	width: 80%;
 }
 
-.shirtOverlay { position:relative;
+.shirtOverlay { 
+	position:relative;
 	z-index: 2;
-	width: 100%;
 	height: auto;
 	opacity: 0.7;
 	border-color: #000000;
 	border-style: solid;
 	border-width: 2px;
 	pointer-events: none;
+	width: 100%;
 } 
 
 .clothESpot1wrap{
@@ -321,6 +343,7 @@
 .clothESpot {          
 	width: 100%;
 	height: 100%; 
+	border: 2px solid black;
 } 
 
 .resizeGrip {
@@ -332,7 +355,93 @@
 	right:-10px;
 }
 
-  .t3ESpot1wrap{
+  .t2ESpot1wrap{
+    padding:0px;
+    position:absolute;
+    top: 7%;
+    left: 35%;
+    z-index: 1;
+    width: 40%;
+    height: 18%;
+    background-color: blue;
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari */
+    transform: rotate(180deg);
+  }
+    
+  .t2ESpot2wrap{
+    padding:0px;
+    position:absolute;
+    top: 77%;
+    left: 30%;
+    z-index: 1;
+    width: 40%;
+    height: 18%;
+    background-color: red;
+  }
+    .t2ESpot3wrap{
+    padding:0px;
+    position:absolute;
+    top: 92%;
+    left: 48%;
+    z-index: 1;
+    width: 25%;
+    height: 3%;
+    background-color: green;
+  }
+
+ /* colorpicker styles */
+.colorpicker {
+    background-color: #222222;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 2px 2px 2px #444444;
+    color: #FFFFFF;
+    font-size: 12px;
+    position: absolute;
+    width: 460px;
+}
+#picker {
+    cursor: crosshair;
+    float: left;
+    margin: 10px;
+    border: 0;
+}
+.controls {
+    float: right;
+    margin: 10px;
+}
+.controls > div {
+    border: 1px solid #2F2F2F;
+    margin-bottom: 5px;
+    overflow: hidden;
+    padding: 5px;
+}
+.controls label {
+    float: left;
+}
+.controls > div input {
+    background-color: #121212;
+    border: 1px solid #2F2F2F;
+    color: #DDDDDD;
+    float: right;
+    font-size: 10px;
+    height: 14px;
+    margin-left: 6px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 75px;
+}
+.preview {
+    background: url("img/select.png") repeat scroll center center transparent;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px #444444;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+}
+
+.t3ESpot1wrap{
     padding:0px;
     position:absolute;
     top: 79%;

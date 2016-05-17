@@ -9,9 +9,7 @@ var draggedElement;
 var allowDraw;
 var font;
 var brightness = 0;
-var contrast = 0;
-var hue = 0;
-var saturation = 0;
+var erasing = false;
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
@@ -120,6 +118,7 @@ $(document).ready(function() {
 		wandFlag = false;
 		colorElimFlag = false;
 		colourFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
 		$('#thresSlider')
@@ -139,12 +138,14 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: 'none'});
 	});
 	
 	$("#tool2").click(function() {
 		wandFlag = true;
 		colorElimFlag = false;
 		colourFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut')
@@ -164,12 +165,14 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: 'none'});
 	});
 	
 	$("#tool3").click(function() {
 		colourFlag = true;
 		colorElimFlag = false;
 		wandFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#thresSlider')
@@ -186,6 +189,26 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
 		$('#greyScaleButton').css({display: ''});
+		$('#eraserSlider').css({display: 'none'});
+	});
+
+	$('#tool5').click(function () {
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
+		var image = {
+	        data: imageInfo.data.data,
+	        width: imageInfo.width,
+	        height: imageInfo.height,
+	        bytes: 4
+	    };
+		mask = eliminateWhite(image, 64);
+		//console.log(mask);
+		cropOut();
 	});
 	
 	$("#cropOut").click(function() {
@@ -200,6 +223,7 @@ $(document).ready(function() {
 		wandFlag = false;
 		colorElimFlag = true;
 		colourFlag = false;
+		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#thresSlider')
@@ -219,6 +243,7 @@ $(document).ready(function() {
 		$('#brightnessSlider').css({display: 'none'});
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: 'none'});
 	});
 	
 	$('#undoButton').click(function() {
@@ -227,6 +252,24 @@ $(document).ready(function() {
 	
 	$('#greyScaleButton').click(function() {
 		greyScale();
+	});
+	
+	$('#eraserButton').click(function() {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = false;
+		erasing = true;
+		$('#uploadedImage').imgAreaSelect({remove:true});
+		$("#previewCanvas").attr("draggable", "false");
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
+		$('#brightLabel').css({display: 'none'});
+		$('#brightnessSlider').css({display: 'none'});
+		$('#greyScaleLabel').css({display: 'none'});
+		$('#greyScaleButton').css({display: 'none'});
+		$('#eraserSlider').css({display: ''});
 	});
 
 	$(".dragSource").each(function() {
@@ -320,13 +363,13 @@ $(document).ready(function() {
 	});
 
 	// allow dropping into background div (for dynamically creating elements)
-     $("#template1Background").on("dragover", function(ev){
+     $(".freeDropZone").on("dragover", function(ev){
      	 ev.preventDefault();
 
      });
 
      //create element dynamically
-    $("#template1Background").on("drop", function(ev) {
+    $(".freeDropZone").on("drop", function(ev) {
     	ev.preventDefault();
 		
     	var newElement = $(
@@ -334,14 +377,32 @@ $(document).ready(function() {
     			<canvas class="clothESpot dragDest"></canvas>\
     		</div>');
 
+
     	
     	// checks if there isn't already another element in the drop position
     	if(!$(ev.target).hasClass("clothESpot")){
     		$(this).append(newElement);
+
+    		//sets the width and height of the new element as % of parent
+    		var widthPercent = 20 //percent of the parents width the new element should be
+    		var widthHeightRatio = newElement.parent().width() / newElement.parent().height();
+    		newElement.css("width", widthPercent + "%");
+    		newElement.css("height", widthPercent * widthHeightRatio + "%");
+
+    		//sets position of new element
     		var xPos = event.pageX - $(ev.target).offset().left - newElement.width() / 2;
     		var yPos = event.pageY - $(ev.target).offset().top - newElement.width() / 2;
-    		newElement.css("left", xPos / ($(this).width() / 100)+"%");
-   			newElement.css("top", yPos / ($(this).height() / 100)+"%");
+    		var leftPercent = xPos / ($(this).width() / 100);
+    		var topPercent = yPos / ($(this).height() / 100);
+    		newElement.css("left", leftPercent + "%");
+   			newElement.css("top", topPercent +"%");
+
+   			//flips upside down if in top part of a flipTop class
+   			if($(this).hasClass("flipTop") && topPercent < 50){
+   				newElement.css('-ms-transform', 'rotate(180deg)'); //IE9
+   				newElement.css('-webkit-transform', 'rotate(180deg)'); //Safari
+   				newElement.css('transform', 'rotate(180deg)');
+  			}
 
     		//enable drop on new element
     		$(newElement).find(".dragDest").each(function() {
@@ -367,6 +428,8 @@ $(document).ready(function() {
    					$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
   				}
   			});
+
+  			
   			//draws image in the newly created canvas
   			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
     	}	
@@ -394,7 +457,6 @@ function updateFont(){
     } else{
     	$('#signature').css('font-style', 'normal')
     }
-
 
 	$(".signatureCanvas").each(function() {
 		drawSignature(this, style, fontFamily);
@@ -465,6 +527,7 @@ window.onload = function() {
     mask = null;
     downPoint = null;
     img = null;
+	currentCanvas = null;
     allowDraw = false;
 	/*
 	brightnessSlider = document.getElementById("brightnessSlider");
@@ -492,7 +555,7 @@ window.onload = function() {
 // Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
 	if(e.target.id != "uploadedImage") {
-		mask = null;
+		mask = null;	
 		var ctx = document.getElementById("uploadedImage").getContext('2d');
 		if(imageInfo != null) {
 			ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
@@ -521,6 +584,9 @@ function ShowEditCanvas(element) {
 				top: pos.top,
 				}).slideDown();
 	ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
+	
+	
+	
 }
 
 //draw selection on a canvas
@@ -611,6 +677,8 @@ function drop(ev, canvas = ev.target) {
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
+	ev.preventDefault();
+	
 	canvas.width = 1000;
 	canvas.height = 1000;
 	var ctx = canvas.getContext("2d");
@@ -668,8 +736,9 @@ function initCanvas(img) {
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	
 };
-
+// Gets the current position of the mouse on  the canvas 'UpuloadedImage'
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
@@ -681,7 +750,8 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
         //console.log(e.pageY);
     return { x: x, y: y };
 }
-
+// listener for the mouseDown event. Checks if applicilable mode is in enabled
+// and makes the selection
 function onMouseDown(e) {
 	//console.log('Test');
 	if(wandFlag || colorElimFlag) {
@@ -693,31 +763,76 @@ function onMouseDown(e) {
 	        //console.log(mask.data.length);
 	    }
 	    else allowDraw = false;
+	} else if(erasing) {
+		allowDraw = true;
+		downPoint = getMousePosition(e);
+		//ctx = document.getElementById("uploadedImage").getContext("2d");
+		ctx = imageInfo.context;
+		radius = document.getElementById("eraserSlider").value;
+		ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.globalCompositeOperation = "source-atop";
+		ctx.closePath();
+		
+		//console.log("Click");
+		
+		//imageInfo.data.putImageData(cData, 0, 0);
 	}
 }
-
+// listener for the mousecMove event, gets the current mouse position
 function onMouseMove(e) {
     if (allowDraw) {
-        var p = getMousePosition(e);
-        if (p.x != downPoint.x || p.y != downPoint.y) {
-            var dx = p.x - downPoint.x,
-                dy = p.y - downPoint.y,
-                len = Math.sqrt(dx * dx + dy * dy),
-                adx = Math.abs(dx),
-                ady = Math.abs(dy),
-                sign = adx > ady ? dx / adx : dy / ady;
-            sign = sign < 0 ? sign / 5 : sign / 3;
-            //var thres = Math.min(Math.max(colorThreshold + Math.floor(sign * len), 1), 255);
-            //var thres = Math.min(colorThreshold + Math.floor(len / 3), 255);
+		if(erasing) {
+			//ctx = document.getElementById("uploadedImage").getContext("2d");
+			ctx = imageInfo.context;
+			radius = document.getElementById("eraserSlider").value;
+			downPoint = getMousePosition(e);
+			ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.closePath();
+			imageInfo.context = ctx;
+			//ctx.fillRect(downPoint.x,downPoint.y,75,50);
+			//console.log("Fill");
+		} else {
+			
+			var p = getMousePosition(e);
+			if (p.x != downPoint.x || p.y != downPoint.y) {
+				var dx = p.x - downPoint.x,
+					dy = p.y - downPoint.y,
+					len = Math.sqrt(dx * dx + dy * dy),
+					adx = Math.abs(dx),
+					ady = Math.abs(dy),
+					sign = adx > ady ? dx / adx : dy / ady;
+				sign = sign < 0 ? sign / 5 : sign / 3;
+				//var thres = Math.min(Math.max(colorThreshold + Math.floor(sign * len), 1), 255);
+				//var thres = Math.min(colorThreshold + Math.floor(len / 3), 255);
+			}
         }
     }
 }
 
 function onMouseUp(e) {
     allowDraw = false;
+	ctx = imageInfo.context;
+	imageInfo.context.globalCompositeOperation = "source-atop";
+	//console.log(imageInfo.data.data);
+	imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	if(erasing) {
+		//var ctx = document.getElementById("uploadedImage").getContext('2d');
+		//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
+		//ctx.putImageData(imageInfo.data, 0, 0);
+		
+	}
     //currentThreshold = colorThreshold;
 }
 
+// Finds the pixels and saves it in the mask, then draws a border around the selection
 function drawMask(x, y) {
     if (!imageInfo) return;
     
@@ -738,11 +853,13 @@ function drawMask(x, y) {
     drawBorder();
 }
 
+// Function that animates the border around the seleceted pixels
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
 }
 
+// Draws a boarder around the selected pixels 
 function drawBorder(noBorder) {
     if (!mask) return;
     
@@ -777,6 +894,7 @@ function drawBorder(noBorder) {
     ctx.putImageData(imgData, 0, 0);
 }
 
+// Function crops the selected pixels form the image
 function cropOut() {
 
 	if(mask == null) return;
@@ -802,14 +920,13 @@ function cropOut() {
 	}, 300);
 };
 
-function colorElimination(image, x, y, threshold)
-{
+// Fucntion finds the selected color (based on a threshold) from the image
+function colorElimination(image, x, y, threshold) {
     // used for testing purposes
     /*for(var i = 0, value = 1, size = image.width*image.height,
          array = new Uint8Array(size); i < size; i++) array[i] = value;*/
-    var tmp, f, ipix = (y * image.width * 4) + x * 4,
-        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]],
-        b = image.bytes;
+    var tmp, ipix = (y * image.width * 4) + x * 4,
+        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]];
     //console.log(x);
     //console.log(y);
     //console.log(ipix);
@@ -841,6 +958,31 @@ function colorElimination(image, x, y, threshold)
         array[i] = 1;
     }
     //console.log('Done');
+    return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
+};
+
+function eliminateWhite(image, threshold) {
+	var tmp;
+	//console.log(image);
+    for(var i = 0, size = image.width*image.height,
+        array = new Uint8Array(size); i < size; i++) {
+
+        tmp = image.data[i*4] - 255;
+    	//console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+1] - 255;
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+2] - 255;
+		//console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+3] - 255;
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+
+        array[i] = 1;
+    }
+    //console.log("done");
     return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
 };
 
@@ -887,8 +1029,16 @@ function greyScale() {
         imageInfo.data.data[i + 3] = alpha; // not changing the transparency
 	}
 	
-	ctx = document.getElementById("uploadedImage").getContext('2d');
+	//ctx = document.getElementById("uploadedImage").getContext('2d');
 	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	//ctx.putImageData(dataArray, 0, 0);
+	//console.log("Grey");
+	
+};
+
+// Eraser tool
+
+function erase() {
+	
 	
 };
