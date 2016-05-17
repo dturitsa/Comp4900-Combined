@@ -21,8 +21,6 @@ $(document).ready(function() {
 	// this is the mouse position within the drag element
 	var startOffsetX, startOffsetY;
 	
-	$("#mainContent").css({"height":$(window).height() - 22});
-	
 	$("#leftButton").click(function() {
 		if (item == 0) {
 			item2 = 1; item = 2;
@@ -122,10 +120,16 @@ $(document).ready(function() {
 		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#tool2').css({"backgroundColor":"black"});
 		$('#tool1').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -141,10 +145,16 @@ $(document).ready(function() {
 		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: ''});
-		$('#thresSlider').css({display: ''});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#cropOut')
+			.slideDown()
+			.promise().done(function() {
+				$('#thresSlider').slideDown();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -160,10 +170,16 @@ $(document).ready(function() {
 		wandFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#brightLabel').css({display: ''});
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
@@ -184,10 +200,16 @@ $(document).ready(function() {
 		colourFlag = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: ''});
-		$('#thresSlider2').css({display: ''});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#cropOut2')
+			.slideDown()
+			.promise().done(function() {
+				$('#thresSlider2').slideDown();
+		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool2').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -269,21 +291,21 @@ $(document).ready(function() {
   			$( this ).css('display', 'none');
 		});
 		var currentTemplate =  $(this).attr("value");
+		$(".templateDiv").css({"backgroundColor":$(this).css("backgroundColor")});
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
     });
 	
-	$("#shirtButton").stop().hover(function() {
-		$('.dropdown-content').slideDown();
+	$("#shirtButton").hover(function() {
+		$('.dropdown-content').stop().slideDown();
 	});
 	
-	$('.dropdown-content').stop().click(function() {
-		$(this).slideUp();
+	$('.dropdown-content').click(function() {
+		$(this).stop().slideUp();
 	});
 	
-	$('.dropdown-content').stop().mouseleave(function() {
-		console.log("EHEE");
-		$(this).slideUp();
+	$('.dropdown-content').mouseleave(function() {
+		$(this).stop().slideUp();
 	});
 
 }); //document.ready function closing tag
@@ -790,7 +812,9 @@ function colorElimination(image, x, y, threshold)
 // Swaps the old data with the new, "undoing" their last action
 
 function undo() {
-	imageInfo.data.data.set(oldImageInfo.data.data);
+	if (imageInfo != null) {
+		imageInfo.data.data.set(oldImageInfo.data.data);
+	}
 };
 
 // Copy the data before making a change in case the user needs to "undo" their action
