@@ -284,13 +284,13 @@ $(document).ready(function() {
 	});
 
 	// allow dropping into background div (for dynamically creating elements)
-     $("#template1Background").on("dragover", function(ev){
+     $(".freeDropZone").on("dragover", function(ev){
      	 ev.preventDefault();
 
      });
 
      //create element dynamically
-    $("#template1Background").on("drop", function(ev) {
+    $(".freeDropZone").on("drop", function(ev) {
     	ev.preventDefault();
 		
     	var newElement = $(
@@ -298,10 +298,19 @@ $(document).ready(function() {
     			<canvas class="clothESpot dragDest"></canvas>\
     		</div>');
 
+
     	
     	// checks if there isn't already another element in the drop position
     	if(!$(ev.target).hasClass("clothESpot")){
     		$(this).append(newElement);
+
+    		//sets the width and height of the new element as % of parent
+    		var widthPercent = 20 //percent of the parents width the new element should be
+    		var widthHeightRatio = newElement.parent().width() / newElement.parent().height();
+    		newElement.css("width", widthPercent + "%");
+    		newElement.css("height", widthPercent * widthHeightRatio + "%");
+
+    		//sets position of new element
     		var xPos = event.pageX - $(ev.target).offset().left - newElement.width() / 2;
     		var yPos = event.pageY - $(ev.target).offset().top - newElement.width() / 2;
     		newElement.css("left", xPos / ($(this).width() / 100)+"%");
@@ -358,8 +367,6 @@ function updateFont(){
     } else{
     	$('#signature').css('font-style', 'normal')
     }
-
-
 
 	 $(".signatureCanvas").each(function() {
             drawSignature(this, style, fontFamily);
@@ -575,8 +582,9 @@ function drop(ev, canvas = ev.target) {
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
-	canvas.width = draggedElement.width;
-	canvas.height = draggedElement.height;
+	ev.preventDefault();
+	canvas.width = 1000;
+	canvas.height = 1000;
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);
