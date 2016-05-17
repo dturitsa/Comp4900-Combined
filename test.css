@@ -361,7 +361,7 @@
 	height: 20px;
 	background-color: red;
 	border: 1px solid #000000;
-	bottom: -10px;
+	top: +10px;
 	right:-10px;
 }
 

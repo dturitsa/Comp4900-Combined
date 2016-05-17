@@ -279,6 +279,11 @@ $(document).ready(function() {
 		this.ondrop = drop;
 		this.ondragover = allowDrop;
 	});
+
+	$(".freeDropZone").each(function() {
+		this.ondrop = freeDrop;
+		this.ondragover = allowDrop;
+	});
 	
 	$("#imgInp").change(function(){ readURL(this); });
 
@@ -359,15 +364,12 @@ $(document).ready(function() {
 	$('.dropdown-content').mouseleave(function() {
 		$(this).stop().slideUp();
 	});
+    
+    
+}); //document.ready function closing tag
 
-	// allow dropping into background div (for dynamically creating elements)
-     $(".freeDropZone").on("dragover", function(ev){
-     	 ev.preventDefault();
-
-     });
-
-     //create element dynamically
-    $(".freeDropZone").on("drop", function(ev) {
+//create elements dynamically
+    function freeDrop(ev) {
     	ev.preventDefault();
 		
     	var newElement = $(
@@ -388,8 +390,9 @@ $(document).ready(function() {
     		newElement.css("height", widthPercent * widthHeightRatio + "%");
 
     		//sets position of new element
-    		var xPos = event.pageX - $(ev.target).offset().left - newElement.width() / 2;
-    		var yPos = event.pageY - $(ev.target).offset().top - newElement.width() / 2;
+    		
+    		var xPos = ev.pageX - $(ev.target).offset().left - newElement.width() / 2;
+    		var yPos = ev.pageY - $(ev.target).offset().top - newElement.width() / 2;
     		var leftPercent = xPos / ($(this).width() / 100);
     		var topPercent = yPos / ($(this).height() / 100);
     		newElement.css("left", leftPercent + "%");
@@ -430,11 +433,10 @@ $(document).ready(function() {
   			
   			//draws image in the newly created canvas
   			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
-    	}	
-    });
-    
-    
-}); //document.ready function closing tag
+    	}
+    	ev.stopPropagation();
+    	 return false;
+    }
 
 //update signature font style and family, then draw it on multiple canvases 
 function updateFont(){
