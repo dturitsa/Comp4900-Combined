@@ -175,6 +175,25 @@ $(document).ready(function() {
 		$('#greyScaleButton').css({display: ''});
 		$('#eraserSlider').css({display: 'none'});
 	});
+
+	$('#tool5').click(function () {
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
+		var image = {
+	        data: imageInfo.data.data,
+	        width: imageInfo.width,
+	        height: imageInfo.height,
+	        bytes: 4
+	    };
+		mask = eliminateWhite(image, 64);
+		//console.log(mask);
+		cropOut();
+	});
 	
 	$("#cropOut").click(function() {
 		cropOut();
@@ -663,7 +682,7 @@ function initCanvas(img) {
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	
 };
-
+// Gets the current position of the mouse on  the canvas 'UpuloadedImage'
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
@@ -675,7 +694,8 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
         //console.log(e.pageY);
     return { x: x, y: y };
 }
-
+// listener for the mouseDown event. Checks if applicilable mode is in enabled
+// and makes the selection
 function onMouseDown(e) {
 	//console.log('Test');
 	if(wandFlag || colorElimFlag) {
@@ -706,7 +726,7 @@ function onMouseDown(e) {
 		//imageInfo.data.putImageData(cData, 0, 0);
 	}
 }
-
+// listener for the mousecMove event, gets the current mouse position
 function onMouseMove(e) {
     if (allowDraw) {
 		if(erasing) {
@@ -739,7 +759,7 @@ function onMouseMove(e) {
 			}
         }
     }
-} 
+}
 
 function onMouseUp(e) {
     allowDraw = false;
@@ -756,6 +776,7 @@ function onMouseUp(e) {
     //currentThreshold = colorThreshold;
 }
 
+// Finds the pixels and saves it in the mask, then draws a border around the selection
 function drawMask(x, y) {
     if (!imageInfo) return;
     
@@ -776,11 +797,13 @@ function drawMask(x, y) {
     drawBorder();
 }
 
+// Function that animates the border around the seleceted pixels
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
 }
 
+// Draws a boarder around the selected pixels 
 function drawBorder(noBorder) {
     if (!mask) return;
     
@@ -815,6 +838,7 @@ function drawBorder(noBorder) {
     ctx.putImageData(imgData, 0, 0);
 }
 
+// Function crops the selected pixels form the image
 function cropOut() {
 
 	if(mask == null) return;
@@ -840,14 +864,13 @@ function cropOut() {
 	}, 300);
 };
 
-function colorElimination(image, x, y, threshold)
-{
+// Fucntion finds the selected color (based on a threshold) from the image
+function colorElimination(image, x, y, threshold) {
     // used for testing purposes
     /*for(var i = 0, value = 1, size = image.width*image.height,
          array = new Uint8Array(size); i < size; i++) array[i] = value;*/
-    var tmp, f, ipix = (y * image.width * 4) + x * 4,
-        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]],
-        b = image.bytes;
+    var tmp, ipix = (y * image.width * 4) + x * 4,
+        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]];
     //console.log(x);
     //console.log(y);
     //console.log(ipix);
@@ -879,6 +902,31 @@ function colorElimination(image, x, y, threshold)
         array[i] = 1;
     }
     //console.log('Done');
+    return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
+};
+
+function eliminateWhite(image, threshold) {
+	var tmp;
+	//console.log(image);
+    for(var i = 0, size = image.width*image.height,
+        array = new Uint8Array(size); i < size; i++) {
+
+        tmp = image.data[i*4] - 255;
+    	//console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+1] - 255;
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+2] - 255;
+		//console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+3] - 255;
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+
+        array[i] = 1;
+    }
+    //console.log("done");
     return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
 };
 
