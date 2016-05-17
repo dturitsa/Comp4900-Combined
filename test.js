@@ -223,7 +223,7 @@ $(document).ready(function() {
   	$( ".resizable" ).resizable({
   		//locks the aspect ratio when resizing
   		aspectRatio:true,
-  		containment: ".templateBacground",
+  		//containment: ".templateBackground",
   		//sets the resize handle in the bottom right corner
   		//handles: {'se': $(".resizeGrip")},
 
@@ -283,36 +283,61 @@ $(document).ready(function() {
 		$(this).slideUp();
 	});
 
+	// allow dropping into background div (for dynamically creating elements)
+     $("#template1Background").on("dragover", function(ev){
+     	 ev.preventDefault();
+
+     });
+
+     //create element dynamically
+    $("#template1Background").on("drop", function(ev) {
+    	ev.preventDefault();
+		
+    	var newElement = $(
+    		'<div class="draggable resizable clothESpot1wrap">\
+    			<canvas class="clothESpot dragDest"></canvas>\
+    		</div>');
+
+    	
+    	// checks if there isn't already another element in the drop position
+    	if(!$(ev.target).hasClass("clothESpot")){
+    		$(this).append(newElement);
+    		var xPos = event.pageX - $(ev.target).offset().left - newElement.width() / 2;
+    		var yPos = event.pageY - $(ev.target).offset().top - newElement.width() / 2;
+    		newElement.css("left", xPos / ($(this).width() / 100)+"%");
+   			newElement.css("top", yPos / ($(this).height() / 100)+"%");
+
+    		//enable drop on new element
+    		$(newElement).find(".dragDest").each(function() {
+				this.ondrop = drop;
+				this.ondragover = allowDrop;
+			});
+
+    		//makes new element draggable
+   			newElement.draggable({
+  				stop: function( event, ui ) {
+   				$(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
+   				$(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
+  				}
+			});
+
+			//make new element resizable
+  			$(newElement).resizable({
+  				//locks the aspect ratio when resizing
+  				aspectRatio:true,
+  				//forces resizable height and width to use % instead of px 
+  				stop: function( event, ui ) {
+   					$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
+   					$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
+  				}
+  			});
+  			//draws image in the newly created canvas
+  			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
+    	}	
+    });
+    
+    
 }); //document.ready function closing tag
-
-//draw selection on a canvas
-function preview(img2, selection) {
-	//console.log(img2);
-	var canvas = $('#previewCanvas')[0];
-	var selectionSource = $('#uploadedImage')[0];
-	//console.log(selectionSource);
-	var ctx = canvas.getContext("2d");  
-	var maxSize = 200;
-	var destX = 0;
-	var destY = 0;
-	var longestSide = Math.max(selection.width, selection.height);
-	var scale = maxSize / longestSide;
-	canvas.width =  selection.width * scale;
-	canvas.height =  selection.height * scale;
-	//console.log(selection);
-	//console.log(img.naturalHeight);
-
-	ctx.drawImage(img2,
-			selection.x1 / (img2.offsetWidth / img.width),
-			selection.y1 / (img2.offsetHeight / img.height),
-			selection.width / (img2.offsetWidth / img.width),
-			selection.height / (img2.offsetHeight / img.height),
-			destX,
-			destY, 
-			selection.width * scale,
-			selection.height * scale
-			);               
-}
 
 //update signature font style and family, then draw it on multiple canvases 
 function updateFont(){
@@ -335,9 +360,10 @@ function updateFont(){
     }
 
 
-	$(".multiPaste3").each(function() {
-		drawSignature(this, style, fontFamily);
-	});
+
+	 $(".signatureCanvas").each(function() {
+            drawSignature(this, style, fontFamily);
+        });
 }
 
 //draws the signature text on the specified canvas
@@ -512,10 +538,10 @@ function dragstart(ev) {
 	draggedElement = ev.target;
 }
 
-function drop(ev) {
+
+function drop(ev, canvas = ev.target) {
 	ev.preventDefault();
-	  
-	var canvas = ev.target;
+	//var canvas = ev.target;
 	switch (canvas.id) {
 		case "pic1":
 			ElementsFull[0] = true;
@@ -535,7 +561,7 @@ function drop(ev) {
 	}
 	drawCopiedImage(canvas, ev); 
 	//loops through multipaste elements and draws image on all of them
-	var multiPasteClasses = ["multiPaste1", "multiPaste2"];
+	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5"];
 	for (var i = 0; i < multiPasteClasses.length; i++) {
 	   
 		if($(canvas).hasClass(multiPasteClasses[i])){
