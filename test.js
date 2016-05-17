@@ -176,6 +176,25 @@ $(document).ready(function() {
 		$('#greyScaleButton').css({display: ''});
 		$('#eraserSlider').css({display: 'none'});
 	});
+
+	$('#tool5').click(function () {
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
+		$('#cropOut').css({display: 'none'});
+		$('#thresSlider').css({display: 'none'});
+		$('#cropOut2').css({display: 'none'});
+		$('#thresSlider2').css({display: 'none'});
+		var image = {
+	        data: imageInfo.data.data,
+	        width: imageInfo.width,
+	        height: imageInfo.height,
+	        bytes: 4
+	    };
+		mask = eliminateWhite(image, 64);
+		//console.log(mask);
+		cropOut();
+	});
 	
 	$("#cropOut").click(function() {
 		cropOut();
@@ -318,13 +337,13 @@ $(document).ready(function() {
 	});
 
 	// allow dropping into background div (for dynamically creating elements)
-     $("#template1Background").on("dragover", function(ev){
+     $(".freeDropZone").on("dragover", function(ev){
      	 ev.preventDefault();
 
      });
 
      //create element dynamically
-    $("#template1Background").on("drop", function(ev) {
+    $(".freeDropZone").on("drop", function(ev) {
     	ev.preventDefault();
 		
     	var newElement = $(
@@ -332,14 +351,32 @@ $(document).ready(function() {
     			<canvas class="clothESpot dragDest"></canvas>\
     		</div>');
 
+
     	
     	// checks if there isn't already another element in the drop position
     	if(!$(ev.target).hasClass("clothESpot")){
     		$(this).append(newElement);
+
+    		//sets the width and height of the new element as % of parent
+    		var widthPercent = 20 //percent of the parents width the new element should be
+    		var widthHeightRatio = newElement.parent().width() / newElement.parent().height();
+    		newElement.css("width", widthPercent + "%");
+    		newElement.css("height", widthPercent * widthHeightRatio + "%");
+
+    		//sets position of new element
     		var xPos = event.pageX - $(ev.target).offset().left - newElement.width() / 2;
     		var yPos = event.pageY - $(ev.target).offset().top - newElement.width() / 2;
-    		newElement.css("left", xPos / ($(this).width() / 100)+"%");
-   			newElement.css("top", yPos / ($(this).height() / 100)+"%");
+    		var leftPercent = xPos / ($(this).width() / 100);
+    		var topPercent = yPos / ($(this).height() / 100);
+    		newElement.css("left", leftPercent + "%");
+   			newElement.css("top", topPercent +"%");
+
+   			//flips upside down if in top part of a flipTop class
+   			if($(this).hasClass("flipTop") && topPercent < 50){
+   				newElement.css('-ms-transform', 'rotate(180deg)'); //IE9
+   				newElement.css('-webkit-transform', 'rotate(180deg)'); //Safari
+   				newElement.css('transform', 'rotate(180deg)');
+  			}
 
     		//enable drop on new element
     		$(newElement).find(".dragDest").each(function() {
@@ -365,6 +402,8 @@ $(document).ready(function() {
    					$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
   				}
   			});
+
+  			
   			//draws image in the newly created canvas
   			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
     	}	
@@ -392,8 +431,6 @@ function updateFont(){
     } else{
     	$('#signature').css('font-style', 'normal')
     }
-
-
 
 	 $(".signatureCanvas").each(function() {
             drawSignature(this, style, fontFamily);
@@ -611,8 +648,9 @@ function drop(ev, canvas = ev.target) {
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
-	canvas.width = draggedElement.width;
-	canvas.height = draggedElement.height;
+	ev.preventDefault();
+	canvas.width = 1000;
+	canvas.height = 1000;
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var longestSide = Math.max(draggedElement.width, draggedElement.height);
@@ -672,7 +710,7 @@ function initCanvas(img) {
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	
 };
-
+// Gets the current position of the mouse on  the canvas 'UpuloadedImage'
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
@@ -685,17 +723,22 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
     return { x: x, y: y };
 }
 
+
 function getMousePosition2(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
     	widthScale = document.getElementById('ElementCanvas').offsetWidth / img.width,
     	heightScale = document.getElementById('ElementCanvas').offsetHeight / img.height,
-        x = Math.round(((e.clientX || e.pageX)) / widthScale),
-        y = Math.round(((e.pageY || e.clientY)) / heightScale);
+        x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
+        y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
         console.log(x, y);
         //console.log(e.pageY);
     return { x: x, y: y };
 }
+
+
+// listener for the mouseDown event. Checks if applicilable mode is in enabled
+// and makes the selection
 
 function onMouseDown(e) {
 	console.log(erasing);
@@ -744,7 +787,7 @@ function editMouseDown(e) {
 		ctx.closePath();
 	}
 }
-
+// listener for the mousecMove event, gets the current mouse position
 function onMouseMove(e) {
     if (allowDraw) {
 		if(erasing) {
@@ -778,7 +821,7 @@ function onMouseMove(e) {
 			}
         }
     }
-} 
+}
 
 function editMouseMove(e) {
 	if(allowDraw) {
@@ -815,9 +858,13 @@ function onMouseUp(e) {
     //currentThreshold = colorThreshold;
 }
 
+
 function editMouseUp(e) {
 	allowDraw = false;
 }
+
+
+// Finds the pixels and saves it in the mask, then draws a border around the selection
 
 function drawMask(x, y) {
     if (!imageInfo) return;
@@ -839,11 +886,13 @@ function drawMask(x, y) {
     drawBorder();
 }
 
+// Function that animates the border around the seleceted pixels
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
 }
 
+// Draws a boarder around the selected pixels 
 function drawBorder(noBorder) {
     if (!mask) return;
     
@@ -878,6 +927,7 @@ function drawBorder(noBorder) {
     ctx.putImageData(imgData, 0, 0);
 }
 
+// Function crops the selected pixels form the image
 function cropOut() {
 
 	if(mask == null) return;
@@ -903,14 +953,13 @@ function cropOut() {
 	}, 300);
 };
 
-function colorElimination(image, x, y, threshold)
-{
+// Fucntion finds the selected color (based on a threshold) from the image
+function colorElimination(image, x, y, threshold) {
     // used for testing purposes
     /*for(var i = 0, value = 1, size = image.width*image.height,
          array = new Uint8Array(size); i < size; i++) array[i] = value;*/
-    var tmp, f, ipix = (y * image.width * 4) + x * 4,
-        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]],
-        b = image.bytes;
+    var tmp, ipix = (y * image.width * 4) + x * 4,
+        pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]];
     //console.log(x);
     //console.log(y);
     //console.log(ipix);
@@ -942,6 +991,31 @@ function colorElimination(image, x, y, threshold)
         array[i] = 1;
     }
     //console.log('Done');
+    return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
+};
+
+function eliminateWhite(image, threshold) {
+	var tmp;
+	//console.log(image);
+    for(var i = 0, size = image.width*image.height,
+        array = new Uint8Array(size); i < size; i++) {
+
+        tmp = image.data[i*4] - 255;
+    	//console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+1] - 255;
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+2] - 255;
+		//console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+        tmp = image.data[(i*4)+3] - 255;
+        //console.log(tmp);
+        if(tmp > threshold || tmp < -threshold) continue;
+
+        array[i] = 1;
+    }
+    //console.log("done");
     return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
 };
 
