@@ -1,3 +1,4 @@
+var pixelColor = null;
 $(function(){
     var bCanPreview = true; // can preview
 
@@ -41,7 +42,7 @@ $(function(){
             var pixel = imageData.data;
 
             // update preview color
-            var pixelColor = "rgb("+pixel[0]+", "+pixel[1]+", "+pixel[2]+")";
+            pixelColor = "rgb("+pixel[0]+", "+pixel[1]+", "+pixel[2]+")";
             $('.preview').css('backgroundColor', pixelColor);
 
             // update controls
@@ -58,6 +59,7 @@ $(function(){
         bCanPreview = !bCanPreview;
         //console.log(bCanPreview);
         $('.colorpicker').fadeToggle("slow", "linear");
+        $('.templateBackground').css('backgroundColor', pixelColor);
     });
     $('.preview').click(function(e) { // preview click
         $('.colorpicker').fadeToggle("slow", "linear");
