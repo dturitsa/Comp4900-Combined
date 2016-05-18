@@ -20,6 +20,8 @@ $(document).ready(function() {
 	// this is the mouse position within the drag element
 	var startOffsetX, startOffsetY;
 	
+	$('[data-toggle="tooltip"]').tooltip();   
+	
 	$("#leftButton").click(function() {
 		if (item == 0) {
 			item2 = 1; item = 2;
