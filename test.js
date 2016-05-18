@@ -172,6 +172,7 @@ $(document).ready(function() {
 		colorElimFlag = false;
 		wandFlag = false;
 		erasing = false;
+		copyColourData();
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#thresSlider')
@@ -189,6 +190,12 @@ $(document).ready(function() {
 		$('#greyScaleLabel').css({display: ''});
 		$('#greyScaleButton').css({display: ''});
 		$('#eraserSlider').css({display: 'none'});
+		$('#redLabel').css({display: ''});
+		$('#greenLabel').css({display: ''});
+		$('#blueLabel').css({display: ''});
+		$('#redSlider').css({display: ''});
+		$('#greenSlider').css({display: ''});
+		$('#blueSlider').css({display: ''});
 	});
 
 	$('#tool5').click(function () {
@@ -277,7 +284,16 @@ $(document).ready(function() {
 		wandFlag = false;
 		erasing = false;
 		erasing2 = true;
-		console.log("clicked");
+		//console.log("clicked");
+	});
+
+	$('#wand').click(function() {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = true;
+		erasing = false;
+		erasing2 = false;
+		console.log("wand");
 	});
 
 	$(".dragSource").each(function() {
@@ -294,6 +310,7 @@ $(document).ready(function() {
 		this.ondrop = freeDrop;
 		this.ondragover = allowDrop;
 	});
+	
 	
 	$("#imgInp").change(function(){ readURL(this); });
 
@@ -539,9 +556,12 @@ window.onload = function() {
     hatchLength = 4;
     hatchOffset = 0;
 	oldImageInfo = null;
+	originalImageInfo = null;
     imageInfo = null;
+    EditInfo = null;
     cacheInd = null;
     mask = null;
+    editMask = null;
     downPoint = null;
     img = null;
 	currentCanvas = null;
@@ -568,15 +588,33 @@ window.onload = function() {
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
+	/*
+	var colorSliders = document.getElementsByClassName("colorSlider");
+	console.log(colorSliders.length);
+	console.log(colorSliders[0]);
+	console.log(colorSliders[1]);
+	console.log(colorSliders[2]);
+	for(var i = 0; i < colorSliders.length; i++) {
+		console.log(i);
+		console.log(colorSliders[i]);
+		colorSliders[i].addEventListener("change", colorChange());
+	}
+	*/
 }
 // Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
-	if(e.target.id != "uploadedImage") {
-		mask = null;	
+	if(e.target.id != "uploadedImage" && e.target.id != "ElementCanvas") {
+		mask = null;
+		mask2 = null;	
 		var ctx = document.getElementById("uploadedImage").getContext('2d');
 		if(imageInfo != null) {
 			ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 			ctx.putImageData(imageInfo.data, 0, 0);
+		}
+		var ctx2 = document.getElementById("ElementCanvas").getContext('2d');
+		if(EditInfo != null) {
+			ctx2.clearRect(0, 0, EditInfo.width, EditInfo.height);
+			ctx2.putImageData(EditInfo.data, 0, 0);
 		}
 	}
 };
@@ -592,19 +630,29 @@ function ShowEditCanvas(element) {
 	var height = OrigCanvas.height;
 	canvas.width = width;
 	canvas.height = height;
-	console.log(width, height);
+	//console.log(width, height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
 	$("#ElementCanvas").css({"max-width": "100%" ,
-					"max-height":500 });
+					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
-				width: (1000 + 10),
-				height: (1000 + 30),
-				left: pos.left, 
+				width: 450 * 1.2,
+				height: 450,
+				left: pos.left - (450 * 1.2), 
 				top: pos.top,
 				}).slideDown();
 
 	ctx.drawImage(OrigCanvas, 0, 0, OrigCanvas.width, OrigCanvas.height);
+
+	EditInfo = {
+        width: OrigCanvas.width,
+        height: OrigCanvas.height,
+        context: ctx
+    };
+    EditInfo.data = ctx.getImageData(0, 0, EditInfo.width, EditInfo.height);
+    mask2 = null;
+    setInterval(function() { editTick(); }, 300);
+    console.log(EditInfo);
 }
 
 //draw selection on a canvas
@@ -639,7 +687,7 @@ function readURL(input) {
 		reader.onload = function (e) {
 			$('#uploadedImage').attr('src', e.target.result);
 		}           
-		reader.readAsDataURL(input.files[0]);          
+		reader.readAsDataURL(input.files[0]); 
 	}
 }
 
@@ -705,12 +753,14 @@ function drawCopiedImage(canvas, ev){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//console.log(draggedElement);
 	//var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	if(draggedElement.width >= draggedElement.height){
+	/*if(draggedElement.width >= draggedElement.height){
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
 	} else{
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-	}
+	}*/
 	//console.log(canvas.width, canvas.height);
+
+	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
 }
 
 // loads the image and draws it on the canvas.
@@ -732,6 +782,17 @@ function imgChange (inp) {
             };
         }
         reader.readAsDataURL(inp.files[0]);
+		toolFlag = true;
+		$("#toolButton").fadeOut();
+		$("#content").stop().animate({paddingLeft: 60},
+			{step: function() {
+				$(window).trigger('resize');
+			}
+		})
+		.promise().done(function() {
+			$("#toolBar").slideDown();
+		});
+		
 		
     }
 };
@@ -741,6 +802,11 @@ function initCanvas(img) {
     cvs.width = img.width;
     cvs.height = img.height;
     //console.log(img);
+	originalImageInfo = {
+		width: img.width,
+		height: img.height,
+		context: cvs.getContext("2d")
+	};
 	oldImageInfo = {
 		width: img.width,
         height: img.height,
@@ -759,6 +825,7 @@ function initCanvas(img) {
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	originalImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	
 };
 // Gets the current position of the mouse on  the canvas 'UpuloadedImage'
@@ -778,8 +845,8 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
 function getMousePosition2(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
-    	widthScale = document.getElementById('ElementCanvas').offsetWidth / img.width,
-    	heightScale = document.getElementById('ElementCanvas').offsetHeight / img.height,
+    	widthScale = document.getElementById('ElementCanvas').offsetWidth / document.getElementById('ElementCanvas').width,
+    	heightScale = document.getElementById('ElementCanvas').offsetHeight / document.getElementById('ElementCanvas').height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
         console.log(x, y);
@@ -792,7 +859,7 @@ function getMousePosition2(e) { // NOTE*: These may need tweeking to work proper
 // and makes the selection
 
 function onMouseDown(e) {
-	console.log(erasing);
+	//console.log(erasing);
 	if(wandFlag || colorElimFlag) {
 	    if (e.button == 0) {
 	        allowDraw = true;
@@ -836,6 +903,15 @@ function editMouseDown(e) {
 			ctx.fill();
 			ctx.globalCompositeOperation = "source-atop";
 		ctx.closePath();
+	} else if(wandFlag || colorElimFlag) {
+	    if (e.button == 0) {
+	        allowDraw = true;
+	        downPoint = getMousePosition2(e);
+	        drawEditMask(downPoint.x, downPoint.y);
+	        //console.log(mask);
+	        //console.log(mask.data.length);
+	    }
+	    else allowDraw = false;
 	}
 }
 // listener for the mousecMove event, gets the current mouse position
@@ -937,10 +1013,35 @@ function drawMask(x, y) {
     drawBorder();
 }
 
+function drawEditMask(x, y) {
+    if (!EditInfo) return;
+    
+   // showThreshold();
+    console.log("EditMask");
+    var image = {
+        data: EditInfo.data.data,
+        width: EditInfo.width,
+        height: EditInfo.height,
+        bytes: 4
+    };
+    if(wandFlag) {
+    	mask2 = MagicWand.floodFill(image, x, y, currentThreshold);
+	} else if(colorElimFlag) {
+    	mask2 = colorElimination(image, x, y, currentThreshold);
+	}
+    mask2 = MagicWand.gaussBlurOnlyBorder(mask2, blurRadius);
+    drawEditBorder();
+}
+
 // Function that animates the border around the seleceted pixels
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
+}
+
+function editTick() {
+    hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
+    drawEditBorder(true);
 }
 
 // Draws a boarder around the selected pixels 
@@ -956,6 +1057,40 @@ function drawBorder(noBorder) {
     var res = imgData.data;
     
     if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask);
+    
+    ctx.clearRect(0, 0, w, h);
+    //ctx.drawImage(img, 0, 0);
+    var len = cacheInd.length;
+    for (j = 0; j < len; j++) {
+        i = cacheInd[j];
+        x = i % w; // calc x by index
+        y = (i - x) / w; // calc y by index
+        k = (y * w + x) * 4; 
+        if ((x + y + hatchOffset) % (hatchLength * 2) < hatchLength) { // detect hatch color 
+            res[k + 3] = 255; // black, change only alpha
+        } else {
+            res[k] = 255; // white
+            res[k + 1] = 255;
+            res[k + 2] = 255;
+            res[k + 3] = 255;
+        }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+}
+
+function drawEditBorder(noBorder) {
+    if (!mask2) return;
+    
+    var x,y,i,j,
+        w = EditInfo.width,
+        h = EditInfo.height,
+        ctx = EditInfo.context,
+        imgData = ctx.createImageData(w, h);
+    imgData.data.set(new Uint8ClampedArray(EditInfo.data.data));
+    var res = imgData.data;
+    
+    if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask2);
     
     ctx.clearRect(0, 0, w, h);
     //ctx.drawImage(img, 0, 0);
@@ -1084,7 +1219,55 @@ function copyImageData() {
 	oldImageInfo.data =  document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
+// Copy the data before changing the colours 
+
+function copyColourData() {
+	originalImageInfo.data = document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
+}
+
 // Filters and colour manipulation
+
+// Color changers
+
+function colorChange() {
+	if(colourFlag) {
+		console.log("changing");
+		for(var i = 0; i < originalImageInfo.data.data.length; i += 4)
+		{
+			var red = originalImageInfo.data.data[i];
+			var green = originalImageInfo.data.data[i + 1];
+			var blue = originalImageInfo.data.data[i + 2];
+			var alpha = originalImageInfo.data.data[i + 3];
+				
+			var redChange = document.getElementById("redSlider").value;
+			var greenChange = document.getElementById("greenSlider").value;
+			var blueChange = document.getElementById("blueSlider").value;
+			
+			if(red + redChange > 255) {
+				imageInfo.data.data[i] = 255;
+			} else if(red + redChange < 0) {
+				imageInfo.data.data[i] = 0;
+			} else {
+				imageInfo.data.data[i] = red + redChange;
+			}
+			if(green + greenChange > 255) {
+				imageInfo.data.data[i + 1] = 255;
+			} else if(green + greenChange < 0) {
+				imageInfo.data.data[i + 1] = 0;
+			} else {
+				imageInfo.data.data[i + 1] = green + greenChange;
+			}
+			if(blue + blueChange > 255) {
+				imageInfo.data.data[i + 2] = 255;
+			} else if(blue + blueChange < 0) {
+				imageInfo.data.data[i + 2] = 0;
+			} else {
+				imageInfo.data.data[i + 2] = blue + blueChange;
+			}
+			imageInfo.data.data[i + 3] = alpha; // not changing the transparency
+		}
+	}
+};
 
 // Brightness Hook
 

@@ -32,6 +32,13 @@
 			<button id="eraserButton" type="button" class="btn btn-default"><img src="img/eraser.png" width="100%"></button>
 			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
 			<button id="tool3" type="button" class="btn btn-default"><img src="img/colour.png" width="100%"></button>
+			<label for="redSlider" id="redLabel" style="display: none;">Red</label>
+			<input id="redSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<label for="greenSlider" id="greenLabel" style="display: none;">Green</label>
+			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<label for="blueSlider" id="blueLabel" style="display: none;">Blue</label>
+			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			
 			<!--
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
@@ -57,6 +64,7 @@
 					</canvas>
 					<button id="paint" type="button" class="btn btn-default">PAINT</button>
 					<button id="erase" type="button" class="btn btn-default">ERASE</button>
+					<button id="wand" type="button" classclass="btn btn-default">WAND</button>
 					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
 			</div>
