@@ -50,42 +50,41 @@
 					<!--<img id="uploadedImage" class="dragme" src="img/Child drawing-5.png" width="100%" style="max-height:100%">-->
 					<canvas id="uploadedImage" class="dragme" style="width: 100%; max-height:100%;" onmouseup="onMouseUp.apply(this, arguments)" onmousedown="onMouseDown.apply(this, arguments)" onmousemove="onMouseMove.apply(this, arguments)"></canvas>
 					<h2 id="preview">Preview:</h2>
-					<canvas id="previewCanvas" draggable="false" class="dragSource"></canvas>
+					<canvas id="previewCanvas" style="max-height:200px; max-width:100%;" draggable="false" class="dragSource"></canvas>
 				</div>
 				<div id="ElementDisplay">
-					<canvas id="ElementCanvas">
+					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
 					</canvas>
-					<button id="paint">PAINT</button>
-					<button id="erase">ERASE</button>
+					<button id="paint" type="button" class="btn btn-default">PAINT</button>
+					<button id="erase" type="button" class="btn btn-default">ERASE</button>
 					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
-			</div>
-			<div id="centerBeam">
-				<div id="Element1" class="Elements">E1<canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element2" class="Elements">E2<canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element3" class="Elements">E3<canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element4" class="Elements">E4<canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element5" class="Elements">E5<canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
 			</div>
 			<div id="rightSection">
 				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
 				<div class="dropdown">
-					<button id="shirtButton" class="templateButtons"><img src="img/T-Shirt-icon2.png" width="100%"></button>
+					<button id="shirtButton" class="templateHover"><p style="margin: 0px; display:inline;">Ties</p>&#x25BC;</button>
 					<div id="myDropdown" class="dropdown-content" style="z-index: 5;">
-						<div width="40px" height="40px" style="background-color:black;">
-							<button class="templateButtons" value="template1" style="background-color:red; border-radius:50%; z-index: 5; margin-top:5px;"></button>
+						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
+							<button class="templateButtons" value="template1" style="background-color:red; margin-top:5px;">
+								<img src="img/Tie2.png" width="100%">
+							</button>
 						</div>
-						<div width="40px" height="40px" style="background-color:black;">
-							<button class="templateButtons" value="template2" style="background-color:blue; border-radius:50%; z-index: 5;"></button>
+						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
+							<button class="templateButtons" value="template2" style="background-color:blue;">
+								<img src="img/Tie2.png" width="100%">
+							</button>
 						</div>
-						<div width="40px" height="40px" style="background-color:black;">
-							<button class="templateButtons" value="template3" style="background-color:green; border-radius:50%; z-index: 5;"></button>
+						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
+							<button class="templateButtons" value="template3" style="background-color:green;">
+								<img src="img/Tie2.png" width="100%">
+							</button>
 						</div>
 					</div>
 				</div>
 				<div id="textEditing">
 					<!-- colorpicker element -->
-					</div>
+					<h2 id="templateTitle">Shirt, Color White</h2>
 					<div class="preview"></div>
 						<div class="colorpicker" style="display:none; z-index: 10;">
 						    <canvas id="picker" var="3" width="300" height="300"></canvas>
@@ -109,12 +108,12 @@
 					<div id="fontStyleButtons">
   						<input type="checkbox" id="bCheck"><label for="bCheck">B</label>
   						<input type="checkbox" id="iCheck"><label for="iCheck">I</label>
-					</div
+					</div>
 					
 				</div>
 
-				<div class="templateDiv" id="template1">
-					<div class="templateBackground freeDropZone" id='template1Background'>
+				<div class="templateDiv" id="template1" value="Shirt, Color Red">
+					<div class="templateBackground freeDropZone" id="template1Background">
 						<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 						<div class="draggable resizable clothESpot1wrap">
     						<canvas class="clothESpot dragDest multiPaste1"></canvas>	
@@ -129,8 +128,7 @@
   						</div>
   					</div>
 				</div>
-
-				<div class="templateDiv" id="template2">
+				<div class="templateDiv" id="template2" value="Scarf, Color Blue">
 					<div class="templateBackground freeDropZone flipTop" id="template2Background">
 						<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
 						<div class="draggable resizable t2ESpot1wrap">
@@ -147,7 +145,7 @@
   					</div>
 				</div>
 
-				<div class="templateDiv" id="template3">
+				<div class="templateDiv" id="template3" value="Tie, Color Green">
 					<div class="templateBackground" id="template3Background">
 						<img src="img/Tie2_Template_Empty_Small.png" class="shirtOverlay" />
 						<div class="draggable resizable t3ESpot1wrap">
@@ -171,7 +169,13 @@
   						</div>
   					</div>
 				</div>
-
+			</div>
+			<div id="centerBeam">
+				<div id="Element1" class="Elements"><canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element2" class="Elements"><canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element3" class="Elements"><canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element4" class="Elements"><canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element5" class="Elements"><canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
 			</div>
 		</div>
 	</div>

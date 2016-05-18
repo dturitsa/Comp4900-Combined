@@ -6,9 +6,11 @@ var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
 var draggedElement;
+var allowDraw;
 var font;
 var brightness = 0;
 var erasing = false;
+var erasing2 = false;
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
@@ -62,7 +64,7 @@ $(document).ready(function() {
 	
 	$("#hideToolButton").click(function() {
 		toolFlag = false;
-		$('#tool2, #tool1').css({"backgroundColor":"black"});
+		$('#tool2, #tool1, #tool4').css({"backgroundColor":"black"});
 		$("#toolBar").slideUp( function() {
 			$("#toolButton").fadeIn();
 			$("#content").stop().animate({paddingLeft: 0},
@@ -84,32 +86,27 @@ $(document).ready(function() {
 		switch(this.id) {
 			case "Element1":
 				if (ElementsFull[0]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element2":
 				if (ElementsFull[1]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element3":
 				if (ElementsFull[2]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element4":
 				if (ElementsFull[3]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 			case "Element5":
 				if (ElementsFull[4]) {
-					whichElement = this;
-					ShowEditCanvas(whichElement);
+					ShowEditCanvas(whichElement = this);
 				}
 				break;
 		}
@@ -123,12 +120,18 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({onSelectChange: preview });
 		$("#previewCanvas").attr("draggable", "true");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#tool2').css({"backgroundColor":"black"});
-		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -144,10 +147,16 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: ''});
-		$('#thresSlider').css({display: ''});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#cropOut')
+			.slideDown()
+			.promise().done(function() {
+				$('#thresSlider').slideDown();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -165,10 +174,16 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: 'none'});
-		$('#thresSlider2').css({display: 'none'});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#thresSlider2')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut2').slideUp();
+		});
 		$('#brightLabel').css({display: ''});
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
@@ -210,10 +225,16 @@ $(document).ready(function() {
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
-		$('#cropOut').css({display: 'none'});
-		$('#thresSlider').css({display: 'none'});
-		$('#cropOut2').css({display: ''});
-		$('#thresSlider2').css({display: ''});
+		$('#thresSlider')
+			.slideUp()
+			.promise().done(function() {
+				$('#cropOut').slideUp();
+		});
+		$('#cropOut2')
+			.slideDown()
+			.promise().done(function() {
+				$('#thresSlider2').slideDown();
+		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool2').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -248,6 +269,15 @@ $(document).ready(function() {
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
 		$('#eraserSlider').css({display: ''});
+	});
+	
+	$('#erase').click(function() {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = false;
+		erasing = false;
+		erasing2 = true;
+		console.log("clicked");
 	});
 
 	$(".dragSource").each(function() {
@@ -319,16 +349,30 @@ $(document).ready(function() {
   			$( this ).css('display', 'none');
 		});
 		var currentTemplate =  $(this).attr("value");
+		$(".templateDiv").css({"backgroundColor":$(this).css("backgroundColor")});
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
     });
 	
+	$('.buttonDiv')
+	.mouseenter(function() {
+		$(this).css({"backgroundColor":"#444444"})
+	})
+	.mouseleave(function() {
+		$(this).css({"backgroundColor":"#5555555"})
+	});
+	
+	
 	$("#shirtButton").hover(function() {
-		$('.dropdown-content').slideDown();
+		$('.dropdown-content').stop().slideDown();
 	});
 	
 	$('.dropdown-content').click(function() {
-		$(this).slideUp();
+		$(this).stop().slideUp();
+	});
+	
+	$('.dropdown-content').mouseleave(function() {
+		$(this).stop().slideUp();
 	});
     
     $(".closeButton").click(function(){
@@ -431,9 +475,9 @@ function updateFont(){
     	$('#signature').css('font-style', 'normal')
     }
 
-	 $(".signatureCanvas").each(function() {
-            drawSignature(this, style, fontFamily);
-        });
+	$(".signatureCanvas").each(function() {
+		drawSignature(this, style, fontFamily);
+	});
 }
 
 //draws the signature text on the specified canvas
@@ -451,7 +495,6 @@ function drawSignature(canvas, style, fontFamily){
   if(textSize.width > canvas.width){
     fontSize = Math.floor(maxFontSize * (canvas.width / textSize.width));
     ctx.font = style + fontSize + "px " + fontFamily;
-    console.log(fontSize);
   } else{
   	fontSize = maxFontSize;
   }
@@ -468,7 +511,7 @@ $(window).resize(function() {
 		}
 		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
-
+		$("#centerBeam").stop().css({left:(Size * leftPercent)});
 	} else {
 		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
 			{step: function() {
@@ -480,9 +523,11 @@ $(window).resize(function() {
 				}
 			});
 		$("#leftSection").stop().animate({width:(Size * leftPercent) - 50});
+		$("#centerBeam").stop().animate({left:(Size * leftPercent)});
 		dragOrclick = true;
 	}
 });
+
 /*
     Onload function for the window. initializes the globals and listeners
     for the magic wand select.
@@ -514,7 +559,7 @@ window.onload = function() {
     });
 
     slider2 = document.getElementById("thresSlider2");
-
+	
     slider2.addEventListener("change", function() {
     	currentThreshold = slider.value = slider2.value;
     	//showThreshold();
@@ -536,53 +581,54 @@ window.onclick = function(e) {
 	}
 };
 
-//uploading image function
+// Opens an Edit window for croped elements
 function ShowEditCanvas(element) {
 	var scaleSize = 4;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
 	var pos = $(element).offset();
-	var width = $("#" + OrigCanvas.id).width();
-	var height = $("#" + OrigCanvas.id).height();
+	var width = OrigCanvas.width;
+	var height = OrigCanvas.height;
+	canvas.width = width;
+	canvas.height = height;
+	console.log(width, height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
-	$("#ElementCanvas").css({"width":width * scaleSize,
-					"height":height * scaleSize});
+	$("#ElementCanvas").css({"max-width": "100%" ,
+					"max-height":500 });
 	$("#ElementDisplay").stop().animate({
-				width: (width + 10) * scaleSize,
-				height: (height + 30) * scaleSize,
-				left: pos.left - (width + 10) * scaleSize, 
+				width: (1000 + 10),
+				height: (1000 + 30),
+				left: pos.left, 
 				top: pos.top,
 				}).slideDown();
-	ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
-	
-	
-	
+
+	ctx.drawImage(OrigCanvas, 0, 0, OrigCanvas.width, OrigCanvas.height);
 }
 
 //draw selection on a canvas
 function preview(img2, selection) {
 	var canvas = $('#previewCanvas')[0];
-	var selectionSource = $('#uploadedImage')[0];
+	//console.log(selection.width);
 	var ctx = canvas.getContext("2d");  
 	var maxSize = 200;
 	var destX = 0;
 	var destY = 0;
-	var longestSide = Math.max(selection.width, selection.height);
-	var scale = maxSize / longestSide;
-	canvas.width =  selection.width * scale;
-	canvas.height =  selection.height * scale;
-	ctx.drawImage(img2,
-			selection.x1 / (img2.offsetWidth / img.width),
-			selection.y1 / (img2.offsetHeight / img.height),
-			selection.width / (img2.offsetWidth / img.width),
-			selection.height / (img2.offsetHeight / img.height),
-			destX,
-			destY, 
-			selection.width * scale,
-			selection.height * scale
-			);               
+	canvas.width =  selection.width;
+	canvas.height =  selection.height;
+	if(selection.width > 0 || selection.height > 0) {
+		ctx.drawImage(img2,
+				selection.x1 / (img2.offsetWidth / img.width),
+				selection.y1 / (img2.offsetHeight / img.height),
+				selection.width / (img2.offsetWidth / img.width),
+				selection.height / (img2.offsetHeight / img.height),
+				destX,
+				destY, 
+				selection.width,
+				selection.height
+				);   
+	}         
 }
 
 //uploading image function
@@ -650,17 +696,21 @@ function drop(ev, canvas = ev.target) {
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
-	canvas.width = 1000;
-	canvas.height = 1000;
+	
+	canvas.width = draggedElement.width;
+	canvas.height = draggedElement.height;
+	//console.log(canvas);
+	//console.log(canvas.width, canvas.height);
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	var longestSide = Math.max(draggedElement.width, draggedElement.height);
-
+	//console.log(draggedElement);
+	//var longestSide = Math.max(draggedElement.width, draggedElement.height);
 	if(draggedElement.width >= draggedElement.height){
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
 	} else{
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
 	}
+	//console.log(canvas.width, canvas.height);
 }
 
 // loads the image and draws it on the canvas.
@@ -672,6 +722,7 @@ function imgChange (inp) {
             //var img = document.getElementById("test-picture");
             //img.setAttribute('src', e.target.result);
             var ctx = document.getElementById("uploadedImage").getContext('2d');
+			//ctx.globalCompositeOperation = "source-atop";
             img = new Image;
             img.src = URL.createObjectURL(inp.files[0]);
             //console.log(img);
@@ -722,10 +773,26 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
         //console.log(e.pageY);
     return { x: x, y: y };
 }
+
+
+function getMousePosition2(e) { // NOTE*: These may need tweeking to work properly
+
+    var p = $(e.target).offset(),
+    	widthScale = document.getElementById('ElementCanvas').offsetWidth / img.width,
+    	heightScale = document.getElementById('ElementCanvas').offsetHeight / img.height,
+        x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
+        y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
+        console.log(x, y);
+        //console.log(e.pageY);
+    return { x: x, y: y };
+}
+
+
 // listener for the mouseDown event. Checks if applicilable mode is in enabled
 // and makes the selection
+
 function onMouseDown(e) {
-	//console.log('Test');
+	console.log(erasing);
 	if(wandFlag || colorElimFlag) {
 	    if (e.button == 0) {
 	        allowDraw = true;
@@ -736,11 +803,12 @@ function onMouseDown(e) {
 	    }
 	    else allowDraw = false;
 	} else if(erasing) {
+		copyImageData();
 		allowDraw = true;
 		downPoint = getMousePosition(e);
 		//ctx = document.getElementById("uploadedImage").getContext("2d");
 		ctx = imageInfo.context;
-		radius = document.getElementById("eraserSlider").value;
+		radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 		ctx.beginPath();
 			ctx.globalCompositeOperation = "destination-out";
 			ctx.fillStyle = "red";
@@ -748,10 +816,26 @@ function onMouseDown(e) {
 			ctx.fill();
 			ctx.globalCompositeOperation = "source-atop";
 		ctx.closePath();
-		
-		//console.log("Click");
-		
-		//imageInfo.data.putImageData(cData, 0, 0);
+	} 
+}
+
+function editMouseDown(e) {
+	if(erasing2) {
+		console.log("clicked again");
+		copyImageData();
+		allowDraw = true;
+		downPoint = getMousePosition2(e);
+		ctx = document.getElementById("ElementCanvas").getContext("2d");
+		//ctx = imageInfo.context;
+		//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
+		radius = 3;
+		ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.globalCompositeOperation = "source-atop";
+		ctx.closePath();
 	}
 }
 // listener for the mousecMove event, gets the current mouse position
@@ -760,7 +844,7 @@ function onMouseMove(e) {
 		if(erasing) {
 			//ctx = document.getElementById("uploadedImage").getContext("2d");
 			ctx = imageInfo.context;
-			radius = document.getElementById("eraserSlider").value;
+			radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 			downPoint = getMousePosition(e);
 			ctx.beginPath();
 			ctx.globalCompositeOperation = "destination-out";
@@ -768,6 +852,7 @@ function onMouseMove(e) {
 			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
 			ctx.fill();
 			ctx.closePath();
+			ctx.globalCompositeOperation = "source-atop";
 			imageInfo.context = ctx;
 			//ctx.fillRect(downPoint.x,downPoint.y,75,50);
 			//console.log("Fill");
@@ -789,13 +874,33 @@ function onMouseMove(e) {
     }
 }
 
+function editMouseMove(e) {
+	if(allowDraw) {
+		if(erasing2) {
+			console.log("moved");
+			ctx = document.getElementById("ElementCanvas").getContext("2d");
+			//ctx = imageInfo.context;
+			//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
+			radius = 3;
+			downPoint = getMousePosition2(e);
+			ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.closePath();
+		} 
+	}
+}
+
 function onMouseUp(e) {
     allowDraw = false;
 	ctx = imageInfo.context;
 	imageInfo.context.globalCompositeOperation = "source-atop";
 	//console.log(imageInfo.data.data);
-	imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	
 	if(erasing) {
+		imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 		//var ctx = document.getElementById("uploadedImage").getContext('2d');
 		//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 		//ctx.putImageData(imageInfo.data, 0, 0);
@@ -804,7 +909,14 @@ function onMouseUp(e) {
     //currentThreshold = colorThreshold;
 }
 
+
+function editMouseUp(e) {
+	allowDraw = false;
+}
+
+
 // Finds the pixels and saves it in the mask, then draws a border around the selection
+
 function drawMask(x, y) {
     if (!imageInfo) return;
     
@@ -961,7 +1073,9 @@ function eliminateWhite(image, threshold) {
 // Swaps the old data with the new, "undoing" their last action
 
 function undo() {
-	imageInfo.data.data.set(oldImageInfo.data.data);
+	if (imageInfo != null) {
+		imageInfo.data.data.set(oldImageInfo.data.data);
+	}
 };
 
 // Copy the data before making a change in case the user needs to "undo" their action
@@ -983,7 +1097,6 @@ function greyScale() {
 	//imageInfo = imageInfo.context.getImageData(0, 0, image.width, image.height);
 	//oldImageInfo = imageInfo;
 	copyImageData();
-	console.log(imageInfo.data.data.length);
 	
 	for(var i = 0; i < imageInfo.data.data.length; i += 4)
 	{
@@ -1003,14 +1116,6 @@ function greyScale() {
 	//ctx = document.getElementById("uploadedImage").getContext('2d');
 	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	//ctx.putImageData(dataArray, 0, 0);
-	
 	//console.log("Grey");
-	
-};
-
-// Eraser tool
-
-function erase() {
-	
 	
 };
