@@ -10,6 +10,7 @@ var allowDraw;
 var font;
 var brightness = 0;
 var erasing = false;
+var erasing2 = false;
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
@@ -268,6 +269,15 @@ $(document).ready(function() {
 		$('#greyScaleLabel').css({display: 'none'});
 		$('#greyScaleButton').css({display: 'none'});
 		$('#eraserSlider').css({display: ''});
+	});
+	
+	$('#erase').click(function() {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = false;
+		erasing = false;
+		erasing2 = true;
+		console.log("clicked");
 	});
 
 	$(".dragSource").each(function() {
@@ -542,7 +552,7 @@ window.onload = function() {
     });
 
     slider2 = document.getElementById("thresSlider2");
-
+	
     slider2.addEventListener("change", function() {
     	currentThreshold = slider.value = slider2.value;
     	//showThreshold();
@@ -584,8 +594,6 @@ function ShowEditCanvas(element) {
 				top: pos.top,
 				}).slideDown();
 	ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
-	
-	
 	
 }
 
@@ -700,6 +708,7 @@ function imgChange (inp) {
             //var img = document.getElementById("test-picture");
             //img.setAttribute('src', e.target.result);
             var ctx = document.getElementById("uploadedImage").getContext('2d');
+			//ctx.globalCompositeOperation = "source-atop";
             img = new Image;
             img.src = URL.createObjectURL(inp.files[0]);
             //console.log(img);
@@ -750,10 +759,26 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
         //console.log(e.pageY);
     return { x: x, y: y };
 }
+
+
+function getMousePosition2(e) { // NOTE*: These may need tweeking to work properly
+
+    var p = $(e.target).offset(),
+    	widthScale = document.getElementById('ElementCanvas').offsetWidth / img.width,
+    	heightScale = document.getElementById('ElementCanvas').offsetHeight / img.height,
+        x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
+        y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
+        console.log(x, y);
+        //console.log(e.pageY);
+    return { x: x, y: y };
+}
+
+
 // listener for the mouseDown event. Checks if applicilable mode is in enabled
 // and makes the selection
+
 function onMouseDown(e) {
-	//console.log('Test');
+	console.log(erasing);
 	if(wandFlag || colorElimFlag) {
 	    if (e.button == 0) {
 	        allowDraw = true;
@@ -764,11 +789,12 @@ function onMouseDown(e) {
 	    }
 	    else allowDraw = false;
 	} else if(erasing) {
+		copyImageData();
 		allowDraw = true;
 		downPoint = getMousePosition(e);
 		//ctx = document.getElementById("uploadedImage").getContext("2d");
 		ctx = imageInfo.context;
-		radius = document.getElementById("eraserSlider").value;
+		radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 		ctx.beginPath();
 			ctx.globalCompositeOperation = "destination-out";
 			ctx.fillStyle = "red";
@@ -776,10 +802,26 @@ function onMouseDown(e) {
 			ctx.fill();
 			ctx.globalCompositeOperation = "source-atop";
 		ctx.closePath();
-		
-		//console.log("Click");
-		
-		//imageInfo.data.putImageData(cData, 0, 0);
+	} 
+}
+
+function editMouseDown(e) {
+	if(erasing2) {
+		console.log("clicked again");
+		copyImageData();
+		allowDraw = true;
+		downPoint = getMousePosition2(e);
+		ctx = document.getElementById("ElementCanvas").getContext("2d");
+		//ctx = imageInfo.context;
+		//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
+		radius = 3;
+		ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.globalCompositeOperation = "source-atop";
+		ctx.closePath();
 	}
 }
 // listener for the mousecMove event, gets the current mouse position
@@ -788,7 +830,7 @@ function onMouseMove(e) {
 		if(erasing) {
 			//ctx = document.getElementById("uploadedImage").getContext("2d");
 			ctx = imageInfo.context;
-			radius = document.getElementById("eraserSlider").value;
+			radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 			downPoint = getMousePosition(e);
 			ctx.beginPath();
 			ctx.globalCompositeOperation = "destination-out";
@@ -796,6 +838,7 @@ function onMouseMove(e) {
 			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
 			ctx.fill();
 			ctx.closePath();
+			ctx.globalCompositeOperation = "source-atop";
 			imageInfo.context = ctx;
 			//ctx.fillRect(downPoint.x,downPoint.y,75,50);
 			//console.log("Fill");
@@ -817,13 +860,33 @@ function onMouseMove(e) {
     }
 }
 
+function editMouseMove(e) {
+	if(allowDraw) {
+		if(erasing2) {
+			console.log("moved");
+			ctx = document.getElementById("ElementCanvas").getContext("2d");
+			//ctx = imageInfo.context;
+			//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
+			radius = 3;
+			downPoint = getMousePosition2(e);
+			ctx.beginPath();
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.fillStyle = "red";
+			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.closePath();
+		} 
+	}
+}
+
 function onMouseUp(e) {
     allowDraw = false;
 	ctx = imageInfo.context;
 	imageInfo.context.globalCompositeOperation = "source-atop";
 	//console.log(imageInfo.data.data);
-	imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	
 	if(erasing) {
+		imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 		//var ctx = document.getElementById("uploadedImage").getContext('2d');
 		//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 		//ctx.putImageData(imageInfo.data, 0, 0);
@@ -832,7 +895,14 @@ function onMouseUp(e) {
     //currentThreshold = colorThreshold;
 }
 
+
+function editMouseUp(e) {
+	allowDraw = false;
+}
+
+
 // Finds the pixels and saves it in the mask, then draws a border around the selection
+
 function drawMask(x, y) {
     if (!imageInfo) return;
     
@@ -1033,12 +1103,5 @@ function greyScale() {
 	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 	//ctx.putImageData(dataArray, 0, 0);
 	//console.log("Grey");
-	
-};
-
-// Eraser tool
-
-function erase() {
-	
 	
 };

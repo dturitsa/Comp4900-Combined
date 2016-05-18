@@ -53,10 +53,10 @@
 					<canvas id="previewCanvas" draggable="false" class="dragSource"></canvas>
 				</div>
 				<div id="ElementDisplay">
-					<canvas id="ElementCanvas">
+					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
 					</canvas>
-					<button id="paint">PAINT</button>
-					<button id="erase">ERASE</button>
+					<button id="paint" type="button" class="btn btn-default">PAINT</button>
+					<button id="erase" type="button" class="btn btn-default">ERASE</button>
 					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
 			</div>
