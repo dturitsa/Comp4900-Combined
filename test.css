@@ -21,8 +21,8 @@
 }
 
 #pic1, #pic2, #pic3, #pic4, #pic5 {
-	width: 74px;
-	height: 84px;
+	width: 76px;
+	height: 86px;
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -259,6 +259,7 @@
 .dropdown {
 	position:relative;
 	display: inline-block;
+	z-index: 1;
 }
 
 .templateButtons {
@@ -277,6 +278,7 @@
 	background-color: #555555;
 	border: none;
 	height: 40px;
+	z-index: 5;
 }
 
 .templateBackground{
@@ -294,24 +296,20 @@
 	padding: 0px;
 	margin-top: -40px;
 	max-height: 1000px;
-}
-
-#template1 {
 	width: 80%;
 }
-#template2 {
+
+#template2, #template3, #template4 {
 	display: none;
+}
+
+#template2 {
 	width: 50%;
 	max-width: 320px;
 }
+
 #template3 {
-	display: none;
-	width: 80%;
 	max-width: 500px;
-}
-#template4 {
-	width: 80%;
-	display: none;
 }
 
 .shirtOverlay { 
