@@ -57,7 +57,7 @@
 					<!--<img id="uploadedImage" class="dragme" src="img/Child drawing-5.png" width="100%" style="max-height:100%">-->
 					<canvas id="uploadedImage" class="dragme" style="width: 100%; max-height:100%;" onmouseup="onMouseUp.apply(this, arguments)" onmousedown="onMouseDown.apply(this, arguments)" onmousemove="onMouseMove.apply(this, arguments)"></canvas>
 					<h2 id="preview">Preview:</h2>
-					<canvas id="previewCanvas" draggable="false" class="dragSource"></canvas>
+					<canvas id="previewCanvas" style="max-height:200px; max-width:100%;" draggable="false" class="dragSource"></canvas>
 				</div>
 				<div id="ElementDisplay">
 					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
