@@ -286,7 +286,14 @@ $(document).ready(function() {
 		wandFlag = false;
 		erasing = false;
 		erasing2 = true;
-		console.log("clicked");
+	});
+
+	$('#wand').click(function() {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = true;
+		erasing = false;
+		erasing2 = false;
 	});
 
 	$(".dragSource").each(function() {
@@ -373,18 +380,21 @@ $(document).ready(function() {
 	});
 	
 	
-	$("#shirtButton").hover(function() {
+	$(".dropdown, .dropdown-content").mouseenter(function() {
 		$('.dropdown-content').stop().slideDown();
 	});
 	
-	$('.dropdown-content').click(function() {
-		$(this).stop().slideUp();
+	$('.dropdown, .dropdown-content').click(function() {
+		$('.dropdown-content').stop().slideUp();
 	});
 	
-	$('.dropdown-content').mouseleave(function() {
-		$(this).stop().slideUp();
+	$('.dropdown').mouseleave(function() {
+		$('.dropdown-content').stop().slideUp();
 	});
     
+    $(".closeButton").click(function(){
+    	console.log("close clicked");
+    });
     
 }); //document.ready function closing tag
 
@@ -395,6 +405,7 @@ $(document).ready(function() {
     	var newElement = $(
     		'<div class="draggable resizable clothESpot1wrap">\
     			<canvas class="clothESpot dragDest"></canvas>\
+    			<img src="img/close_icon.png" class="closeButton"/>\
     		</div>');
 
 
@@ -450,6 +461,9 @@ $(document).ready(function() {
   				}
   			});
 
+  			$(".closeButton").click(function(){
+    			$(this).parent().remove();
+    		});
   			
   			//draws image in the newly created canvas
   			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
@@ -544,8 +558,10 @@ window.onload = function() {
 	oldImageInfo = null;
 	originalImageInfo = null;
     imageInfo = null;
+    EditInfo = null;
     cacheInd = null;
     mask = null;
+    editMask = null;
     downPoint = null;
     img = null;
 	currentCanvas = null;
@@ -576,12 +592,18 @@ window.onload = function() {
 
 // Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
-	if(e.target.id != "uploadedImage") {
-		mask = null;	
+	if(e.target.id != "uploadedImage" && e.target.id != "ElementCanvas") {
+		mask = null;
+		mask2 = null;	
 		var ctx = document.getElementById("uploadedImage").getContext('2d');
 		if(imageInfo != null) {
 			ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 			ctx.putImageData(imageInfo.data, 0, 0);
+		}
+		var ctx2 = document.getElementById("ElementCanvas").getContext('2d');
+		if(EditInfo != null) {
+			ctx2.clearRect(0, 0, EditInfo.width, EditInfo.height);
+			ctx2.putImageData(EditInfo.data, 0, 0);
 		}
 	}
 };
@@ -597,19 +619,28 @@ function ShowEditCanvas(element) {
 	var height = OrigCanvas.height;
 	canvas.width = width;
 	canvas.height = height;
-	console.log(width, height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
 	$("#ElementCanvas").css({"max-width": "100%" ,
-					"max-height":500 });
+					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
-				width: (1000 + 10),
-				height: (1000 + 30),
-				left: pos.left, 
+				width: canvas.width + 25,
+				height: canvas.height + 50,
+				left: pos.left - canvas.width - 25, 
 				top: pos.top,
 				}).slideDown();
 
 	ctx.drawImage(OrigCanvas, 0, 0, OrigCanvas.width, OrigCanvas.height);
+
+	EditInfo = {
+        width: OrigCanvas.width,
+        height: OrigCanvas.height,
+        context: ctx
+    };
+    EditInfo.data = ctx.getImageData(0, 0, EditInfo.width, EditInfo.height);
+    mask2 = null;
+    setInterval(function() { editTick(); }, 300);
+    console.log(EditInfo);
 }
 
 //draw selection on a canvas
@@ -710,12 +741,14 @@ function drawCopiedImage(canvas, ev){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//console.log(draggedElement);
 	//var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	if(draggedElement.width >= draggedElement.height){
+	/*if(draggedElement.width >= draggedElement.height){
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
 	} else{
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-	}
+	}*/
 	//console.log(canvas.width, canvas.height);
+
+	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
 }
 
 // loads the image and draws it on the canvas.
@@ -800,11 +833,10 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
 function getMousePosition2(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
-    	widthScale = document.getElementById('ElementCanvas').offsetWidth / img.width,
-    	heightScale = document.getElementById('ElementCanvas').offsetHeight / img.height,
+    	widthScale = document.getElementById('ElementCanvas').offsetWidth / document.getElementById('ElementCanvas').width,
+    	heightScale = document.getElementById('ElementCanvas').offsetHeight / document.getElementById('ElementCanvas').height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
-        console.log(x, y);
         //console.log(e.pageY);
     return { x: x, y: y };
 }
@@ -843,7 +875,6 @@ function onMouseDown(e) {
 
 function editMouseDown(e) {
 	if(erasing2) {
-		console.log("clicked again");
 		copyImageData();
 		allowDraw = true;
 		downPoint = getMousePosition2(e);
@@ -858,6 +889,15 @@ function editMouseDown(e) {
 			ctx.fill();
 			ctx.globalCompositeOperation = "source-atop";
 		ctx.closePath();
+	} else if(wandFlag || colorElimFlag) {
+	    if (e.button == 0) {
+	        allowDraw = true;
+	        downPoint = getMousePosition2(e);
+	        drawEditMask(downPoint.x, downPoint.y);
+	        //console.log(mask);
+	        //console.log(mask.data.length);
+	    }
+	    else allowDraw = false;
 	}
 }
 // listener for the mousecMove event, gets the current mouse position
@@ -899,7 +939,6 @@ function onMouseMove(e) {
 function editMouseMove(e) {
 	if(allowDraw) {
 		if(erasing2) {
-			console.log("moved");
 			ctx = document.getElementById("ElementCanvas").getContext("2d");
 			//ctx = imageInfo.context;
 			//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
@@ -961,10 +1000,35 @@ function drawMask(x, y) {
     drawBorder();
 }
 
+function drawEditMask(x, y) {
+    if (!EditInfo) return;
+    
+   // showThreshold();
+    console.log("EditMask");
+    var image = {
+        data: EditInfo.data.data,
+        width: EditInfo.width,
+        height: EditInfo.height,
+        bytes: 4
+    };
+    if(wandFlag) {
+    	mask2 = MagicWand.floodFill(image, x, y, currentThreshold);
+	} else if(colorElimFlag) {
+    	mask2 = colorElimination(image, x, y, currentThreshold);
+	}
+    mask2 = MagicWand.gaussBlurOnlyBorder(mask2, blurRadius);
+    drawEditBorder();
+}
+
 // Function that animates the border around the seleceted pixels
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
+}
+
+function editTick() {
+    hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
+    drawEditBorder(true);
 }
 
 // Draws a boarder around the selected pixels 
@@ -980,6 +1044,40 @@ function drawBorder(noBorder) {
     var res = imgData.data;
     
     if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask);
+    
+    ctx.clearRect(0, 0, w, h);
+    //ctx.drawImage(img, 0, 0);
+    var len = cacheInd.length;
+    for (j = 0; j < len; j++) {
+        i = cacheInd[j];
+        x = i % w; // calc x by index
+        y = (i - x) / w; // calc y by index
+        k = (y * w + x) * 4; 
+        if ((x + y + hatchOffset) % (hatchLength * 2) < hatchLength) { // detect hatch color 
+            res[k + 3] = 255; // black, change only alpha
+        } else {
+            res[k] = 255; // white
+            res[k + 1] = 255;
+            res[k + 2] = 255;
+            res[k + 3] = 255;
+        }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+}
+
+function drawEditBorder(noBorder) {
+    if (!mask2) return;
+    
+    var x,y,i,j,
+        w = EditInfo.width,
+        h = EditInfo.height,
+        ctx = EditInfo.context,
+        imgData = ctx.createImageData(w, h);
+    imgData.data.set(new Uint8ClampedArray(EditInfo.data.data));
+    var res = imgData.data;
+    
+    if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask2);
     
     ctx.clearRect(0, 0, w, h);
     //ctx.drawImage(img, 0, 0);
