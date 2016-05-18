@@ -564,53 +564,53 @@ window.onclick = function(e) {
 	}
 };
 
-//uploading image function
+// Opens an Edit window for croped elements
 function ShowEditCanvas(element) {
 	var scaleSize = 4;
 	var OrigCanvas = document.getElementById($(element).children()[0].id);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
 	var pos = $(element).offset();
-	var width = $("#" + OrigCanvas.id).width();
-	var height = $("#" + OrigCanvas.id).height();
+	var width = OrigCanvas.width;
+	var height = OrigCanvas.height;
+	canvas.width = width;
+	canvas.height = height;
+	console.log(width, height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
-	$("#ElementCanvas").css({"width":width * scaleSize,
-					"height":height * scaleSize});
+	$("#ElementCanvas").css({"max-width": "100%" ,
+					"max-height":500 });
 	$("#ElementDisplay").stop().animate({
-				width: (width + 10) * scaleSize,
-				height: (height + 30) * scaleSize,
-				left: pos.left - (width + 10) * scaleSize, 
+				width: (1000 + 10),
+				height: (1000 + 30),
+				left: pos.left, 
 				top: pos.top,
 				}).slideDown();
-	ctx.drawImage(OrigCanvas, 0, 0, canvas.width, canvas.height);
-	
-	
-	
+	ctx.drawImage(OrigCanvas, 0, 0, OrigCanvas.width, OrigCanvas.height);
 }
 
 //draw selection on a canvas
 function preview(img2, selection) {
 	var canvas = $('#previewCanvas')[0];
-	var selectionSource = $('#uploadedImage')[0];
+	//console.log(selection.width);
 	var ctx = canvas.getContext("2d");  
 	var maxSize = 200;
 	var destX = 0;
 	var destY = 0;
-	var longestSide = Math.max(selection.width, selection.height);
-	var scale = maxSize / longestSide;
-	canvas.width =  selection.width * scale;
-	canvas.height =  selection.height * scale;
-	ctx.drawImage(img2,
-			selection.x1 / (img2.offsetWidth / img.width),
-			selection.y1 / (img2.offsetHeight / img.height),
-			selection.width / (img2.offsetWidth / img.width),
-			selection.height / (img2.offsetHeight / img.height),
-			destX,
-			destY, 
-			selection.width * scale,
-			selection.height * scale
-			);               
+	canvas.width =  selection.width;
+	canvas.height =  selection.height;
+	if(selection.width > 0 || selection.height > 0) {
+		ctx.drawImage(img2,
+				selection.x1 / (img2.offsetWidth / img.width),
+				selection.y1 / (img2.offsetHeight / img.height),
+				selection.width / (img2.offsetWidth / img.width),
+				selection.height / (img2.offsetHeight / img.height),
+				destX,
+				destY, 
+				selection.width,
+				selection.height
+				);   
+	}         
 }
 
 //uploading image function
@@ -679,16 +679,20 @@ function drop(ev, canvas = ev.target) {
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
 	
-	canvas.width = 1000;
-	canvas.height = 1000;
+	canvas.width = draggedElement.width;
+	canvas.height = draggedElement.height;
+	//console.log(canvas);
+	//console.log(canvas.width, canvas.height);
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	var longestSide = Math.max(draggedElement.width, draggedElement.height);
+	//console.log(draggedElement);
+	//var longestSide = Math.max(draggedElement.width, draggedElement.height);
 	if(draggedElement.width >= draggedElement.height){
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
 	} else{
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
 	}
+	//console.log(canvas.width, canvas.height);
 }
 
 // loads the image and draws it on the canvas.
