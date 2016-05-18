@@ -331,6 +331,9 @@ $(document).ready(function() {
 		$(this).slideUp();
 	});
     
+    $(".closeButton").click(function(){
+    	console.log("close clicked");
+    });
     
 }); //document.ready function closing tag
 
@@ -341,6 +344,7 @@ $(document).ready(function() {
     	var newElement = $(
     		'<div class="draggable resizable clothESpot1wrap">\
     			<canvas class="clothESpot dragDest"></canvas>\
+    			<img src="img/close_icon.png" class="closeButton"/>\
     		</div>');
 
 
@@ -396,6 +400,9 @@ $(document).ready(function() {
   				}
   			});
 
+  			$(".closeButton").click(function(){
+    			$(this).parent().remove();
+    		});
   			
   			//draws image in the newly created canvas
   			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
