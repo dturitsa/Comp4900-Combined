@@ -172,6 +172,7 @@ $(document).ready(function() {
 		colorElimFlag = false;
 		wandFlag = false;
 		erasing = false;
+		copyColourData();
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#thresSlider')
@@ -189,6 +190,12 @@ $(document).ready(function() {
 		$('#greyScaleLabel').css({display: ''});
 		$('#greyScaleButton').css({display: ''});
 		$('#eraserSlider').css({display: 'none'});
+		$('#redLabel').css({display: ''});
+		$('#greenLabel').css({display: ''});
+		$('#blueLabel').css({display: ''});
+		$('#redSlider').css({display: ''});
+		$('#greenSlider').css({display: ''});
+		$('#blueSlider').css({display: ''});
 	});
 
 	$('#tool5').click(function () {
@@ -294,6 +301,7 @@ $(document).ready(function() {
 		this.ondrop = freeDrop;
 		this.ondragover = allowDrop;
 	});
+	
 	
 	$("#imgInp").change(function(){ readURL(this); });
 
@@ -532,6 +540,7 @@ window.onload = function() {
     hatchLength = 4;
     hatchOffset = 0;
 	oldImageInfo = null;
+	originalImageInfo = null;
     imageInfo = null;
     cacheInd = null;
     mask = null;
@@ -561,6 +570,18 @@ window.onload = function() {
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
+	/*
+	var colorSliders = document.getElementsByClassName("colorSlider");
+	console.log(colorSliders.length);
+	console.log(colorSliders[0]);
+	console.log(colorSliders[1]);
+	console.log(colorSliders[2]);
+	for(var i = 0; i < colorSliders.length; i++) {
+		console.log(i);
+		console.log(colorSliders[i]);
+		colorSliders[i].addEventListener("change", colorChange());
+	}
+	*/
 }
 // Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
@@ -632,7 +653,7 @@ function readURL(input) {
 		reader.onload = function (e) {
 			$('#uploadedImage').attr('src', e.target.result);
 		}           
-		reader.readAsDataURL(input.files[0]);          
+		reader.readAsDataURL(input.files[0]); 
 	}
 }
 
@@ -725,6 +746,17 @@ function imgChange (inp) {
             };
         }
         reader.readAsDataURL(inp.files[0]);
+		toolFlag = true;
+		$("#toolButton").fadeOut();
+		$("#content").stop().animate({paddingLeft: 60},
+			{step: function() {
+				$(window).trigger('resize');
+			}
+		})
+		.promise().done(function() {
+			$("#toolBar").slideDown();
+		});
+		
 		
     }
 };
@@ -734,6 +766,11 @@ function initCanvas(img) {
     cvs.width = img.width;
     cvs.height = img.height;
     //console.log(img);
+	originalImageInfo = {
+		width: img.width,
+		height: img.height,
+		context: cvs.getContext("2d")
+	};
 	oldImageInfo = {
 		width: img.width,
         height: img.height,
@@ -752,6 +789,7 @@ function initCanvas(img) {
     tempCtx.drawImage(img, 0, 0);
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+	originalImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	
 };
 // Gets the current position of the mouse on  the canvas 'UpuloadedImage'
@@ -785,7 +823,7 @@ function getMousePosition2(e) { // NOTE*: These may need tweeking to work proper
 // and makes the selection
 
 function onMouseDown(e) {
-	console.log(erasing);
+	//console.log(erasing);
 	if(wandFlag || colorElimFlag) {
 	    if (e.button == 0) {
 	        allowDraw = true;
@@ -1077,7 +1115,55 @@ function copyImageData() {
 	oldImageInfo.data =  document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
+// Copy the data before changing the colours 
+
+function copyColourData() {
+	originalImageInfo.data = document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
+}
+
 // Filters and colour manipulation
+
+// Color changers
+
+function colorChange() {
+	if(colourFlag) {
+		console.log("changing");
+		for(var i = 0; i < originalImageInfo.data.data.length; i += 4)
+		{
+			var red = originalImageInfo.data.data[i];
+			var green = originalImageInfo.data.data[i + 1];
+			var blue = originalImageInfo.data.data[i + 2];
+			var alpha = originalImageInfo.data.data[i + 3];
+				
+			var redChange = document.getElementById("redSlider").value;
+			var greenChange = document.getElementById("greenSlider").value;
+			var blueChange = document.getElementById("blueSlider").value;
+			
+			if(red + redChange > 255) {
+				imageInfo.data.data[i] = 255;
+			} else if(red + redChange < 0) {
+				imageInfo.data.data[i] = 0;
+			} else {
+				imageInfo.data.data[i] = red + redChange;
+			}
+			if(green + greenChange > 255) {
+				imageInfo.data.data[i + 1] = 255;
+			} else if(green + greenChange < 0) {
+				imageInfo.data.data[i + 1] = 0;
+			} else {
+				imageInfo.data.data[i + 1] = green + greenChange;
+			}
+			if(blue + blueChange > 255) {
+				imageInfo.data.data[i + 2] = 255;
+			} else if(blue + blueChange < 0) {
+				imageInfo.data.data[i + 2] = 0;
+			} else {
+				imageInfo.data.data[i + 2] = blue + blueChange;
+			}
+			imageInfo.data.data[i + 3] = alpha; // not changing the transparency
+		}
+	}
+};
 
 // Brightness Hook
 
