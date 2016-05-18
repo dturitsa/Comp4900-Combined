@@ -366,13 +366,12 @@
 	border: 2px solid black;
 } 
 
-.resizeGrip {
-	width: 20px;
-	height: 20px;
-	background-color: red;
-	border: 1px solid #000000;
-	top: +10px;
-	right:-10px;
+.closeButton {
+	width: 30px;
+	height: 30px;
+	top: -15px;
+	right:-15px;
+	position: absolute;
 }
 
   .t2ESpot1wrap{
