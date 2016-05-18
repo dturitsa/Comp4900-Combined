@@ -20,6 +20,8 @@ $(document).ready(function() {
 	// this is the mouse position within the drag element
 	var startOffsetX, startOffsetY;
 	
+	$('[data-toggle="tooltip"]').tooltip();   
+	
 	$("#leftButton").click(function() {
 		if (item == 0) {
 			item2 = 1; item = 2;
@@ -284,7 +286,6 @@ $(document).ready(function() {
 		wandFlag = false;
 		erasing = false;
 		erasing2 = true;
-		//console.log("clicked");
 	});
 
 	$('#wand').click(function() {
@@ -293,7 +294,6 @@ $(document).ready(function() {
 		wandFlag = true;
 		erasing = false;
 		erasing2 = false;
-		console.log("wand");
 	});
 
 	$(".dragSource").each(function() {
@@ -380,16 +380,16 @@ $(document).ready(function() {
 	});
 	
 	
-	$("#shirtButton").hover(function() {
+	$(".dropdown, .dropdown-content").mouseenter(function() {
 		$('.dropdown-content').stop().slideDown();
 	});
 	
-	$('.dropdown-content').click(function() {
-		$(this).stop().slideUp();
+	$('.dropdown, .dropdown-content').click(function() {
+		$('.dropdown-content').stop().slideUp();
 	});
 	
-	$('.dropdown-content').mouseleave(function() {
-		$(this).stop().slideUp();
+	$('.dropdown').mouseleave(function() {
+		$('.dropdown-content').stop().slideUp();
 	});
     
     $(".closeButton").click(function(){
@@ -630,15 +630,14 @@ function ShowEditCanvas(element) {
 	var height = OrigCanvas.height;
 	canvas.width = width;
 	canvas.height = height;
-	//console.log(width, height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
 	$("#ElementCanvas").css({"max-width": "100%" ,
 					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
-				width: 450 * 1.2,
-				height: 450,
-				left: pos.left - (450 * 1.2), 
+				width: canvas.width + 25,
+				height: canvas.height + 50,
+				left: pos.left - canvas.width - 25, 
 				top: pos.top,
 				}).slideDown();
 
@@ -849,7 +848,6 @@ function getMousePosition2(e) { // NOTE*: These may need tweeking to work proper
     	heightScale = document.getElementById('ElementCanvas').offsetHeight / document.getElementById('ElementCanvas').height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
-        console.log(x, y);
         //console.log(e.pageY);
     return { x: x, y: y };
 }
@@ -888,7 +886,6 @@ function onMouseDown(e) {
 
 function editMouseDown(e) {
 	if(erasing2) {
-		console.log("clicked again");
 		copyImageData();
 		allowDraw = true;
 		downPoint = getMousePosition2(e);
@@ -953,7 +950,6 @@ function onMouseMove(e) {
 function editMouseMove(e) {
 	if(allowDraw) {
 		if(erasing2) {
-			console.log("moved");
 			ctx = document.getElementById("ElementCanvas").getContext("2d");
 			//ctx = imageInfo.context;
 			//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);

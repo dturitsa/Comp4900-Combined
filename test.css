@@ -21,8 +21,8 @@
 }
 
 #pic1, #pic2, #pic3, #pic4, #pic5 {
-	width: 74px;
-	height: 84px;
+	width: 76px;
+	height: 86px;
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -49,7 +49,6 @@
 	color: #777777;
 	font-size: 24px;
 	font-weight: bold;
-	padding-top: 25px;
 	position: relative;
 	display: block;
 	background: repeating-linear-gradient(
@@ -217,31 +216,38 @@
 	margin-top: 40px;
 }
 
-#template2, #template3{
-	display: none;
-}
-
-.templateBackground{
-	position: relative;
-	height: auto;
-}
-
 #templateNum {
 	margin-top: 70px;
 	width: 30%;
 }
 
 #fontStyleButtons{
-	display: inline;
+	padding-top: 5px;
+	margin: auto;
+	width: 82px;
+}
+
+#textEditing {
+	top: -50px;
+	position: relative;
+	width: 100%;
+	text-align: center;
+}
+
+#signature {
+	display: inline-block;
 }
 
 #fontSelect {
 	width: 100px;
+	display: block;
+	margin: auto;
+	margin-top: 5px;
 }
 
-#textEditing {
-	width: 100%;
-	text-align: center;
+.templateBackground{
+	position: relative;
+	height: inherit;
 }
 
 .dropdown-content {
@@ -253,6 +259,7 @@
 .dropdown {
 	position:relative;
 	display: inline-block;
+	z-index: 1;
 }
 
 .templateButtons {
@@ -271,46 +278,49 @@
 	background-color: #555555;
 	border: none;
 	height: 40px;
+	z-index: 5;
 }
 
 .templateBackground{
 	position: relative;
+	height: inherit;
+	max-height: inherit;
 
-}
-
-#signature {
-	display: inline-block;
-}
-
-#fontStyleButtons{
-	display: inline-block;
-}
-
-#fontSelect {
-	width: 100px;
-	display: inline-block;
 }
 
 .templateDiv{
-	margin-top: 10px; 
 	margin-left:auto; 
 	margin-right:auto; 
 	position: relative;
 	overflow: hidden;
 	padding: 0px;
+	margin-top: -40px;
+	max-height: 1000px;
 	width: 80%;
+}
+
+#template2, #template3, #template4 {
+	display: none;
+}
+
+#template2 {
+	width: 50%;
+	max-width: 320px;
+}
+
+#template3 {
+	max-width: 500px;
 }
 
 .shirtOverlay { 
 	position:relative;
 	z-index: 2;
-	height: auto;
+	height: inherit;
 	opacity: 0.7;
-	border-color: #000000;
-	border-style: solid;
-	border-width: 2px;
+	border: 2px solid black;
 	pointer-events: none;
 	width: 100%;
+	max-height: inherit;
 } 
 
 .clothESpot1wrap{
@@ -448,6 +458,9 @@
     height: 30px;
     width: 30px;
     display: inline-block;
+	position: relative;
+	top: 11px;
+	
 }
 
 .t3ESpot1wrap{
@@ -462,59 +475,117 @@
     -ms-transform: rotate(45deg); /* IE 9 */
     -webkit-transform: rotate(45deg); /* Safari */
     transform: rotate(45deg);
-  }
-    
-  .t3ESpot2wrap{
-    padding:0px;
-    position:absolute;
-    top: 62%;
-    left: 45%;
-    z-index: 1;
-    width: 22%;
-    height: 14%;
-    background-color: red;
-    -ms-transform: rotate(-50deg); /* IE 9 */
-    -webkit-transform: rotate(-50deg); /* Safari */
-    transform: rotate(-50deg);
-  }
-    .t3ESpot3wrap{
-    padding:0px;
-    position:absolute;
-    top: 89%;
-    left: 48%;
-    z-index: 1;
-    width: 22%;
-    height: 4%;
-    background-color: green;
-    -ms-transform: rotate(-50deg); /* IE 9 */
-    -webkit-transform: rotate(-50deg); /* Safari */
-    transform: rotate(-50deg);
-  }
+}
 
-  .t3ESpot4wrap{
-    padding:0px;
-    position:absolute;
-    top: 45%;
-    left: 45%;
-    z-index: 1;
-    width: 20%;
-    height: 13%;
-    background-color: yellow;
-    -ms-transform: rotate(130deg); /* IE 9 */
-    -webkit-transform: rotate(130deg); /* Safari */
-    transform: rotate(130deg);
-  }
+.t3ESpot2wrap{
+	padding:0px;
+	position:absolute;
+	top: 62%;
+	left: 45%;
+	z-index: 1;
+	width: 22%;
+	height: 14%;
+	background-color: red;
+	-ms-transform: rotate(-50deg); /* IE 9 */
+	-webkit-transform: rotate(-50deg); /* Safari */
+	transform: rotate(-50deg);
+}
+.t3ESpot3wrap{
+	padding:0px;
+	position:absolute;
+	top: 89%;
+	left: 48%;
+	z-index: 1;
+	width: 22%;
+	height: 4%;
+	background-color: green;
+	-ms-transform: rotate(-50deg); /* IE 9 */
+	-webkit-transform: rotate(-50deg); /* Safari */
+	transform: rotate(-50deg);
+}
 
-  .t3ESpot5wrap{
-    padding:0px;
-    position:absolute;
-    top: 25%;
-    left: 45%;
-    z-index: 1;
-    width: 20%;
-    height: 13%;
-    background-color: orange;
-    -ms-transform: rotate(-30deg); /* IE 9 */
-    -webkit-transform: rotate(-30deg); /* Safari */
-    transform: rotate(-30deg);
-  }
+.t3ESpot4wrap{
+	padding:0px;
+	position:absolute;
+	top: 45%;
+	left: 45%;
+	z-index: 1;
+	width: 23%;
+	height: 13%;
+	background-color: yellow;
+	-ms-transform: rotate(130deg); /* IE 9 */
+	-webkit-transform: rotate(130deg); /* Safari */
+	transform: rotate(130deg);
+}
+
+.t3ESpot5wrap{
+	padding:0px;
+	position:absolute;
+	top: 25%;
+	left: 45%;
+	z-index: 1;
+	width: 23%;
+	height: 13%;
+	background-color: orange;
+	-ms-transform: rotate(-30deg); /* IE 9 */
+	-webkit-transform: rotate(-30deg); /* Safari */
+	transform: rotate(-30deg);
+}
+
+.t4ESpot {
+	padding:0px;
+	position:absolute;
+	z-index: 1;
+	width: 13%;
+	height: 23%;
+}
+
+#t4Ele1 {
+	top: 57%;
+	left: 3%;
+	background-color: blue;
+}
+
+#t4Ele2{
+	top: 57%;
+	left: 16.5%;
+	background-color: red;
+}
+
+#t4Ele3{
+	top: 59%;
+	left: 30%;
+	background-color: yellow;
+}
+
+#t4Ele4{
+	top: 62%;
+	left: 43.5%;
+	background-color: orange;
+}
+
+#t4Ele5{
+	top: 59%;
+	left: 57%;
+	background-color: blue;
+}
+
+#t4Ele6{
+	top: 57%;
+	left: 70.5%;
+	background-color: red;
+}
+
+#t4Ele7{
+	top: 57%;
+	left: 84%;
+	background-color: yellow;
+}
+
+#t4Ele8{
+	top: 81.5%;
+	left: 72%;
+	width: 13%;
+	height: 7%;
+	background-color: green;
+}
