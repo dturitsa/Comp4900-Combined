@@ -588,19 +588,8 @@ window.onload = function() {
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
-	/*
-	var colorSliders = document.getElementsByClassName("colorSlider");
-	console.log(colorSliders.length);
-	console.log(colorSliders[0]);
-	console.log(colorSliders[1]);
-	console.log(colorSliders[2]);
-	for(var i = 0; i < colorSliders.length; i++) {
-		console.log(i);
-		console.log(colorSliders[i]);
-		colorSliders[i].addEventListener("change", colorChange());
-	}
-	*/
 }
+
 // Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
 	if(e.target.id != "uploadedImage" && e.target.id != "ElementCanvas") {
@@ -966,19 +955,21 @@ function editMouseMove(e) {
 }
 
 function onMouseUp(e) {
-    allowDraw = false;
-	ctx = imageInfo.context;
-	imageInfo.context.globalCompositeOperation = "source-atop";
-	//console.log(imageInfo.data.data);
-	
-	if(erasing) {
-		imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
-		//var ctx = document.getElementById("uploadedImage").getContext('2d');
-		//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
-		//ctx.putImageData(imageInfo.data, 0, 0);
+	if(allowDraw) {
+		allowDraw = false;
+		ctx = imageInfo.context;
+		imageInfo.context.globalCompositeOperation = "source-atop";
+		//console.log(imageInfo.data.data);
 		
+		if(erasing) {
+			imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
+			//var ctx = document.getElementById("uploadedImage").getContext('2d');
+			//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
+			//ctx.putImageData(imageInfo.data, 0, 0);
+			
+		}
+		//currentThreshold = colorThreshold;
 	}
-    //currentThreshold = colorThreshold;
 }
 
 
@@ -1218,6 +1209,7 @@ function copyImageData() {
 // Copy the data before changing the colours 
 
 function copyColourData() {
+	console.log("hey");
 	originalImageInfo.data = document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
@@ -1227,39 +1219,81 @@ function copyColourData() {
 
 function colorChange() {
 	if(colourFlag) {
-		console.log("changing");
+	
+		//copyColourData();
+		//copyImageData();
+		
+		var red = null;
+		var green = null;
+		var blue = null;
+		var alpha = null;
+		var redChange = null;
+		var greenChange = null;
+		var blueChange = null;
+		var negRed = false;
+		var negBlue = false;
+		var negGreen = false;
+		
+		
+		console.log(originalImageInfo.data.data.length);
 		for(var i = 0; i < originalImageInfo.data.data.length; i += 4)
 		{
-			var red = originalImageInfo.data.data[i];
-			var green = originalImageInfo.data.data[i + 1];
-			var blue = originalImageInfo.data.data[i + 2];
-			var alpha = originalImageInfo.data.data[i + 3];
-				
-			var redChange = document.getElementById("redSlider").value;
-			var greenChange = document.getElementById("greenSlider").value;
-			var blueChange = document.getElementById("blueSlider").value;
+			red = originalImageInfo.data.data[i]>>>0;
+			green = originalImageInfo.data.data[i + 1]>>>0;
+			blue = originalImageInfo.data.data[i + 2]>>>0;
+			alpha = originalImageInfo.data.data[i + 3];
 			
-			if(red + redChange > 255) {
-				imageInfo.data.data[i] = 255;
-			} else if(red + redChange < 0) {
-				imageInfo.data.data[i] = 0;
+			if(document.getElementById("redSlider").value < 0) {
+				negRed = true;
+				redChange = (document.getElementById("redSlider").value * -1)>>>0;
 			} else {
-				imageInfo.data.data[i] = red + redChange;
+				redChange = document.getElementById("redSlider").value>>>0;
 			}
-			if(green + greenChange > 255) {
-				imageInfo.data.data[i + 1] = 255;
-			} else if(green + greenChange < 0) {
-				imageInfo.data.data[i + 1] = 0;
+			if(document.getElementById("greenSlider").value < 0) {
+				negGreen = true;
+				greenChange = (document.getElementById("greenSlider").value * -1)>>>0;
 			} else {
-				imageInfo.data.data[i + 1] = green + greenChange;
+				greenChange = document.getElementById("greenSlider").value>>>0;
 			}
-			if(blue + blueChange > 255) {
-				imageInfo.data.data[i + 2] = 255;
-			} else if(blue + blueChange < 0) {
-				imageInfo.data.data[i + 2] = 0;
+			if(document.getElementById("blueSlider").value < 0) {
+				negBlue = true;
+				blueChange = (document.getElementById("blueSlider").value * -1)>>>0;
 			} else {
-				imageInfo.data.data[i + 2] = blue + blueChange;
+				blueChange = document.getElementById("blueSlider").value>>>0;
 			}
+			
+			if(negRed){
+				imageInfo.data.data[i] = red - redChange;
+			} else if(red + redChange > 255) {
+				imageInfo.data.data[i] = 255>>>0;
+			} else if(red - redChange < 0) {
+				imageInfo.data.data[i] = 0>>>0;
+			} else {
+				imageInfo.data.data[i] += redChange>>>0;
+			}
+			
+			if(negGreen){
+				imageInfo.data.data[i + 1] -= greenChange;
+			} else if(green + greenChange > 255) {
+				imageInfo.data.data[i + 1] = 255>>>0;
+			} else if(green - greenChange < 0) {
+				imageInfo.data.data[i + 1] = 0>>>0;			
+			} else {
+				imageInfo.data.data[i + 1] += greenChange>>>0;
+			}
+			
+			if(negBlue){
+				imageInfo.data.data[i + 2] -= blueChange;
+			} else if(blue + blueChange > 255) {
+				imageInfo.data.data[i + 2] = 255>>>0;
+			} else if(blue - blueChange < 0) {
+				imageInfo.data.data[i + 2] = 0>>>0;			
+			} else {
+				imageInfo.data.data[i + 2] += blueChange>>>0;
+			}
+			negRed = false;
+			negGreen = false;
+			negBlue = false;
 			imageInfo.data.data[i + 3] = alpha; // not changing the transparency
 		}
 	}
@@ -1273,8 +1307,6 @@ function changeBrightness() {
 
 function greyScale() {
 	
-	//imageInfo = imageInfo.context.getImageData(0, 0, image.width, image.height);
-	//oldImageInfo = imageInfo;
 	copyImageData();
 	
 	for(var i = 0; i < imageInfo.data.data.length; i += 4)
@@ -1292,9 +1324,5 @@ function greyScale() {
         imageInfo.data.data[i + 3] = alpha; // not changing the transparency
 	}
 	
-	//ctx = document.getElementById("uploadedImage").getContext('2d');
-	//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
-	//ctx.putImageData(dataArray, 0, 0);
-	//console.log("Grey");
 	
 };

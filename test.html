@@ -33,20 +33,20 @@
 			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
 			<button id="tool3" type="button" data-toggle="tooltip" title="Colour Choices" class="btn btn-default"><img src="img/colour.png" width="100%"></button>
 			<label for="redSlider" id="redLabel" style="display: none;">Red</label>
-			<input id="redSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<input id="redSlider" class="colorSlider" type="range" value="0" min="-20" max="20" style="display: none;" onchange="colorChange()"/>
 			<label for="greenSlider" id="greenLabel" style="display: none;">Green</label>
-			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-20" max="20" style="display: none;" onchange="colorChange()"/>
 			<label for="blueSlider" id="blueLabel" style="display: none;">Blue</label>
-			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-20" max="20" style="display: none;" onchange="colorChange()"/>
 			
 			<!--
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
-			
+			-->
 			<label for="greyScaleButton" id="greyScaleLabel" data-toggle="tooltip" title="Convert to black and white" style="display: none;">Black and White</label>
 			
 			<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/greyscale.png" width="100%"></button>
-			-->
+			
 		</div>
 		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 		<div id="content">
