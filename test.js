@@ -286,6 +286,14 @@ $(document).ready(function() {
 		erasing2 = true;
 	});
 
+	$('#wand').click(function() {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = true;
+		erasing = false;
+		erasing2 = false;
+	});
+
 	$(".dragSource").each(function() {
 		this.onmousedown = mousedown;
 		this.ondragstart = dragstart;
@@ -541,8 +549,10 @@ window.onload = function() {
 	oldImageInfo = null;
 	originalImageInfo = null;
     imageInfo = null;
+    EditInfo = null;
     cacheInd = null;
     mask = null;
+    editMask = null;
     downPoint = null;
     img = null;
 	currentCanvas = null;
@@ -584,12 +594,18 @@ window.onload = function() {
 }
 // Onclick event for the window. allows user to deselect when clicking off the canvas
 window.onclick = function(e) {
-	if(e.target.id != "uploadedImage") {
-		mask = null;	
+	if(e.target.id != "uploadedImage" && e.target.id != "ElementCanvas") {
+		mask = null;
+		mask2 = null;	
 		var ctx = document.getElementById("uploadedImage").getContext('2d');
 		if(imageInfo != null) {
 			ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 			ctx.putImageData(imageInfo.data, 0, 0);
+		}
+		var ctx2 = document.getElementById("ElementCanvas").getContext('2d');
+		if(EditInfo != null) {
+			ctx2.clearRect(0, 0, EditInfo.width, EditInfo.height);
+			ctx2.putImageData(EditInfo.data, 0, 0);
 		}
 	}
 };
@@ -617,6 +633,16 @@ function ShowEditCanvas(element) {
 				}).slideDown();
 
 	ctx.drawImage(OrigCanvas, 0, 0, OrigCanvas.width, OrigCanvas.height);
+
+	EditInfo = {
+        width: OrigCanvas.width,
+        height: OrigCanvas.height,
+        context: ctx
+    };
+    EditInfo.data = ctx.getImageData(0, 0, EditInfo.width, EditInfo.height);
+    mask2 = null;
+    setInterval(function() { editTick(); }, 300);
+    console.log(EditInfo);
 }
 
 //draw selection on a canvas
@@ -809,8 +835,8 @@ function getMousePosition(e) { // NOTE*: These may need tweeking to work properl
 function getMousePosition2(e) { // NOTE*: These may need tweeking to work properly
 
     var p = $(e.target).offset(),
-    	widthScale = document.getElementById('ElementCanvas').offsetWidth / img.width,
-    	heightScale = document.getElementById('ElementCanvas').offsetHeight / img.height,
+    	widthScale = document.getElementById('ElementCanvas').offsetWidth / document.getElementById('ElementCanvas').width,
+    	heightScale = document.getElementById('ElementCanvas').offsetHeight / document.getElementById('ElementCanvas').height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
         //console.log(e.pageY);
@@ -865,6 +891,15 @@ function editMouseDown(e) {
 			ctx.fill();
 			ctx.globalCompositeOperation = "source-atop";
 		ctx.closePath();
+	} else if(wandFlag || colorElimFlag) {
+	    if (e.button == 0) {
+	        allowDraw = true;
+	        downPoint = getMousePosition2(e);
+	        drawEditMask(downPoint.x, downPoint.y);
+	        //console.log(mask);
+	        //console.log(mask.data.length);
+	    }
+	    else allowDraw = false;
 	}
 }
 // listener for the mousecMove event, gets the current mouse position
@@ -965,10 +1000,35 @@ function drawMask(x, y) {
     drawBorder();
 }
 
+function drawEditMask(x, y) {
+    if (!EditInfo) return;
+    
+   // showThreshold();
+    console.log("EditMask");
+    var image = {
+        data: EditInfo.data.data,
+        width: EditInfo.width,
+        height: EditInfo.height,
+        bytes: 4
+    };
+    if(wandFlag) {
+    	mask2 = MagicWand.floodFill(image, x, y, currentThreshold);
+	} else if(colorElimFlag) {
+    	mask2 = colorElimination(image, x, y, currentThreshold);
+	}
+    mask2 = MagicWand.gaussBlurOnlyBorder(mask2, blurRadius);
+    drawEditBorder();
+}
+
 // Function that animates the border around the seleceted pixels
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
+}
+
+function editTick() {
+    hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
+    drawEditBorder(true);
 }
 
 // Draws a boarder around the selected pixels 
@@ -984,6 +1044,40 @@ function drawBorder(noBorder) {
     var res = imgData.data;
     
     if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask);
+    
+    ctx.clearRect(0, 0, w, h);
+    //ctx.drawImage(img, 0, 0);
+    var len = cacheInd.length;
+    for (j = 0; j < len; j++) {
+        i = cacheInd[j];
+        x = i % w; // calc x by index
+        y = (i - x) / w; // calc y by index
+        k = (y * w + x) * 4; 
+        if ((x + y + hatchOffset) % (hatchLength * 2) < hatchLength) { // detect hatch color 
+            res[k + 3] = 255; // black, change only alpha
+        } else {
+            res[k] = 255; // white
+            res[k + 1] = 255;
+            res[k + 2] = 255;
+            res[k + 3] = 255;
+        }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+}
+
+function drawEditBorder(noBorder) {
+    if (!mask2) return;
+    
+    var x,y,i,j,
+        w = EditInfo.width,
+        h = EditInfo.height,
+        ctx = EditInfo.context,
+        imgData = ctx.createImageData(w, h);
+    imgData.data.set(new Uint8ClampedArray(EditInfo.data.data));
+    var res = imgData.data;
+    
+    if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask2);
     
     ctx.clearRect(0, 0, w, h);
     //ctx.drawImage(img, 0, 0);
