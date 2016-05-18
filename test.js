@@ -606,14 +606,14 @@ function ShowEditCanvas(element) {
 	var height = OrigCanvas.height;
 	canvas.width = width;
 	canvas.height = height;
-	console.log(width, height);
+	//console.log(width, height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
 	$("#ElementCanvas").css({"max-width": "100%" ,
-					"max-height":500 });
+					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
-				width: (1000 + 10),
-				height: (1000 + 30),
+				width: 450 * 1.2,
+				height: 450,
 				left: pos.left, 
 				top: pos.top,
 				}).slideDown();
@@ -719,12 +719,14 @@ function drawCopiedImage(canvas, ev){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//console.log(draggedElement);
 	//var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	if(draggedElement.width >= draggedElement.height){
+	/*if(draggedElement.width >= draggedElement.height){
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
 	} else{
 	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-	}
+	}*/
 	//console.log(canvas.width, canvas.height);
+
+	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
 }
 
 // loads the image and draws it on the canvas.
