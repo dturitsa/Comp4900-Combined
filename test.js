@@ -300,6 +300,11 @@ $(document).ready(function() {
 		this.onmousedown = mousedown;
 		this.ondragstart = dragstart;
 	});
+
+	$(".wrapper").each(function(){
+		$(this).data("defaultWidthRatio", $(this).width() / $(this).parent().width());
+		$(this).data("defaultHeightRatio", $(this).height() / $(this).parent().height());
+	})
 	  
 	$(".dragDest").each(function() {
 		this.ondrop = drop;
@@ -738,12 +743,25 @@ function drop(ev, canvas = ev.target) {
 		}  
 	}
 }
+function fitSize(wrap, content){
+	//console.log(wrap.width());
+	//console.log(content.width);
 
+ 	var scale;
+ 	if(content.width > content.height){
+ 		scale = ($(wrap).data("defaultWidthRatio") *  $(wrap).parent().width()) / content.width;
+ 	}else{
+ 		scale = ($(wrap).data("defaultHeightRatio") *  $(wrap).parent().height()) / content.height;
+ 	}
+ 	console.log(scale);
+ 	$(wrap).css('width', (content.width * scale) / ($(wrap).parent().width() / 100) + '%');
+ 	$(wrap).css('height', (content.height * scale) / ($(wrap).parent().height() / 100)+ '%');
+}
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
-	
+	fitSize($(canvas).parent(), draggedElement);
 	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
 	//console.log(canvas);
