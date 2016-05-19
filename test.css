@@ -405,8 +405,13 @@
     width: 30px;
     display: inline-block;
 	position: relative;
-	top: 11px;
-	
+	top: 11px;	
+}
+
+.dynamicElement{
+	width: 20%;
+	height: 20%;
+	background-color: blue;
 }
 
 #t1Ele1{
