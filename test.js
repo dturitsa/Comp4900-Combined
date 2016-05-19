@@ -644,14 +644,21 @@ function ShowEditCanvas(element) {
 	var height = OrigCanvas.height;
 	canvas.width = width;
 	canvas.height = height;
+	var elmWidth = width, elmHeight = height;
+	if(elmWidth < 300) {
+		elmWidth = 300;
+	}
+	if(elmHeight > 300) {
+		elmHeight = 300;
+	}
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	$('#uploadedImage').imgAreaSelect({remove:true});
 	$("#ElementCanvas").css({"max-width": "100%" ,
 					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
-				width: canvas.width + 25,
-				height: canvas.height + 100,
-				left: pos.left - canvas.width - 25, 
+				width: elmWidth + 150,
+				height: elmHeight + 50,
+				left: pos.left - elmWidth - 150, 
 				top: pos.top,
 				}).slideDown();
 
@@ -714,7 +721,6 @@ function mousedown(ev) {
 }
 
 function dragstart(ev) {
-
 	ev.dataTransfer.setData("Text", ev.target.id);
 	draggedElement = ev.target;
 }
@@ -1023,7 +1029,6 @@ function editMouseUp(e) {
 
 
 // Finds the pixels and saves it in the mask, then draws a border around the selection
-
 function drawMask(x, y) {
     if (!imageInfo) return;
     
