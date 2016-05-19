@@ -369,6 +369,10 @@ $(document).ready(function() {
 		$(".templateDiv").css({"backgroundColor":$(this).css("backgroundColor")});
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
+		$(".clothESpot").each(function(){
+			fitSize(this);
+		});
+
     });
 	
 	$('.buttonDiv')
@@ -501,6 +505,7 @@ function updateFont(){
 function drawSignature(canvas, style, fontFamily){  
   canvas.width = 1500;
   canvas.height = 500;
+  fitSize(canvas)
   var maxFontSize = canvas.height;
   var fontSize;
   var text = $('#signature').val()
@@ -717,7 +722,7 @@ function drop(ev, canvas = ev.target) {
 	}
 	drawCopiedImage(canvas, ev); 
 	//loops through multipaste elements and draws image on all of them
-	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5"];
+	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5", "signatureCanvas"];
 	for (var i = 0; i < multiPasteClasses.length; i++) {
 	   
 		if($(canvas).hasClass(multiPasteClasses[i])){
@@ -728,26 +733,40 @@ function drop(ev, canvas = ev.target) {
 	}
 }
 
+function fitSize(content, wrap = $(content).parent()){
+	if (typeof $(wrap).data('defaultWidthRatio') == 'undefined')
+	{
+		if($(wrap).parent().width() == 0){
+			$(wrap).data("defaultWidthRatio", parseFloat($(wrap).css("width")) / 100.0);
+			$(wrap).data("defaultHeightRatio", parseFloat($(wrap).css("height")) / 100.0);
+		} else{
+			$(wrap).data("defaultWidthRatio", $(wrap).width() / $(wrap).parent().width());
+			$(wrap).data("defaultHeightRatio", $(wrap).height() / $(wrap).parent().height());
+		}
+	}
+
+ 	if($(wrap).data("used") !== true){
+ 		return;
+ 	}
+ 	var scale;
+ 	if(content.width > content.height){
+ 		scale = ($(wrap).data("defaultWidthRatio") *  $(wrap).parent().width()) / content.width;
+ 	}else{
+ 		scale = ($(wrap).data("defaultHeightRatio") *  $(wrap).parent().height()) / content.height;
+ 	}
+ 	$(wrap).css('width', (content.width * scale) / ($(wrap).parent().width() / 100) + '%');
+ 	$(wrap).css('height', (content.height * scale) / ($(wrap).parent().height() / 100)+ '%');
+}
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
-	
+	$(canvas).parent().data("used", true);
+	fitSize(draggedElement, $(canvas).parent());
 	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
-	//console.log(canvas);
-	//console.log(canvas.width, canvas.height);
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	//console.log(draggedElement);
-	//var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	/*if(draggedElement.width >= draggedElement.height){
-	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
-	} else{
-	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-	}*/
-	//console.log(canvas.width, canvas.height);
-
 	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
 }
 
