@@ -47,6 +47,10 @@ $(document).ready(function() {
 	});
 	
 	$("#ExitButton").click(function() {
+		var tmp = document.getElementById('ElementCanvas');
+		var ctx = OrigCanvas.getContext('2d');
+		ctx.clearRect(0,0, OrigCanvas.width, OrigCanvas.height);
+		ctx.drawImage(tmp, 0, 0);
 		$("#ElementDisplay").fadeOut();
 		whichElement = null;
 	});
@@ -286,6 +290,7 @@ $(document).ready(function() {
 		wandFlag = false;
 		erasing = false;
 		erasing2 = true;
+		$('#editCrop').css({display: 'none'});
 	});
 
 	$('#wand').click(function() {
@@ -294,6 +299,20 @@ $(document).ready(function() {
 		wandFlag = true;
 		erasing = false;
 		erasing2 = false;
+		$('#editCrop').css({display: ''});
+	});
+
+	$('#colorElim').click(function() {
+		colourFlag = false;
+		colorElimFlag = true;
+		wandFlag = false;
+		erasing = false;
+		erasing2 = false;
+		$('#editCrop').css({display: ''});
+	});
+
+	$('#editCrop').click(function() {
+		cropOut2();
 	});
 
 	$(".dragSource").each(function() {
@@ -571,6 +590,7 @@ window.onload = function() {
     img = null;
 	currentCanvas = null;
     allowDraw = false;
+    OrigCanvas = null;
 	/*
 	brightnessSlider = document.getElementById("brightnessSlider");
 	
@@ -616,7 +636,7 @@ window.onclick = function(e) {
 // Opens an Edit window for croped elements
 function ShowEditCanvas(element) {
 	var scaleSize = 4;
-	var OrigCanvas = document.getElementById($(element).children()[0].id);
+	OrigCanvas = document.getElementById($(element).children()[0].id);
 	var canvas = document.getElementById("ElementCanvas");
 	var ctx = canvas.getContext('2d');
 	var pos = $(element).offset();
@@ -630,7 +650,7 @@ function ShowEditCanvas(element) {
 					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
 				width: canvas.width + 25,
-				height: canvas.height + 50,
+				height: canvas.height + 100,
 				left: pos.left - canvas.width - 25, 
 				top: pos.top,
 				}).slideDown();
@@ -645,7 +665,7 @@ function ShowEditCanvas(element) {
     EditInfo.data = ctx.getImageData(0, 0, EditInfo.width, EditInfo.height);
     mask2 = null;
     setInterval(function() { editTick(); }, 300);
-    console.log(EditInfo);
+    //console.log(EditInfo);
 }
 
 //draw selection on a canvas
@@ -994,6 +1014,11 @@ function onMouseUp(e) {
 
 function editMouseUp(e) {
 	allowDraw = false;
+
+	if(erasing2) {
+		var ctx2 = document.getElementById("ElementCanvas").getContext("2d");
+		EditInfo.data = ctx2.getImageData(0, 0, EditInfo.width, EditInfo.height);
+	}
 }
 
 
@@ -1023,7 +1048,7 @@ function drawEditMask(x, y) {
     if (!EditInfo) return;
     
    // showThreshold();
-    console.log("EditMask");
+    //console.log("EditMask");
     var image = {
         data: EditInfo.data.data,
         width: EditInfo.width,
@@ -1143,6 +1168,32 @@ function cropOut() {
 		ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 		ctx.putImageData(imageInfo.data, 0, 0);
 	}, 300);
+};
+
+
+function cropOut2() {
+
+	if(mask2 == null) return;
+	var tmpMask = mask2;
+	mask2 = null;
+
+	//setTimeout(function() {
+	//	copyImageData();
+
+		for(i = 0; i < tmpMask.data.length; i++) {
+			if(tmpMask.data[i] != 0) {
+				var tmp = i * 4;
+				EditInfo.data.data[tmp] = 0;
+				EditInfo.data.data[tmp + 1] = 0;
+				EditInfo.data.data[tmp + 2] = 0;
+				EditInfo.data.data[tmp + 3] = 0;
+			}
+		}
+		//mask = null;
+		var ctx = document.getElementById("ElementCanvas").getContext('2d');
+		ctx.clearRect(0, 0, EditInfo.width, EditInfo.height);
+		ctx.putImageData(EditInfo.data, 0, 0);
+	//}, 300);
 };
 
 // Fucntion finds the selected color (based on a threshold) from the image
