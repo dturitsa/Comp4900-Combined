@@ -397,6 +397,10 @@ $(document).ready(function() {
 		updateFont();  
      });
 
+    $("#previewBut").click(function(){
+    	preview($(this).parent().find(".templateBackground")[0]);
+    });
+
     $("#fontStyleButtons").change(function(){
     	updateFont();  
     }); 
@@ -772,6 +776,16 @@ function drop(ev, canvas = ev.target) {
 			});
 		}  
 	}
+}
+
+//collapse canvas and create preview
+function preview(template, previewCanvas = $("#previewCanvas")){
+	template = $(template);
+
+	template.find(".wrapper").each(function(){
+		console.log($(this).width());
+	})
+	
 }
 
 function fitSize(content, wrap = $(content).parent()){
