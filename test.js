@@ -504,8 +504,9 @@ function updateFont(){
 
 //draws the signature text on the specified canvas
 function drawSignature(canvas, style, fontFamily){  
-  canvas.width = 1500;
-  canvas.height = 500;
+  canvas.width = 2000;
+  canvas.height = 400;
+  fitSize($(canvas).parent(), canvas)
   var maxFontSize = canvas.height;
   var fontSize;
   var text = $('#signature').val()
