@@ -138,6 +138,7 @@ $(document).ready(function() {
 		});
 		$('#tool2').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -165,6 +166,7 @@ $(document).ready(function() {
 		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -191,6 +193,11 @@ $(document).ready(function() {
 			.promise().done(function() {
 				$('#cropOut2').slideUp();
 		});
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: ''});
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
@@ -205,9 +212,16 @@ $(document).ready(function() {
 	});
 
 	$('#tool5').click(function () {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = false;
+		erasing = false;
+		$('#uploadedImage').imgAreaSelect({remove:true});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool3').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
 		$('#cropOut2').css({display: 'none'});
@@ -249,7 +263,10 @@ $(document).ready(function() {
 				$('#thresSlider2').slideDown();
 		});
 		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool3').css({"backgroundColor":"black"});
 		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool5').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -271,6 +288,12 @@ $(document).ready(function() {
 		colorElimFlag = false;
 		wandFlag = false;
 		erasing = true;
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool3').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
+		$('#tool5').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: 'none'});
