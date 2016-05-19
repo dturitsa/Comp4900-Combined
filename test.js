@@ -975,6 +975,11 @@ function onMouseUp(e) {
 
 function editMouseUp(e) {
 	allowDraw = false;
+
+	if(erasing2) {
+		var ctx2 = document.getElementById("ElementCanvas").getContext("2d");
+		EditInfo.data = ctx2.getImageData(0, 0, EditInfo.width, EditInfo.height);
+	}
 }
 
 
