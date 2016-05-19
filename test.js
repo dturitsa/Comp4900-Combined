@@ -449,7 +449,7 @@ $(document).ready(function() {
     	ev.preventDefault();
 		
     	var newElement = $(
-    		'<div class="draggable resizable clothESpot1wrap">\
+    		'<div class="draggable resizable wrapper dynamicElement">\
     			<canvas class="clothESpot dragDest"></canvas>\
     			<img src="img/close_icon.png" class="closeButton"/>\
     		</div>');
@@ -460,14 +460,14 @@ $(document).ready(function() {
     	if(!$(ev.target).hasClass("clothESpot")){
     		$(this).append(newElement);
 
+/*
     		//sets the width and height of the new element as % of parent
     		var widthPercent = 20 //percent of the parents width the new element should be
     		var widthHeightRatio = newElement.parent().width() / newElement.parent().height();
     		newElement.css("width", widthPercent + "%");
     		newElement.css("height", widthPercent * widthHeightRatio + "%");
-
-    		//sets position of new element
-    		
+*/
+    		//sets position of new element	
     		var xPos = ev.pageX - $(ev.target).offset().left - newElement.width() / 2;
     		var yPos = ev.pageY - $(ev.target).offset().top - newElement.width() / 2;
     		var leftPercent = xPos / ($(this).width() / 100);
