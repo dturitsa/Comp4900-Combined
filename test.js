@@ -718,7 +718,7 @@ function drop(ev, canvas = ev.target) {
 	}
 	drawCopiedImage(canvas, ev); 
 	//loops through multipaste elements and draws image on all of them
-	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5"];
+	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5", "signatureCanvas"];
 	for (var i = 0; i < multiPasteClasses.length; i++) {
 	   
 		if($(canvas).hasClass(multiPasteClasses[i])){
