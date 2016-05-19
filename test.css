@@ -28,7 +28,7 @@
 	left: 0px;
 }
 
-#paint, #erase {
+#paint, #erase, #wand, #colorElim, #editCrop {
 	background-color:transparent;
 	border-color: transparent;
 	color: white;
@@ -119,8 +119,8 @@
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus, #eraserButton:focus, #undoButton:focus, .templateButtons:focus {
-	outline:none;
+.templateButtons:focus, .btnFocus:focus{
+	outline:0 !important;
 }
 
 #toolButton {
@@ -254,12 +254,19 @@
 	display:none;
 	position: absolute;
 	min-width: 40px;
+	z-index: 5;
 }
 
 .dropdown {
 	position:relative;
 	display: inline-block;
-	z-index: 1;
+	z-index: 5;
+}
+
+.buttonDiv {
+	z-index: 5;
+	background-color: #555555;
+	padding:5px;
 }
 
 .templateButtons {
