@@ -369,6 +369,10 @@ $(document).ready(function() {
 		$(".templateDiv").css({"backgroundColor":$(this).css("backgroundColor")});
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
+		$(".clothESpot").each(function(){
+			fitSize(this);
+		});
+
     });
 	
 	$('.buttonDiv')
@@ -499,9 +503,9 @@ function updateFont(){
 
 //draws the signature text on the specified canvas
 function drawSignature(canvas, style, fontFamily){  
-  canvas.width = 2000;
-  canvas.height = 400;
-  fitSize($(canvas).parent(), canvas)
+  canvas.width = 1500;
+  canvas.height = 500;
+  fitSize(canvas)
   var maxFontSize = canvas.height;
   var fontSize;
   var text = $('#signature').val()
@@ -729,7 +733,7 @@ function drop(ev, canvas = ev.target) {
 	}
 }
 
-function fitSize(wrap, content){
+function fitSize(content, wrap = $(content).parent()){
 	if (typeof $(wrap).data('defaultWidthRatio') == 'undefined')
 	{
 		if($(wrap).parent().width() == 0){
@@ -738,39 +742,31 @@ function fitSize(wrap, content){
 		} else{
 			$(wrap).data("defaultWidthRatio", $(wrap).width() / $(wrap).parent().width());
 			$(wrap).data("defaultHeightRatio", $(wrap).height() / $(wrap).parent().height());
-		}		
-		//console.log("STORED- WidthRatio: " + $(wrap).data("defaultWidthRatio") + " HeightRatio: " + $(wrap).data("defaultHeightRatio"));
+		}
 	}
-		
- 	if(content.width > content.height){
- 		$(wrap).css('width', $(wrap).data("defaultWidthRatio") * 100 + '%');
- 		$(wrap).css('height', ($(wrap).data("defaultHeightRatio") * 100) * (content.height / content.width) + '%');
- 	}else{
- 		$(wrap).css('height', $(wrap).data("defaultHeightRatio") * 100 + '%');
- 		$(wrap).css('width', ($(wrap).data("defaultWidthRatio") * 100) * (content.width / content.height) + '%');
+
+ 	if($(wrap).data("used") !== true){
+ 		return;
  	}
+ 	var scale;
+ 	if(content.width > content.height){
+ 		scale = ($(wrap).data("defaultWidthRatio") *  $(wrap).parent().width()) / content.width;
+ 	}else{
+ 		scale = ($(wrap).data("defaultHeightRatio") *  $(wrap).parent().height()) / content.height;
+ 	}
+ 	$(wrap).css('width', (content.width * scale) / ($(wrap).parent().width() / 100) + '%');
+ 	$(wrap).css('height', (content.height * scale) / ($(wrap).parent().height() / 100)+ '%');
 }
 
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
-	console.log('drawing');
 	ev.preventDefault();
-	fitSize($(canvas).parent(), draggedElement);
+	$(canvas).parent().data("used", true);
+	fitSize(draggedElement, $(canvas).parent());
 	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
-	//console.log(canvas);
-	//console.log(canvas.width, canvas.height);
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	//console.log(draggedElement);
-	//var longestSide = Math.max(draggedElement.width, draggedElement.height);
-	/*if(draggedElement.width >= draggedElement.height){
-	  ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height * (draggedElement.height / draggedElement.width));
-	} else{
-	  ctx.drawImage(draggedElement, 0, 0, canvas.width * (draggedElement.width / draggedElement.height), canvas.height);
-	}*/
-	//console.log(canvas.width, canvas.height);
-
 	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
 }
 
