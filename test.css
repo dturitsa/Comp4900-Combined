@@ -98,7 +98,7 @@
 	padding-bottom: 5px;
 }
 
-#hideToolButton, #tool1, #tool2, #tool3, #undoButton, #greyScaleButton, #tool4 {
+#hideToolButton, #tool1, #tool2, #tool3, #undoButton, #greyScaleButton, #tool4, #tool5, #eraserButton {
 	border-radius:50%;
 	display:block; 
 	margin-top:10px; 
@@ -111,11 +111,11 @@
 }
 
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover {
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover,  #tool5:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover {
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus,  #paint:focus, #erase:focus {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus,  #paint:focus, #erase:focus,  #eraserButton:focus {
 	background-color:#555555;
 }
 
@@ -367,6 +367,13 @@
 	padding:0px;
     position:absolute;
     z-index: 1;
+	background: repeating-linear-gradient(
+	  45deg,
+	  rgba(204, 204, 204, 0.7),
+	  rgba(204, 204, 204, 0.7) 10px,
+	  rgba(170, 170, 170, 0.7) 10px,
+	  rgba(170, 170, 170, 0.7) 20px
+	);
 }
 
 .closeButton {
@@ -435,7 +442,6 @@
 .dynamicElement{
 	width: 20%;
 	height: 20%;
-	background-color: blue;
 }
 
 .templates {
@@ -456,6 +462,7 @@
 	float:right;
 	top: 0px;
 	right: 0px;
+	z-index: 4;
 }
 
 #t1Ele1{
@@ -463,7 +470,6 @@
 	left: 20%;
 	width: 15%;
 	height: 25%;
-	background-color: blue;
 }
 
 #t1Ele2{
@@ -471,7 +477,6 @@
 	left: 65%;
 	width: 15%;
 	height: 25%;
-	background-color: green;
 }
 
 #t1Ele3{
@@ -479,7 +484,6 @@
 	left: 15%;
 	width: 25%;
 	height: 15%;
-	background-color: green;
 }
 
  #t2Ele1{    
@@ -522,7 +526,6 @@
 	left: 45%;
 	width: 22%;
 	height: 14%;
-	background-color: red;
 	-ms-transform: rotate(-50deg); /* IE 9 */
 	-webkit-transform: rotate(-50deg); /* Safari */
 	transform: rotate(-50deg);
@@ -532,7 +535,6 @@
 	left: 48%;
 	width: 22%;
 	height: 4%;
-	background-color: green;
 	-ms-transform: rotate(-50deg); /* IE 9 */
 	-webkit-transform: rotate(-50deg); /* Safari */
 	transform: rotate(-50deg);
@@ -543,7 +545,6 @@
 	left: 45%;
 	width: 23%;
 	height: 13%;
-	background-color: yellow;
 	-ms-transform: rotate(130deg); /* IE 9 */
 	-webkit-transform: rotate(130deg); /* Safari */
 	transform: rotate(130deg);
@@ -554,7 +555,6 @@
 	left: 45%;
 	width: 23%;
 	height: 13%;
-	background-color: orange;
 	-ms-transform: rotate(-30deg); /* IE 9 */
 	-webkit-transform: rotate(-30deg); /* Safari */
 	transform: rotate(-30deg);
@@ -568,43 +568,36 @@
 #t4Ele1 {
 	top: 57%;
 	left: 3%;
-	background-color: blue;
 }
 
 #t4Ele2{
 	top: 57%;
 	left: 16.5%;
-	background-color: red;
 }
 
 #t4Ele3{
 	top: 59%;
 	left: 30%;
-	background-color: yellow;
 }
 
 #t4Ele4{
 	top: 62%;
 	left: 43.5%;
-	background-color: orange;
 }
 
 #t4Ele5{
 	top: 59%;
 	left: 57%;
-	background-color: blue;
 }
 
 #t4Ele6{
 	top: 57%;
 	left: 70.5%;
-	background-color: red;
 }
 
 #t4Ele7{
 	top: 57%;
 	left: 84%;
-	background-color: yellow;
 }
 
 #t4Ele8{
@@ -612,7 +605,6 @@
 	left: 72%;
 	width: 13%;
 	height: 7%;
-	background-color: green;
 }
 
 #t5Ele1 {

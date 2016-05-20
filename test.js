@@ -138,6 +138,7 @@ $(document).ready(function() {
 		});
 		$('#tool2').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -165,6 +166,7 @@ $(document).ready(function() {
 		});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -191,6 +193,11 @@ $(document).ready(function() {
 			.promise().done(function() {
 				$('#cropOut2').slideUp();
 		});
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: ''});
 		$('#brightnessSlider').css({display: ''});
 		$('#greyScaleLabel').css({display: ''});
@@ -205,9 +212,16 @@ $(document).ready(function() {
 	});
 
 	$('#tool5').click(function () {
+		colourFlag = false;
+		colorElimFlag = false;
+		wandFlag = false;
+		erasing = false;
+		$('#uploadedImage').imgAreaSelect({remove:true});
 		$('#tool1').css({"backgroundColor":"black"});
 		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool3').css({"backgroundColor":"black"});
 		$('#tool4').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
 		$('#cropOut2').css({display: 'none'});
@@ -249,7 +263,10 @@ $(document).ready(function() {
 				$('#thresSlider2').slideDown();
 		});
 		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool3').css({"backgroundColor":"black"});
 		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool5').css({"backgroundColor":"black"});
+		$('#eraserButton').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -271,6 +288,12 @@ $(document).ready(function() {
 		colorElimFlag = false;
 		wandFlag = false;
 		erasing = true;
+		$('#tool1').css({"backgroundColor":"black"});
+		$('#tool3').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"black"});
+		$('#tool4').css({"backgroundColor":"black"});
+		$('#tool5').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
 		$('#cropOut').css({display: 'none'});
@@ -329,7 +352,6 @@ $(document).ready(function() {
 		this.ondrop = freeDrop;
 		this.ondragover = allowDrop;
 	});
-	
 	
 	$("#imgInp").change(function(){ readURL(this); });
 
@@ -444,13 +466,6 @@ $(document).ready(function() {
     	if(!$(ev.target).hasClass("clothESpot")){
     		$(this).append(newElement);
 
-/*
-    		//sets the width and height of the new element as % of parent
-    		var widthPercent = 20 //percent of the parents width the new element should be
-    		var widthHeightRatio = newElement.parent().width() / newElement.parent().height();
-    		newElement.css("width", widthPercent + "%");
-    		newElement.css("height", widthPercent * widthHeightRatio + "%");
-*/
     		//sets position of new element	
     		var xPos = ev.pageX - $(ev.target).offset().left - newElement.width() / 2;
     		var yPos = ev.pageY - $(ev.target).offset().top - newElement.width() / 2;
