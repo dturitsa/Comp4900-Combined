@@ -37,12 +37,12 @@
 			<button id="eraserButton" type="button" class="btn btn-default"><img src="img/eraser.png" width="100%"></button>
 			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
 			<button id="tool3" type="button" data-toggle="tooltip" title="Colour Choices" class="btn btn-default"><img src="img/colour.png" width="100%"></button>
-			<label for="redSlider" id="redLabel" style="display: none;">Red</label>
-			<input id="redSlider" class="colorSlider" type="range" value="0" min="-20" max="20" style="display: none;" onchange="colorChange()"/>
-			<label for="greenSlider" id="greenLabel" style="display: none;">Green</label>
-			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-20" max="20" style="display: none;" onchange="colorChange()"/>
-			<label for="blueSlider" id="blueLabel" style="display: none;">Blue</label>
-			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-20" max="20" style="display: none;" onchange="colorChange()"/>
+			<label for="redSlider" id="redLabel" style="display: none; color:white;">Red</label>
+			<input id="redSlider" class="colorSlider" type="range"  value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<label for="greenSlider" id="greenLabel" style="display: none; color:white;">Green</label>
+			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<label for="blueSlider" id="blueLabel" style="display: none; color:white;">Blue</label>
+			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
 			
 			<!--
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
@@ -62,7 +62,7 @@
 					<!--<img id="uploadedImage" class="dragme" src="img/Child drawing-5.png" width="100%" style="max-height:100%">-->
 					<canvas id="uploadedImage" class="dragme" style="width: 100%; max-height:100%;" onmouseup="onMouseUp.apply(this, arguments)" onmousedown="onMouseDown.apply(this, arguments)" onmousemove="onMouseMove.apply(this, arguments)"></canvas>
 					<h2 id="preview">Preview:</h2>
-					<canvas id="previewCanvas" style="max-height:200px; max-width:100%;" draggable="false" class="dragSource"></canvas>
+					<canvas id="previewCanvas" style="max-height:200px; max-width:100%;" draggable="false" class="dragSource" data-toggle="tooltip" title="Drag this image to place it"></canvas>
 				</div>
 				<div id="ElementDisplay">
 					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
@@ -79,7 +79,7 @@
 				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
 				<div class="dropdown">
 					<button id="shirtButton" class="templateHover"><p style="margin: 0px; display:inline;">Ties</p>&#x25BC;</button>
-					<div id="myDropdown" class="dropdown-content" style="z-index: 5;">
+					<div id="myDropdown" class="dropdown-content" style="z-index: 25;">
 						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
 							<button class="templateButtons" value="template1" style="background-color:red; margin-top:5px;">
 								<img src="img/Tie2.png" width="100%">
@@ -131,8 +131,8 @@
 					</div>
 					
 				</div>
-				<!--<img src="img/placeholder.png" class="placeholderImage" />-->
 				<div class="templateDiv" id="template1" value="Shirt">
+					
 					<div class="templateBackground freeDropZone" id="template1Background">
 						<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 						<div class="draggable resizable wrapper" id="t1Ele1">
@@ -148,7 +148,14 @@
   						</div>
   					</div>
 				</div>
+
+				<div id="finalPreviewDiv" class="ui-dialog">
+						<canvas id="clothingPreviewCanvas" width="100" height="100"></canvas>
+						<img class="hiddenAssets" id="scarfPreviewBackground" src="img/scarf_preview.png"/>
+				</div>
+
 				<div class="templateDiv" id="template2" value="Scarf">
+					<button id="previewBut">Preview</button>
 					<div class="templateBackground freeDropZone flipTop" id="template2Background">
 						<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
 						<div class="draggable resizable wrapper" id="t2Ele1">
@@ -163,6 +170,7 @@
     						<canvas class="clothESpot dragDest signatureCanvas"></canvas>
   						</div>
   					</div>
+
 				</div>
 
 				<div class="templateDiv" id="template3" value="Tie">

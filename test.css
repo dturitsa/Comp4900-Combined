@@ -353,7 +353,9 @@
 	position: absolute;
 }
 
-
+.hiddenAssets{
+	display: none;
+}
 
  /* colorpicker styles */
 .colorpicker {
@@ -455,8 +457,8 @@
     top: 92%;
     left: 48%;
     z-index: 1;
-    width: 25%;
-    height: 12%;
+    width: 30%;
+    height: 4%;
 }
 
 #t3Ele1{
