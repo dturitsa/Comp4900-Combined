@@ -414,7 +414,8 @@ $(document).ready(function() {
 			fitSize(this);
 		});
 		if(currentTemplate == "template3"){
-			alert("Tie's cannot have white!");
+			//alert("Tie's cannot have white!");
+			popup('popUpDiv');
 		}
     });
 	
