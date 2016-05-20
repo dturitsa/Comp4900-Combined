@@ -398,9 +398,9 @@ $(document).ready(function() {
      });
 
 
-    $("#previewBut").click(function(){
-    	previewClothing($(this).parent().find(".templateBackground")[0]);
+    $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
+    	previewClothing($(this).parent().find(".templateBackground")[0]);
     });
 
 
@@ -790,38 +790,43 @@ function drop(ev, canvas = ev.target) {
 //collapse canvas and create preview
 function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0]){
 	template = $(template);
-	var backgroundImage = $("#scarfPreviewBackground")[0];
+	var templateValue = template.parent().attr("value");
+	var backgroundImage = template.parent().find(".previewBackground")[0];
 	previewCanvas.width = backgroundImage.naturalWidth;
 	previewCanvas.height = backgroundImage.naturalHeight;
 	var ctx = previewCanvas.getContext("2d");
 	ctx.fillStyle="#FF0000";
 	ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 	
+	var leftOffset, topOffset, width, height;
 
 	template.find(".wrapper").each(function(){
 
-		var leftOffset = $(this).position().left / $(this).parent().width() * 1.2;
-		var topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
-		var width = $(this).width();
-		var height = $(this).height();
-
+		if(templateValue == 'Scarf'){
+			leftOffset = $(this).position().left / $(this).parent().width() * 1.2;
+			topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
+			width = $(this).width();
+			height = $(this).height();
+		}else if(templateValue == 'Tie'){
+			leftOffset = $(this).position().left / $(this).parent().width() * .8 + .25;
+			topOffset = $(this).position().top / $(this).parent().height() * .8 + .2;
+			width = $(this).width() * .9 * previewCanvas.width / $(this).parent().width();
+			height = $(this).height() * .9 * previewCanvas.width / $(this).parent().width();
+		}
     	if(getRotationDegrees($(this)) != 0){
-    		var tempCanvas = document.createElement('canvas');
-    		var tempCtx = tempCanvas.getContext("2d");
-    		tempCanvas.width = width;
-			tempCanvas.height = height;
-    		tempCtx.translate(width/2, height/2);
-    		tempCtx.rotate(getRotationDegrees($(this)) * Math.PI/180);
-    		tempCtx.drawImage($(this).find("canvas")[0], -width / 2, -height / 2, width, height);
-			ctx.drawImage(tempCanvas, leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height(), width, height);
+    		console.log("width" + width + " height" + height);
+    		ctx.save();
+    		ctx.translate(leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height());
+    		ctx.translate(width / 2, height / 2);
+    		ctx.rotate(getRotationDegrees($(this)) * Math.PI/180);
+    		//ctx.drawImage($(this).find("canvas")[0], -width / 2, -height / 2, width, height);
+			ctx.drawImage($(this).find("canvas")[0], -(width/2), -(height/2), width, height);
+			ctx.restore();
     	} else{
     		ctx.drawImage($(this).find("canvas")[0], leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height(), width, height);
     	}
-
 	});
 	ctx.drawImage(backgroundImage, 0, 0, previewCanvas.width, previewCanvas.height);
-	
-	
 }
 
 //gets the element rotation in degrees
@@ -838,7 +843,7 @@ function getRotationDegrees(obj) {
         var angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
     } else { var angle = 0; }
 
-    //if(angle < 0) angle +=360;
+    if(angle < 0) angle +=360;
     return angle;
 }
 
