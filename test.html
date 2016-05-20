@@ -9,14 +9,20 @@
 	<script type="text/javascript" src="magic-wand-min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="colorPicker.js"></script>
+	<script type="text/javascript" src="css-pop.js"></script>
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-	
 	<script type="text/javascript" src="test.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'> <!--google font-->
 	<link rel="stylesheet" type="text/css" href="test.css">
 </head>
 <body>
 	<div id="mainContent">
+		<div id="blanket" style="display:none;"></div>
+		<div id="popUpDiv" style="display:none;">
+	      <p id="popupText"><strong>Tie's cannot have any white.
+	      							White will automatically be removed.</strong></p>
+	    	<a href="#" onclick="popup('popUpDiv')" >Close</a>
+		</div>	
 		<div id="toolBar">
 			<button id="hideToolButton" data-toggle="tooltip" title="Hide the toolbar" type="button" class="btn btn-default">Hide</button>
 			<button id="undoButton" type="button" class="btn btn-inverted">Undo</button>
