@@ -57,7 +57,7 @@
 					<!--<img id="uploadedImage" class="dragme" src="img/Child drawing-5.png" width="100%" style="max-height:100%">-->
 					<canvas id="uploadedImage" class="dragme" style="width: 100%; max-height:100%;" onmouseup="onMouseUp.apply(this, arguments)" onmousedown="onMouseDown.apply(this, arguments)" onmousemove="onMouseMove.apply(this, arguments)"></canvas>
 					<h2 id="preview">Preview:</h2>
-					<canvas id="previewCanvas" style="max-height:200px; max-width:100%;" draggable="false" class="dragSource"></canvas>
+					<canvas id="previewCanvas" style="max-height:200px; max-width:100%;" draggable="false" class="dragSource" data-toggle="tooltip" title="Drag this image to place it"></canvas>
 				</div>
 				<div id="ElementDisplay">
 					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
@@ -126,8 +126,8 @@
 					</div>
 					
 				</div>
-				<!--<img src="img/placeholder.png" class="placeholderImage" />-->
 				<div class="templateDiv" id="template1" value="Shirt">
+					
 					<div class="templateBackground freeDropZone" id="template1Background">
 						<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 						<div class="draggable resizable wrapper" id="t1Ele1">
@@ -143,7 +143,14 @@
   						</div>
   					</div>
 				</div>
+
+				<div id="finalPreviewDiv" class="ui-dialog">
+						<canvas id="clothingPreviewCanvas" width="100" height="100"></canvas>
+						<img class="hiddenAssets" id="scarfPreviewBackground" src="img/scarf_preview.png"/>
+				</div>
+
 				<div class="templateDiv" id="template2" value="Scarf">
+					<button id="previewBut">Preview</button>
 					<div class="templateBackground freeDropZone flipTop" id="template2Background">
 						<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
 						<div class="draggable resizable wrapper" id="t2Ele1">
@@ -158,29 +165,30 @@
     						<canvas class="clothESpot dragDest signatureCanvas"></canvas>
   						</div>
   					</div>
+
 				</div>
 
 				<div class="templateDiv" id="template3" value="Tie">
 					<div class="templateBackground" id="template3Background">
 						<img src="img/Tie2_Template_Empty_Small2.png" class="shirtOverlay" />
 						<div class="draggable resizable wrapper" id="t3Ele1">
-    						<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+    						<canvas class="clothESpot dragDest multiPaste1 tieClass"></canvas>	
   						</div>
    
   						<div class="draggable resizable wrapper" id="t3Ele2">
-    						<canvas class="clothESpot dragDest multiPaste2"></canvas>
+    						<canvas class="clothESpot dragDest multiPaste2 tieClass"></canvas>
   						</div>
 
   						<div class="draggable resizable wrapper" id="t3Ele3">
-    						<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+    						<canvas class="clothESpot dragDest signatureCanvas tieClass"></canvas>
   						</div>
 
   						<div class="draggable resizable wrapper" id="t3Ele4">
-    						<canvas class="clothESpot dragDest multiPaste4"></canvas>
+    						<canvas class="clothESpot dragDest multiPaste4 tieClass"></canvas>
   						</div>
 
    						<div class="draggable resizable wrapper" id="t3Ele5">
-    						<canvas class="clothESpot dragDest multiPaste5"></canvas>
+    						<canvas class="clothESpot dragDest multiPaste5 tieClass"></canvas>
   						</div>
   					</div>
 				</div>

@@ -397,6 +397,13 @@ $(document).ready(function() {
 		updateFont();  
      });
 
+
+    $("#previewBut").click(function(){
+    	previewClothing($(this).parent().find(".templateBackground")[0]);
+    	$( "#finalPreviewDiv" ).dialog();
+    });
+
+
     $("#fontStyleButtons").change(function(){
     	updateFont();  
     }); 
@@ -413,7 +420,9 @@ $(document).ready(function() {
 		$(".clothESpot").each(function(){
 			fitSize(this);
 		});
-
+		if(currentTemplate == "template3"){
+			alert("Tie's cannot have white!");
+		}
     });
 	
 	$('.buttonDiv')
@@ -539,6 +548,7 @@ function updateFont(){
 function drawSignature(canvas, style, fontFamily){  
   canvas.width = 1500;
   canvas.height = 500;
+  $(canvas).parent().data("used", true);
   fitSize(canvas)
   var maxFontSize = canvas.height;
   var fontSize;
@@ -555,6 +565,7 @@ function drawSignature(canvas, style, fontFamily){
   	fontSize = maxFontSize;
   }
   ctx.fillText(text, 10, fontSize);
+  
 }
 
 $(window).resize(function() {
@@ -738,6 +749,8 @@ function mousedown(ev) {
 function dragstart(ev) {
 	ev.dataTransfer.setData("Text", ev.target.id);
 	draggedElement = ev.target;
+	//console.log(ev.target);
+	//console.log(draggedElement);
 }
 
 
@@ -774,7 +787,63 @@ function drop(ev, canvas = ev.target) {
 	}
 }
 
+//collapse canvas and create preview
+function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0]){
+	template = $(template);
+	var backgroundImage = $("#scarfPreviewBackground")[0];
+	previewCanvas.width = backgroundImage.naturalWidth;
+	previewCanvas.height = backgroundImage.naturalHeight;
+	var ctx = previewCanvas.getContext("2d");
+	ctx.fillStyle="#FF0000";
+	ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+	
+
+	template.find(".wrapper").each(function(){
+
+		var leftOffset = $(this).position().left / $(this).parent().width() * 1.2;
+		var topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
+		var width = $(this).width();
+		var height = $(this).height();
+
+    	if(getRotationDegrees($(this)) != 0){
+    		var tempCanvas = document.createElement('canvas');
+    		var tempCtx = tempCanvas.getContext("2d");
+    		tempCanvas.width = width;
+			tempCanvas.height = height;
+    		tempCtx.translate(width/2, height/2);
+    		tempCtx.rotate(getRotationDegrees($(this)) * Math.PI/180);
+    		tempCtx.drawImage($(this).find("canvas")[0], -width / 2, -height / 2, width, height);
+			ctx.drawImage(tempCanvas, leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height(), width, height);
+    	} else{
+    		ctx.drawImage($(this).find("canvas")[0], leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height(), width, height);
+    	}
+
+	});
+	ctx.drawImage(backgroundImage, 0, 0, previewCanvas.width, previewCanvas.height);
+	
+	
+}
+
+//gets the element rotation in degrees
+function getRotationDegrees(obj) {
+    var matrix = obj.css("-webkit-transform") ||
+    obj.css("-moz-transform")    ||
+    obj.css("-ms-transform")     ||
+    obj.css("-o-transform")      ||
+    obj.css("transform");
+    if(matrix !== 'none') {
+        var values = matrix.split('(')[1].split(')')[0].split(',');
+        var a = values[0];
+        var b = values[1];
+        var angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+    } else { var angle = 0; }
+
+    //if(angle < 0) angle +=360;
+    return angle;
+}
+
 function fitSize(content, wrap = $(content).parent()){
+	//sets default element size, if it hasn't already been set
 	if (typeof $(wrap).data('defaultWidthRatio') == 'undefined')
 	{
 		if($(wrap).parent().width() == 0){
@@ -786,9 +855,12 @@ function fitSize(content, wrap = $(content).parent()){
 		}
 	}
 
+	//return if no image has been dropped into the element yet
  	if($(wrap).data("used") !== true){
  		return;
  	}
+
+ 	//resize the wrapping div to fit the canvas aspect ratio
  	var scale;
  	if(content.width > content.height){
  		scale = ($(wrap).data("defaultWidthRatio") *  $(wrap).parent().width()) / content.width;
@@ -797,6 +869,8 @@ function fitSize(content, wrap = $(content).parent()){
  	}
  	$(wrap).css('width', (content.width * scale) / ($(wrap).parent().width() / 100) + '%');
  	$(wrap).css('height', (content.height * scale) / ($(wrap).parent().height() / 100)+ '%');
+
+ 	$(wrap).css('background', 'transparent');
 }
 
 //draws copied image on the canvas
@@ -807,8 +881,28 @@ function drawCopiedImage(canvas, ev){
 	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
+	if($(canvas).hasClass("tieClass")) {
+		//console.log("Tie Class found");
+		//console.log(draggedElement);
+		var tmp = draggedElement.getContext('2d');
+		//console.log(tmp);
+		var data = tmp.getImageData(0,0,draggedElement.width,draggedElement.height);
+		//console.log(data.data)
+		var image = {
+	        data: data.data,
+	        width: draggedElement.width,
+	        height: draggedElement.height,
+	        bytes: 4
+	    };
+	    //console.log(image.data.data);
+		var mask = eliminateWhite(image, 64);
+		//console.log(mask.data);
+		cropOut3(mask, data, ctx);
+		//console.log("done Tie class");
+	} else {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
+	}
 }
 
 // loads the image and draws it on the canvas.
@@ -1190,6 +1284,26 @@ function cropOut() {
 	}, 300);
 };
 
+function cropOut3(mask, image, ctx) {
+	//console.log(mask);
+	if(mask == null) return;
+	var tmpMask = mask;
+	mask = null;
+
+		for(i = 0; i < tmpMask.data.length; i++) {
+			if(tmpMask.data[i] != 0) {
+				var tmp = i * 4;
+				image.data[tmp] = 0;
+				image.data[tmp + 1] = 0;
+				image.data[tmp + 2] = 0;
+				image.data[tmp + 3] = 0;
+			}
+		}
+		//mask = null;
+		//var ctx = document.getElementById("uploadedImage").getContext('2d');
+		ctx.clearRect(0, 0, image.width, image.height);
+		ctx.putImageData(image, 0, 0);
+};
 
 function cropOut2() {
 
@@ -1259,7 +1373,7 @@ function colorElimination(image, x, y, threshold) {
 
 function eliminateWhite(image, threshold) {
 	var tmp;
-	//console.log(image);
+	//console.log(image.data);
     for(var i = 0, size = image.width*image.height,
         array = new Uint8Array(size); i < size; i++) {
 
