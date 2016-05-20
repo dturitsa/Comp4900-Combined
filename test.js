@@ -413,7 +413,9 @@ $(document).ready(function() {
 		$(".clothESpot").each(function(){
 			fitSize(this);
 		});
-
+		if(currentTemplate == "template3"){
+			alert("Tie's cannot have white!");
+		}
     });
 	
 	$('.buttonDiv')
@@ -738,6 +740,8 @@ function mousedown(ev) {
 function dragstart(ev) {
 	ev.dataTransfer.setData("Text", ev.target.id);
 	draggedElement = ev.target;
+	//console.log(ev.target);
+	//console.log(draggedElement);
 }
 
 
@@ -807,8 +811,28 @@ function drawCopiedImage(canvas, ev){
 	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
+	if($(canvas).hasClass("tieClass")) {
+		//console.log("Tie Class found");
+		//console.log(draggedElement);
+		var tmp = draggedElement.getContext('2d');
+		//console.log(tmp);
+		var data = tmp.getImageData(0,0,draggedElement.width,draggedElement.height);
+		//console.log(data.data)
+		var image = {
+	        data: data.data,
+	        width: draggedElement.width,
+	        height: draggedElement.height,
+	        bytes: 4
+	    };
+	    //console.log(image.data.data);
+		var mask = eliminateWhite(image, 64);
+		//console.log(mask.data);
+		cropOut3(mask, data, ctx);
+		//console.log("done Tie class");
+	} else {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
+	}
 }
 
 // loads the image and draws it on the canvas.
@@ -1190,6 +1214,26 @@ function cropOut() {
 	}, 300);
 };
 
+function cropOut3(mask, image, ctx) {
+	//console.log(mask);
+	if(mask == null) return;
+	var tmpMask = mask;
+	mask = null;
+
+		for(i = 0; i < tmpMask.data.length; i++) {
+			if(tmpMask.data[i] != 0) {
+				var tmp = i * 4;
+				image.data[tmp] = 0;
+				image.data[tmp + 1] = 0;
+				image.data[tmp + 2] = 0;
+				image.data[tmp + 3] = 0;
+			}
+		}
+		//mask = null;
+		//var ctx = document.getElementById("uploadedImage").getContext('2d');
+		ctx.clearRect(0, 0, image.width, image.height);
+		ctx.putImageData(image, 0, 0);
+};
 
 function cropOut2() {
 
@@ -1259,7 +1303,7 @@ function colorElimination(image, x, y, threshold) {
 
 function eliminateWhite(image, threshold) {
 	var tmp;
-	//console.log(image);
+	//console.log(image.data);
     for(var i = 0, size = image.width*image.height,
         array = new Uint8Array(size); i < size; i++) {
 
