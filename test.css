@@ -28,7 +28,7 @@
 	left: 0px;
 }
 
-#paint, #erase {
+#wand, #erase, #editCrop, #colorElim {
 	background-color:transparent;
 	border-color: transparent;
 	color: white;
@@ -111,11 +111,11 @@
 }
 
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover,  #tool5:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover {
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover,  #tool5:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover, #erase:hover, #wand:hover, #colorElim:hover, #editCrop:hover {
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus,  #paint:focus, #erase:focus,  #eraserButton:focus {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus,  #paint:focus, #erase:focus,  #eraserButton:focus, #erase:focus, #wand:focus, #colorElim:focus, #editCrop:focus {
 	background-color:#555555;
 }
 

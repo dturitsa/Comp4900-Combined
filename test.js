@@ -315,6 +315,9 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = true;
 		$('#editCrop').css({display: 'none'});
+		$('#wand').css({"backgroundColor":"black"});
+		$('#colorElim').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 	});
 
 	$('#wand').click(function() {
@@ -324,6 +327,9 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = false;
 		$('#editCrop').css({display: ''});
+		$('#erase').css({"backgroundColor":"black"});
+		$('#colorElim').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 	});
 
 	$('#colorElim').click(function() {
@@ -333,6 +339,9 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = false;
 		$('#editCrop').css({display: ''});
+		$('#wand').css({"backgroundColor":"black"});
+		$('#erase').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 	});
 
 	$('#editCrop').click(function() {
@@ -695,7 +704,7 @@ function ShowEditCanvas(element) {
 					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
 				width: elmWidth + 150,
-				height: elmHeight + 50,
+				height: elmHeight + 85,
 				left: pos.left - elmWidth - 150, 
 				top: pos.top,
 				}).slideDown();
