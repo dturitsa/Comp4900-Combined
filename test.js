@@ -14,6 +14,7 @@ var erasing2 = false;
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
+var Selected;
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -447,7 +448,53 @@ $(document).ready(function() {
     $(".closeButton").click(function(){
     	console.log("close clicked");
     });
+	
+	$(".colorSelection").click(function(evt) {
+		$(this).stop().animate({
+			'width': '125px',
+			'height': '265px'
+		}, 200);
+		$("#colorTable").show();
+		$(".colorSwatch").each(function() {
+			$( this ).css('display', 'block');
+		});
+		$("#ExitButton2").show();
+	});
     
+	$("#ExitButton2").click(function(evt) {
+		evt.stopPropagation();
+		$(this).hide();
+		$(".colorSelection").stop().animate({
+			'width': '60px',
+			'height': '40px'
+		}, 200);
+		$("#colorTable").hide();
+		$(".colorSwatch").each(function() {
+			$( this ).css('display', 'none');
+		});
+	});
+	
+	$(".colorSwatch")
+		.hover(function() {
+			$(this).css("box-shadow", "2px 1px 8px black");
+		}, function() {
+			if (this == Selected) {
+				$(this).css("box-shadow", "2px 1px 8px black");
+			} else {
+				$(this).css("box-shadow", "none");
+			}
+			
+		})
+		.click(function(evt) {
+			evt.stopPropagation();
+			Selected = this;
+			$(".colorSwatch").each(function() {
+				$(this).css("box-shadow", "none");
+			});
+			$(this).css("box-shadow", "2px 1px 8px black");
+			var color = $(this).css("backgroundColor");
+			$(".templateDiv").css("backgroundColor", color);
+		});
 }); //document.ready function closing tag
 
 //create elements dynamically
