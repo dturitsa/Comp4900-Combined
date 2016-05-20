@@ -385,7 +385,6 @@ $(document).ready(function() {
   			$( this ).css('display', 'none');
 		});
 		var currentTemplate =  $(this).attr("value");
-		$(".templateDiv").css({"backgroundColor":$(this).css("backgroundColor")});
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
 		$(".clothESpot").each(function(){
@@ -394,12 +393,20 @@ $(document).ready(function() {
 
     });
 	
-	$('.buttonDiv')
+	$('.buttonDiv:odd')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
 	.mouseleave(function() {
-		$(this).css({"backgroundColor":"#5555555"})
+		$(this).css({"backgroundColor":"#888888"})
+	});
+	
+	$('.buttonDiv:even')
+	.mouseenter(function() {
+		$(this).css({"backgroundColor":"#444444"})
+	})
+	.mouseleave(function() {
+		$(this).css({"backgroundColor":"#555555"})
 	});
 	
 	

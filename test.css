@@ -126,11 +126,15 @@
 #toolButton {
 	border-radius:50%;
 	border-top-left-radius: 0px;
+	border: none;
 	border-bottom-left-radius: 0px;
 	float:left;
-	background-color: #999999;
-	padding-left: 0px;
-	padding-right: 5px;
+	background-color: #444444;
+	color: white;
+	padding: 10px;
+	padding-left: 2px;
+	text-shadow: 2px 2px 8px black;
+	box-shadow: 1px 1px 8px black;
 }
 
 #leftSection {
@@ -213,6 +217,8 @@
 
 #templateTitle {
 	text-align: center;
+	width: 289px;
+	margin:auto;
 	margin-top: 40px;
 }
 
@@ -228,9 +234,9 @@
 }
 
 #textEditing {
-	top: -50px;
 	position: relative;
-	width: 100%;
+	width: 50%;
+	margin:auto;
 	text-align: center;
 }
 
@@ -243,6 +249,13 @@
 	display: block;
 	margin: auto;
 	margin-top: 5px;
+}
+
+#file-upload {
+	position: relative;
+	margin: auto;
+	top: 50px;
+
 }
 
 .templateBackground{
@@ -261,31 +274,44 @@
 	position:relative;
 	display: inline-block;
 	z-index: 5;
+	float: right;
 }
 
 .buttonDiv {
 	z-index: 5;
 	background-color: #555555;
-	padding:5px;
+	padding:5px 12px;
+	border: 1px solid black;
+	border-top: none;
+	box-shadow: 2px 1px 8px black;
 }
 
 .templateButtons {
-	width: 50px;
-	height: 40px;
-	background-color: #555555;
+	width: 60px;
+	height: 50px;
 	border: none;
 	z-index: 5;
 	border-radius: 50%;
 }
 
+.buttonDiv:nth-child(even) {
+	background-color: #555555;
+}
+
+.buttonDiv:nth-child(even) {
+	background-color: #888888;
+}
+
 .templateHover {
 	color: white;
 	font-weight: bold;
-	width: 60px;
 	background-color: #555555;
 	border: none;
 	height: 40px;
 	z-index: 5;
+	text-shadow: 2px 2px 8px black;
+	box-shadow: 2px 1px 8px black;
+	border-bottom: 1px solid black;
 }
 
 .templateBackground{
@@ -296,17 +322,15 @@
 }
 
 .templateDiv{
-	margin-left:auto; 
-	margin-right:auto; 
 	position: relative;
 	overflow: hidden;
 	padding: 0px;
-	margin-top: -40px;
 	max-height: 1000px;
 	width: 80%;
+	margin: auto;
 }
 
-#template2, #template3, #template4 {
+#template2, #template3, #template4, #template5 {
 	display: none;
 }
 
@@ -414,6 +438,26 @@
 	background-color: blue;
 }
 
+.templates {
+	position: relative;
+}
+
+#colorsWord {
+	color: white;
+	text-align: center;
+	margin:0px;
+}
+
+.colorSelection {
+	background-color:#444444;
+	position:absolute;
+	width:60px;
+	height:40px;
+	float:right;
+	top: 0px;
+	right: 0px;
+}
+
 #t1Ele1{
 	top: 20%;
 	left: 20%;
@@ -459,8 +503,8 @@
     top: 92%;
     left: 48%;
     z-index: 1;
-    width: 25%;
-    height: 12%;
+    width: 30%;
+    height: 3%;
 }
 
 #t3Ele1{
@@ -569,4 +613,20 @@
 	width: 13%;
 	height: 7%;
 	background-color: green;
+}
+
+#t5Ele1 {
+	top: 68%;
+	left: 70%;
+	width: 18%;
+	height: 25%;
+	background-color: green;
+}
+
+#t5Ele2 {
+	top: 84.5%;
+	left: 71.5%;
+	width: 15%;
+	height: 10%;
+	background-color: blue;
 }
