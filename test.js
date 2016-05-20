@@ -2,6 +2,7 @@ var toolFlag = false;
 var wandFlag = false;
 var colorElimFlag = false;
 var colourFlag = false;
+var tieMessage = true;
 var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
@@ -420,9 +421,10 @@ $(document).ready(function() {
 		$(".clothESpot").each(function(){
 			fitSize(this);
 		});
-		if(currentTemplate == "template3"){
+		if(tieMessage == true && currentTemplate == "template3"){
 			//alert("Tie's cannot have white!");
 			popup('popUpDiv');
+			tieMessage = !tieMessage;
 		}
     });
 	
