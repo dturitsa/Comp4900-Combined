@@ -25,6 +25,7 @@ $(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip();   
 	
 	$("#leftButton").click(function() {
+		$('#uploadedImage').imgAreaSelect({remove:true});
 		if (item == 0) {
 			item2 = 1; item = 2;
 			rightPercent = 0.8; leftPercent = 0.2;
@@ -37,6 +38,7 @@ $(document).ready(function() {
 	});
 	
 	$("#rightButton").click(function() {
+		$('#uploadedImage').imgAreaSelect({remove:true});
 		if (item2 == 0) {
 			item = 1;item2 = 2;
 			rightPercent = 0.2; leftPercent = 0.8;

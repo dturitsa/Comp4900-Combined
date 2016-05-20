@@ -35,7 +35,9 @@
 			<input id="thresSlider2" type="range" orient="vertical" min="1" max="100" value="50" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
 			<button id="tool5" type="button" data-toggle="tooltip" title="Get rid of all white from your image" class="btnFocus btn btn-default" style="background-color:black; border: none"><img src="img/whiteOut-icon.png" width="100%"></button>
 
+			<button id="eraserButton" type="button" class="btn btn-default" data-toggle="tooltip" title="Eraser"><img src="img/eraser.png" width="100%"></button>
 			<button id="eraserButton" type="button" class="btnFocus btn btn-default"><img src="img/eraser.png" width="100%"></button>
+
 			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
 			<button id="tool3" type="button" data-toggle="tooltip" title="Colour Choices" class="btnFocus  btn btn-default"><img src="img/colour.png" width="100%"></button>
 			<label for="redSlider" id="redLabel" style="display: none; color:white;">Red</label>
@@ -302,11 +304,11 @@
 				</div>
 			</div>
 			<div id="centerBeam">
-				<div id="Element1" class="Elements"><canvas id="pic1" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element2" class="Elements"><canvas id="pic2" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element3" class="Elements"><canvas id="pic3" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element4" class="Elements"><canvas id="pic4" class="dragDest dragSource" draggable="true"></canvas></div>
-				<div id="Element5" class="Elements"><canvas id="pic5" class="dragDest dragSource" draggable="true"></canvas></div>
+				<div id="Element1" class="Elements"><canvas id="pic1" class="dragDest dragSource" draggable="true" data-toggle="tooltip" title="Drag to place it, click to edit"></canvas></div>
+				<div id="Element2" class="Elements"><canvas id="pic2" class="dragDest dragSource" draggable="true" data-toggle="tooltip" title="Drag to place it, click to edit"></canvas></div>
+				<div id="Element3" class="Elements"><canvas id="pic3" class="dragDest dragSource" draggable="true" data-toggle="tooltip" title="Drag to place it, click to edit"></canvas></div>
+				<div id="Element4" class="Elements"><canvas id="pic4" class="dragDest dragSource" draggable="true" data-toggle="tooltip" title="Drag to place it, click to edit"></canvas></div>
+				<div id="Element5" class="Elements"><canvas id="pic5" class="dragDest dragSource" draggable="true" data-toggle="tooltip" title="Drag to place it, click to edit"></canvas></div>
 			</div>
 		</div>
 	</div>
