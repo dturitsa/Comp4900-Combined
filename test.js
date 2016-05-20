@@ -413,7 +413,9 @@ $(document).ready(function() {
 		$(".clothESpot").each(function(){
 			fitSize(this);
 		});
-
+		if(currentTemplate == "template3"){
+			alert("Tie's cannot have white!");
+		}
     });
 	
 	$('.buttonDiv')
