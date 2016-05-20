@@ -635,10 +635,19 @@ window.onload = function() {
     	currentThreshold = slider.value = slider2.value;
     	//showThreshold();
     });
+	
     colorThreshold = slider.value = slider2.value = 50;
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
+	
+	var red = document.getElementById("redSlider");
+	var green = document.getElementById("greenSlider");
+	var blue = document.getElementById("blueSlider");
+	
+	red.value = blue.value = green.value = 0;
+	
+	
 }
 
 // Onclick event for the window. allows user to deselect when clicking off the canvas
