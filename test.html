@@ -24,41 +24,42 @@
 	    	<a href="#" onclick="popup('popUpDiv')" >Close</a>
 		</div>	
 		<div id="toolBar">
-			<button id="hideToolButton" data-toggle="tooltip" title="Hide the toolbar" type="button" class="btn btn-default">Hide</button>
-			<button id="undoButton" type="button" class="btn btn-inverted">Undo</button>
-			<button id="tool1" type="button" data-toggle="tooltip" title="Crop out a part of your image" class="btn btn-default"><img src="img/crop2.png" width="100%"></button>
-			<button id="tool2" type="button" data-toggle="tooltip" title="Magic wand to remove part of your image" class="btn btn-default"><img src="img/MagicWand2.png" width="100%"></button>
-			<button id="cropOut" type="button" data-toggle="tooltip" title="Delete the selection" class="btn btn-default" style="background-color:black; border:none; display: none;"><img src="img/cut-icon.png" width="100%"></button>
+			<button id="hideToolButton" data-toggle="tooltip" title="Hide the toolbar" type="button" class="btnFocus btn btn-default">Hide</button>
+			<button id="undoButton" type="button" class="btnFocus btn btn-inverted">Undo</button>
+			<button id="tool1" type="button" data-toggle="tooltip" title="Crop out a part of your image" class="btnFocus btn btn-default"><img src="img/crop2.png" width="100%"></button>
+			<button id="tool2" type="button" data-toggle="tooltip" title="Magic wand to remove part of your image" class="btnFocus btn btn-default"><img src="img/MagicWand2.png" width="100%"></button>
+			<button id="cropOut" type="button" data-toggle="tooltip" title="Delete the selection" class="btnFocus btn btn-default" style="background-color:black; border:none; display: none;"><img src="img/cut-icon.png" width="100%"></button>
 			<input id="thresSlider" type="range" orient="vertical" min="1" max="100" value="50" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
-			<button id="tool4" type="button" data-toggle="tooltip" title="Get rid a colour from all the image" class="btn btn-default"><img src="img/ColorSelection-icon.png" width="100%"></button>
-			<button id="cropOut2" type="button" data-toggle="tooltip" title="Delete the selection" class="btn btn-default" style="background-color:black; border:none; display: none;"><img src="img/cut-icon.png" width="100%"></button>
+			<button id="tool4" type="button" data-toggle="tooltip" title="Get rid a colour from all the image" class="btnFocus btn btn-default"><img src="img/ColorSelection-icon.png" width="100%"></button>
+			<button id="cropOut2" type="button" data-toggle="tooltip" title="Delete the selection" class="btnFocus btn btn-default" style="background-color:black; border:none; display: none;"><img src="img/cut-icon.png" width="100%"></button>
 			<input id="thresSlider2" type="range" orient="vertical" min="1" max="100" value="50" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
-			<button id="tool5" type="button" data-toggle="tooltip" title="Get rid of all white from your image" class="btn btn-default"><img src="img/whiteOut-icon.png" width="100%"></button>
+			<button id="tool5" type="button" data-toggle="tooltip" title="Get rid of all white from your image" class="btnFocus btn btn-default" style="background-color:black; border: none"><img src="img/whiteOut-icon.png" width="100%"></button>
 
 			<button id="eraserButton" type="button" class="btn btn-default" data-toggle="tooltip" title="Eraser"><img src="img/eraser.png" width="100%"></button>
+			<button id="eraserButton" type="button" class="btnFocus btn btn-default"><img src="img/eraser.png" width="100%"></button>
+
 			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
-			<button id="tool3" type="button" data-toggle="tooltip" title="Colour Choices" class="btn btn-default"><img src="img/colour.png" width="100%"></button>
+			<button id="tool3" type="button" data-toggle="tooltip" title="Colour Choices" class="btnFocus  btn btn-default"><img src="img/colour.png" width="100%"></button>
 			<label for="redSlider" id="redLabel" style="display: none; color:white;">Red</label>
 			<input id="redSlider" class="colorSlider" type="range"  value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
 			<label for="greenSlider" id="greenLabel" style="display: none; color:white;">Green</label>
 			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
 			<label for="blueSlider" id="blueLabel" style="display: none; color:white;">Blue</label>
 			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
-			
 			<!--
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
 			-->
 			<!--<label for="greyScaleButton" id="greyScaleLabel" data-toggle="tooltip" title="Convert to black and white" style="display: none;">Black and White</label>-->
 			
-			<button id="greyScaleButton" type="button" class="btn btn-default" style="display:none;"><img src="img/GreyScale.png" width="100%"></button>
+			<button id="greyScaleButton" type="button" class="btnFocus btn btn-default" style="display:none;"><img src="img/GreyScale.png" width="100%"></button>
 			
 		</div>
-		<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 		<div id="content">
 			<div id="leftSection">
-				<button id="leftButton" type="button" class="btn btn-default btn-sm">&#9668;</button>
-				<button id="toolButton" type="button" class="btn btn-default">Tools</button>
+				<button id="leftButton" type="button" class="btnFocus btn btn-default btn-sm">&#9668;</button>
+				<button id="toolButton" type="button" class="btnFocus btn btn-default">Tools</button>
+				<input id="file-upload" type="file" accept="image/*" onchange="imgChange(this)" />
 				<div id="imageSpace">
 					<!--<img id="uploadedImage" class="dragme" src="img/Child drawing-5.png" width="100%" style="max-height:100%">-->
 					<canvas id="uploadedImage" class="dragme" style="width: 100%; max-height:100%;" onmouseup="onMouseUp.apply(this, arguments)" onmousedown="onMouseDown.apply(this, arguments)" onmousemove="onMouseMove.apply(this, arguments)"></canvas>
@@ -68,44 +69,49 @@
 				<div id="ElementDisplay">
 					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
 					</canvas>
-					<button id="paint" type="button" class="btn btn-default">PAINT</button>
-					<button id="erase" type="button" class="btn btn-default">ERASE</button>
-					<button id="wand" type="button" classclass="btn btn-default">WAND</button>
-					<button id="colorElim" type="button" classclass="btn btn-default">COLOR SELECT</button>
-					<button id="editCrop" style="display: none;" type="button" classclass="btn btn-default">CROP</button>
-					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
+					<button id="paint" type="button" class="btnFocus btn btn-default">PAINT</button>
+					<button id="erase" type="button" class="btnFocus btn btn-default">ERASE</button>
+					<button id="wand" type="button" class="btnFocus btn btn-default">WAND</button>
+					<button id="colorElim" type="button" class="btnFocus btn btn-default">COLOR SELECT</button>
+					<button id="editCrop" style="display: none;" type="button" class="btnFocus btn btn-default">CROP</button>
+					<button id="ExitButton" type="button" class="btnFocus btn btn-default btn-sm">X</button>
 				</div>
 			</div>
 			<div id="rightSection">
-				<button id="rightButton" type="button" class="btn btn-default btn-sm">&#9658;</button>
+				<button id="rightButton" type="button" class="btnFocus btn btn-default btn-sm">&#9658;</button>
 				<div class="dropdown">
-					<button id="shirtButton" class="templateHover"><p style="margin: 0px; display:inline;">Ties</p>&#x25BC;</button>
-					<div id="myDropdown" class="dropdown-content" style="z-index: 25;">
-						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
-							<button class="templateButtons" value="template1" style="background-color:red; margin-top:5px;">
+					<button id="clothesButton" class="btnFocus templateHover"><p style="margin: 0px; display:inline;">Clothing</p>&#x25BC;</button>
+					<div id="myDropdown" class="dropdown-content" style="z-index: 5;">
+						<div class="buttonDiv" width="40px" height="40px">
+							<button class="templateButtons" value="template1" style="margin-top:5px;">
+								<img src="img/T-Shirt-icon2.png" width="100%">
+							</button>
+						</div>
+						<div class="buttonDiv" width="40px" height="40px">
+							<button class="templateButtons" value="template2">
+								<img src="img/Scarf-white.png" width="100%">
+							</button>
+						</div>
+						<div class="buttonDiv" width="40px" height="40px">
+							<button class="templateButtons" value="template3">
 								<img src="img/Tie2.png" width="100%">
 							</button>
 						</div>
-						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
-							<button class="templateButtons" value="template2" style="background-color:blue;">
-								<img src="img/Tie2.png" width="100%">
+						<div class="buttonDiv" width="40px" height="40px">
+							<button class="templateButtons" value="template4">
+								<img src="img/winter-hat.png" width="100%">
 							</button>
 						</div>
-						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
-							<button class="templateButtons" value="template3" style="background-color:green;">
-								<img src="img/Tie2.png" width="100%">
-							</button>
-						</div>
-						<div class="buttonDiv" width="40px" height="40px" style="background-color: #555555; padding:5px;">
-							<button class="templateButtons" value="template4" style="background-color:purple;">
-								<img src="img/Tie2.png" width="100%">
+						<div class="buttonDiv" width="40px" height="40px">
+							<button class="templateButtons" value="template5">
+								<img src="img/Leggings_White.png" width="100%">
 							</button>
 						</div>
 					</div>
 				</div>
 				<div id="textEditing">
 					<!-- colorpicker element -->
-					<h2 id="templateTitle">Shirt</h2>
+					<h2 id="templateTitle">Customized Shirt</h2>
 					<div class="preview"></div>
 						<div class="colorpicker" style="display:none; z-index: 10;">
 						    <canvas id="picker" var="3" width="300" height="300"></canvas>
@@ -132,108 +138,169 @@
 					</div>
 					
 				</div>
-				<div class="templateDiv" id="template1" value="Shirt">
+				<div class="templates">
+					<div class="templateDiv" id="template1" value="Customized Shirt">
+						<div class="templateBackground freeDropZone" id="template1Background">
+							<img src="img/tshirtDiagram.png" class="shirtOverlay" />
+							<div class="draggable resizable wrapper" id="t1Ele1">
+								<canvas class="clothESpot dragDest multiPaste1 "></canvas>	
+							</div>
+	   
+							<div class="draggable resizable wrapper" id="t1Ele2">
+								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							</div>
+
+							<div class="draggable resizable wrapper" id="t1Ele3">
+								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+							</div>
+						</div>
+					</div>
 					
-					<div class="templateBackground freeDropZone" id="template1Background">
-						<img src="img/tshirtDiagram.png" class="shirtOverlay" />
-						<div class="draggable resizable wrapper" id="t1Ele1">
-    						<canvas class="clothESpot dragDest multiPaste1 "></canvas>	
-  						</div>
-   
-  						<div class="draggable resizable wrapper" id="t1Ele2">
-    						<canvas class="clothESpot dragDest multiPaste2"></canvas>
-  						</div>
-
-   						<div class="draggable resizable wrapper" id="t1Ele3">
-    						<canvas class="clothESpot dragDest signatureCanvas"></canvas>
-  						</div>
-  					</div>
-				</div>
-
-				<div id="finalPreviewDiv" class="ui-dialog">
+					<div id="finalPreviewDiv" class="ui-dialog">
 						<canvas id="clothingPreviewCanvas" width="100" height="100"></canvas>
 						<img class="hiddenAssets" id="scarfPreviewBackground" src="img/scarf_preview.png"/>
-				</div>
+					</div>
+					
+					<div class="templateDiv" id="template2" value="Customized Scarf">
+						<button id="previewBut">Preview</button>
+						<div class="templateBackground freeDropZone flipTop" id="template2Background">
+							<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
+							<div class="draggable resizable wrapper" id="t2Ele1">
+								<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+							</div>
+	   
+							<div class="draggable resizable wrapper" id="t2Ele2">
+								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							</div>
+							<div class="draggable resizable wrapper" id="t2Ele3">
+								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+							</div>
+						</div>
+					</div>
 
-				<div class="templateDiv" id="template2" value="Scarf">
-					<button id="previewBut">Preview</button>
-					<div class="templateBackground freeDropZone flipTop" id="template2Background">
-						<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
-						<div class="draggable resizable wrapper" id="t2Ele1">
-    						<canvas class="clothESpot dragDest multiPaste1"></canvas>	
-  						</div>
-   
-  						<div class="draggable resizable wrapper" id="t2Ele2">
-    						<canvas class="clothESpot dragDest multiPaste2"></canvas>
-  						</div>
+					<div class="templateDiv" id="template3" value="Customized Tie">
+						<div class="templateBackground" id="template3Background">
+							<img src="img/Tie2_Template_Empty_Small2.png" class="shirtOverlay" />
+							<div class="draggable resizable wrapper" id="t3Ele1">
+								<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+							</div>
+	   
+							<div class="draggable resizable wrapper" id="t3Ele2">
+								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							</div>
 
-   						<div class="draggable resizable wrapper" id="t2Ele3">
-    						<canvas class="clothESpot dragDest signatureCanvas"></canvas>
-  						</div>
-  					</div>
+							<div class="draggable resizable wrapper" id="t3Ele3">
+								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+							</div>
 
-				</div>
+							<div class="draggable resizable wrapper" id="t3Ele4">
+								<canvas class="clothESpot dragDest multiPaste4"></canvas>
+							</div>
 
-				<div class="templateDiv" id="template3" value="Tie">
-					<div class="templateBackground" id="template3Background">
-						<img src="img/Tie2_Template_Empty_Small2.png" class="shirtOverlay" />
-						<div class="draggable resizable wrapper" id="t3Ele1">
-    						<canvas class="clothESpot dragDest multiPaste1 tieClass"></canvas>	
-  						</div>
-   
-  						<div class="draggable resizable wrapper" id="t3Ele2">
-    						<canvas class="clothESpot dragDest multiPaste2 tieClass"></canvas>
-  						</div>
+							<div class="draggable resizable wrapper" id="t3Ele5">
+								<canvas class="clothESpot dragDest multiPaste5"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="templateDiv" id="template4" value="Customized Hat">
+						<div class="templateBackground" id="template4Background">
+							<img src="img/Hat_Template_Empty2.png" class="shirtOverlay" />
+	   
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele1">
+								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							</div>
+							
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele2">
+								<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+							</div>
+	   
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele3">
+								<canvas class="clothESpot dragDest multiPaste3"></canvas>
+							</div>
+							
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele4">
+								<canvas class="clothESpot dragDest multiPaste4"></canvas>	
+							</div>
+	   
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele5">
+								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							</div>
+	   
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele6">
+								<canvas class="clothESpot dragDest multiPaste1"></canvas>
+							</div>
+							
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele7">
+								<canvas class="clothESpot dragDest multiPaste3"></canvas>	
+							</div>
 
-  						<div class="draggable resizable wrapper" id="t3Ele3">
-    						<canvas class="clothESpot dragDest signatureCanvas tieClass"></canvas>
-  						</div>
-
-  						<div class="draggable resizable wrapper" id="t3Ele4">
-    						<canvas class="clothESpot dragDest multiPaste4 tieClass"></canvas>
-  						</div>
-
-   						<div class="draggable resizable wrapper" id="t3Ele5">
-    						<canvas class="clothESpot dragDest multiPaste5 tieClass"></canvas>
-  						</div>
-  					</div>
-				</div>
-				<div class="templateDiv" id="template4" value="Hat">
-					<div class="templateBackground" id="template4Background">
-						<img src="img/Hat_Template_Empty2.png" class="shirtOverlay" />
-   
-  						<div class="draggable resizable t4ESpot wrapper" id="t4Ele1">
-    						<canvas class="clothESpot dragDest multiPaste2"></canvas>
-  						</div>
-						
-						<div class="draggable resizable t4ESpot wrapper" id="t4Ele2">
-    						<canvas class="clothESpot dragDest multiPaste1"></canvas>	
-  						</div>
-   
-  						<div class="draggable resizable t4ESpot wrapper" id="t4Ele3">
-    						<canvas class="clothESpot dragDest multiPaste3"></canvas>
-  						</div>
-						
-						<div class="draggable resizable t4ESpot wrapper" id="t4Ele4">
-    						<canvas class="clothESpot dragDest multiPaste4"></canvas>	
-  						</div>
-   
-  						<div class="draggable resizable t4ESpot wrapper" id="t4Ele5">
-    						<canvas class="clothESpot dragDest multiPaste2"></canvas>
-  						</div>
-   
-  						<div class="draggable resizable t4ESpot wrapper" id="t4Ele6">
-    						<canvas class="clothESpot dragDest multiPaste1"></canvas>
-  						</div>
-						
-						<div class="draggable resizable t4ESpot wrapper" id="t4Ele7">
-    						<canvas class="clothESpot dragDest multiPaste3"></canvas>	
-  						</div>
-
-   						<div class="draggable resizable t4ESpot wrapper" id="t4Ele8">
-    						<canvas class="clothESpot dragDest signatureCanvas"></canvas>
-  						</div>
-  					</div>
+							<div class="draggable resizable t4ESpot wrapper" id="t4Ele8">
+								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="templateDiv" id="template5" value="Customized Leggings">
+						<div class="templateBackground freeDropZone flipTop" id="template5Background">
+							<img src="img/Leggings_Empty.png" class="shirtOverlay" />
+							<div class="draggable resizable wrapper" id="t5Ele1">
+								<canvas class="clothESpot dragDest multiPaste1"></canvas>
+							</div>
+							
+							<div class="draggable resizable t4ESpot wrapper" id="t5Ele2">
+								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="colorSelection"><span id="CName">Colors</span>
+						<button id="ExitButton2" type="button" class="btnFocus btn btn-default btn-sm" style="display:none;">&#9658;</button>
+						<table id="colorTable">
+							<tr>
+								<td>
+									<div class="colorSwatch" style="background-color:#FFFDD0;"></div>
+								</td>
+								<td>
+									<div class="colorSwatch" style="background-color:#ADD8E6;"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="colorSwatch" style="background-color:#4682B4;"></div>
+								</td>
+								<td>
+									<div class="colorSwatch" style="background-color:#9C9F84;"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="colorSwatch" style="background-color:#40E0D0;"></div>
+								</td>
+								<td>
+									<div class="colorSwatch" style="background-color:lightgrey;"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="colorSwatch" style="background-color:#747D7D"></div>
+								</td>
+								<td>
+									<div class="colorSwatch" style="background-color:violet"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="colorSwatch" style="background-color:#614051"></div>
+								</td>
+								<td>
+									<div class="colorSwatch" style="background-color:#5C0C0C"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="colorSwatch" style="background-color:#8C001A"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 			</div>
 			<div id="centerBeam">
