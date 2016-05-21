@@ -33,10 +33,9 @@
 			<button id="tool4" type="button" data-toggle="tooltip" title="Get rid a colour from all the image" class="btnFocus btn btn-default"><img src="img/ColorSelection-icon.png" width="100%"></button>
 			<button id="cropOut2" type="button" data-toggle="tooltip" title="Delete the selection" class="btnFocus btn btn-default" style="background-color:black; border:none; display: none;"><img src="img/cut-icon.png" width="100%"></button>
 			<input id="thresSlider2" type="range" orient="vertical" min="1" max="100" value="50" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
-			<button id="tool5" type="button" data-toggle="tooltip" title="Get rid of all white from your image" class="btnFocus btn btn-default" style="background-color:black; border: none"><img src="img/whiteOut-icon.png" width="100%"></button>
+			<button id="tool5" type="button" data-toggle="tooltip" title="Get rid of all white from your image" class="btnFocus btn btn-default"><img src="img/whiteOut-icon.png" width="100%"></button>
 
 			<button id="eraserButton" type="button" class="btn btn-default" data-toggle="tooltip" title="Eraser"><img src="img/eraser.png" width="100%"></button>
-			<button id="eraserButton" type="button" class="btnFocus btn btn-default"><img src="img/eraser.png" width="100%"></button>
 
 			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
 			<button id="tool3" type="button" data-toggle="tooltip" title="Colour Choices" class="btnFocus  btn btn-default"><img src="img/colour.png" width="100%"></button>
@@ -69,12 +68,11 @@
 				<div id="ElementDisplay">
 					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
 					</canvas>
-					<button id="paint" type="button" class="btnFocus btn btn-default">PAINT</button>
-					<button id="erase" type="button" class="btnFocus btn btn-default">ERASE</button>
-					<button id="wand" type="button" class="btnFocus btn btn-default">WAND</button>
-					<button id="colorElim" type="button" class="btnFocus btn btn-default">COLOR SELECT</button>
-					<button id="editCrop" style="display: none;" type="button" class="btnFocus btn btn-default">CROP</button>
-					<button id="ExitButton" type="button" class="btnFocus btn btn-default btn-sm">X</button>
+					<button id="erase" type="button" class="btn btn-default"><img src="img/eraser.png" height="50px" width="100%"></button>
+					<button id="wand" type="button" class="btn btn-default"><img src="img/MagicWand2.png" height="50px" width="100%"></button>
+					<button id="colorElim" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" height="50px" width="100%"></button>
+					<button id="editCrop" style="display: none;" type="button" class="btn btn-default"><img src="img/cut-icon.png" height="50px" width="100%"></button>
+					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
 			</div>
 			<div id="rightSection">
