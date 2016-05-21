@@ -475,13 +475,14 @@ $(document).ready(function() {
 	$(".colorSelection").click(function(evt) {
 		$(this).stop().animate({
 			'width': '125px',
-			'height': '265px'
+			'height': '270px'
 		}, 200);
 		$("#colorTable").show();
 		$(".colorSwatch").each(function() {
 			$( this ).css('display', 'block');
 		});
 		$("#ExitButton2").show();
+		$(this).css("cursor", "auto");
 	});
     
 	$("#ExitButton2").click(function(evt) {
@@ -495,6 +496,7 @@ $(document).ready(function() {
 		$(".colorSwatch").each(function() {
 			$( this ).css('display', 'none');
 		});
+		$(".colorSelection").css("cursor", "pointer");
 	});
 	
 	$(".colorSwatch")

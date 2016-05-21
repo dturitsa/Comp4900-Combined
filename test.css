@@ -271,6 +271,7 @@
 	position: absolute;
 	min-width: 40px;
 	z-index: 5;
+	box-shadow: 2px 1px 8px black;
 }
 
 .dropdown {
@@ -286,7 +287,6 @@
 	padding:5px 12px;
 	border: 1px solid black;
 	border-top: none;
-	box-shadow: 2px 1px 8px black;
 }
 
 .templateButtons {
@@ -466,6 +466,7 @@
 	margin: auto;
 	z-index: 5;
 	cursor:pointer;
+	border: 1px solid black;
 }
 
 td {
@@ -480,7 +481,7 @@ td {
 	color: white;
 	height: 33px;
 	width: 100%;
-	padding-bottom: 12px;
+	padding-top: 8px;
 	padding-right: 85px;
 }
 
@@ -498,6 +499,7 @@ td {
 	color:white;
 	font-weight:bold;
 	border:none;
+	cursor:pointer;
 }
 
 #CName {
