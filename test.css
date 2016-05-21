@@ -28,7 +28,7 @@
 	left: 0px;
 }
 
-#paint, #erase {
+#wand, #erase, #editCrop, #colorElim {
 	background-color:transparent;
 	border-color: transparent;
 	color: white;
@@ -96,6 +96,7 @@
 	margin:0px; 
 	float:left;
 	padding-bottom: 5px;
+	box-shadow: 2px 1px 8px black;
 }
 
 #hideToolButton, #tool1, #tool2, #tool3, #undoButton, #greyScaleButton, #tool4, #tool5, #eraserButton {
@@ -110,27 +111,30 @@
 	border-color:#000000;
 }
 
+#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover,  #tool5:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover, #erase:hover, #wand:hover, #colorElim:hover, #editCrop:hover {
+	background-color:#999999;
+}
 
-#hideToolButton:hover, #tool1:hover, #tool2:hover, #tool3:hover,  #tool5:hover, #undoButton:hover, #greyScaleButton:hover, #tool4:hover, #eraserButton:hover {
+#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus,  #paint:focus, #erase:focus,  #eraserButton:focus, #erase:focus, #wand:focus, #colorElim:focus, #editCrop:focus {
 	background-color:#555555;
 }
 
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus,  #paint:focus, #erase:focus,  #eraserButton:focus {
-	background-color:#555555;
-}
-
-#hideToolButton:focus, #tool1:focus , #toolButton:focus, #tool2:focus, #tool3:focus, #tool4:focus, #eraserButton:focus, #undoButton:focus,  #eraserButton:focus, .templateButtons:focus {
-	outline:none;
+.templateButtons:focus, .btnFocus:focus{
+	outline:0 !important;
 }
 
 #toolButton {
 	border-radius:50%;
 	border-top-left-radius: 0px;
+	border: none;
 	border-bottom-left-radius: 0px;
 	float:left;
-	background-color: #999999;
-	padding-left: 0px;
-	padding-right: 5px;
+	background-color: #444444;
+	color: white;
+	padding: 10px;
+	padding-left: 2px;
+	text-shadow: 2px 2px 8px black;
+	box-shadow: 1px 1px 8px black;
 }
 
 #leftSection {
@@ -155,22 +159,25 @@
 	margin-left: -50px;
 	left: 50%;
 	padding-top:1px;
+	box-shadow: 2px 1px 8px black;
 }
 
 #leftButton {
 	float:right; 
 	border-radius:0px;
-	border-right:none;
-	border-top:none;
+	border:none;
 	background-color: #999999;
+	z-index: 5;
+	position: relative;
 }
 
 #rightButton {
 	float:left; 
 	border-radius:0px;
-	border-left:none;
-	border-top:none;
+	border:none;
 	background-color: #999999;
+	z-index: 5;
+	position: relative;
 }
 
 #ExitButton {
@@ -213,6 +220,8 @@
 
 #templateTitle {
 	text-align: center;
+	width: 289px;
+	margin:auto;
 	margin-top: 40px;
 }
 
@@ -228,9 +237,9 @@
 }
 
 #textEditing {
-	top: -50px;
 	position: relative;
-	width: 100%;
+	width: 50%;
+	margin:auto;
 	text-align: center;
 }
 
@@ -245,6 +254,13 @@
 	margin-top: 5px;
 }
 
+#file-upload {
+	position: relative;
+	margin: auto;
+	top: 50px;
+
+}
+
 .templateBackground{
 	position: relative;
 	height: inherit;
@@ -254,31 +270,51 @@
 	display:none;
 	position: absolute;
 	min-width: 40px;
+	z-index: 5;
 }
 
 .dropdown {
 	position:relative;
 	display: inline-block;
-	z-index: 1;
+	z-index: 5;
+	float: right;
+}
+
+.buttonDiv {
+	z-index: 5;
+	background-color: #555555;
+	padding:5px 12px;
+	border: 1px solid black;
+	border-top: none;
+	box-shadow: 2px 1px 8px black;
 }
 
 .templateButtons {
-	width: 50px;
-	height: 40px;
-	background-color: #555555;
+	width: 60px;
+	height: 50px;
 	border: none;
 	z-index: 5;
 	border-radius: 50%;
 }
 
+.buttonDiv:nth-child(even) {
+	background-color: #555555;
+}
+
+.buttonDiv:nth-child(even) {
+	background-color: #888888;
+}
+
 .templateHover {
 	color: white;
 	font-weight: bold;
-	width: 60px;
 	background-color: #555555;
 	border: none;
 	height: 40px;
 	z-index: 5;
+	text-shadow: 2px 2px 8px black;
+	box-shadow: 2px 1px 8px black;
+	border-bottom: 1px solid black;
 }
 
 .templateBackground{
@@ -289,17 +325,15 @@
 }
 
 .templateDiv{
-	margin-left:auto; 
-	margin-right:auto; 
 	position: relative;
 	overflow: hidden;
 	padding: 0px;
-	margin-top: -40px;
 	max-height: 1000px;
 	width: 80%;
+	margin: auto;
 }
 
-#template2, #template3, #template4 {
+#template2, #template3, #template4, #template5 {
 	display: none;
 }
 
@@ -357,22 +391,6 @@
 	display: none;
 }
 
- /* colorpicker styles */
-.colorpicker {
-    background-color: #222222;
-    border-radius: 5px 5px 5px 5px;
-    box-shadow: 2px 2px 2px #444444;
-    color: #FFFFFF;
-    font-size: 12px;
-    position: absolute;
-    width: 460px;
-}
-#picker {
-    cursor: crosshair;
-    float: left;
-    margin: 10px;
-    border: 0;
-}
 .controls {
     float: right;
     margin: 10px;
@@ -415,8 +433,66 @@
 	height: 20%;
 }
 
+
 #finalPreviewDiv{
 	display: none;
+
+.templates {
+	position: relative;
+}
+
+#colorsWord {
+	color: white;
+	text-align: center;
+	margin:0px;
+}
+
+.colorSwatch {
+	width:50px;
+	height:30px;
+	display:none;
+	margin: auto;
+	z-index: 5;
+	cursor:pointer;
+}
+
+td {
+	padding: 5px;
+}
+
+#ExitButton2 {
+	position: absolute;
+	top:0px;
+	background-color: transparent;
+	border:none;
+	color: white;
+	height: 33px;
+	width: 100%;
+	padding-bottom: 12px;
+	padding-right: 85px;
+}
+
+.colorSelection {
+	background-color:#444444;
+	position:absolute;
+	width:60px;
+	height:40px;
+	float:right;
+	top: 0px;
+	right: 0px;
+	z-index: 4;
+	text-shadow: 2px 2px 8px black;
+	box-shadow: 2px 1px 8px black;
+	color:white;
+	font-weight:bold;
+	border:none;
+}
+
+#CName {
+	width: 46px;
+	display: block;
+	margin:auto;
+	margin-top: 10px;
 }
 
 #t1Ele1{
@@ -560,3 +636,49 @@
 	width: 13%;
 	height: 7%;
 }
+
+#t5Ele1 {
+	top: 68%;
+	left: 70%;
+	width: 18%;
+	height: 25%;
+}
+
+#t5Ele2 {
+	top: 84.5%;
+	left: 71.5%;
+	width: 15%;
+	height: 10%;
+}
+
+#blanket {
+   background-color:#111;
+   opacity: 0.65;
+   *background:none;
+   position:absolute;
+   z-index: 9001;
+   top:0px;
+   left:0px;
+   width:100%;
+}
+
+#popUpDiv {
+	position:absolute;
+	background-color:#FFF;
+	width:250px;
+	height:150px;
+	border:5px solid #000;
+	z-index: 9002;
+}
+
+#popupText {
+	padding-left:20px;
+	padding-top:10px;
+}
+
+#popUpDiv a {position:relative; top: 25px; left:150px}
+
+#popUpDiv a:link, #mainContent a:visited {color:#fff; text-decoration:none; font-size:18px; background:#000000; padding:5px; -webkit-border-radius:10px;
+-moz-border-radius:10px}
+#popUpDiv a:hover, #mainContent a:active {color:#fff; text-decoration:none; font-size:18px; background:#333333; padding:5px; -webkit-border-radius:10px;
+-moz-border-radius:10px}

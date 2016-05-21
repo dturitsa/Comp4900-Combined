@@ -2,6 +2,7 @@ var toolFlag = false;
 var wandFlag = false;
 var colorElimFlag = false;
 var colourFlag = false;
+var tieMessage = true;
 var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
@@ -14,6 +15,7 @@ var erasing2 = false;
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
+var Selected;
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -23,6 +25,7 @@ $(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip();   
 	
 	$("#leftButton").click(function() {
+		$('#uploadedImage').imgAreaSelect({remove:true});
 		if (item == 0) {
 			item2 = 1; item = 2;
 			rightPercent = 0.8; leftPercent = 0.2;
@@ -35,6 +38,7 @@ $(document).ready(function() {
 	});
 	
 	$("#rightButton").click(function() {
+		$('#uploadedImage').imgAreaSelect({remove:true});
 		if (item2 == 0) {
 			item = 1;item2 = 2;
 			rightPercent = 0.2; leftPercent = 0.8;
@@ -314,6 +318,9 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = true;
 		$('#editCrop').css({display: 'none'});
+		$('#wand').css({"backgroundColor":"black"});
+		$('#colorElim').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 	});
 
 	$('#wand').click(function() {
@@ -323,6 +330,9 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = false;
 		$('#editCrop').css({display: ''});
+		$('#erase').css({"backgroundColor":"black"});
+		$('#colorElim').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 	});
 
 	$('#colorElim').click(function() {
@@ -332,6 +342,9 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = false;
 		$('#editCrop').css({display: ''});
+		$('#wand').css({"backgroundColor":"black"});
+		$('#erase').css({"backgroundColor":"black"});
+		$(this).css({"backgroundColor":"#444444"});
 	});
 
 	$('#editCrop').click(function() {
@@ -414,23 +427,32 @@ $(document).ready(function() {
   			$( this ).css('display', 'none');
 		});
 		var currentTemplate =  $(this).attr("value");
-		$(".templateDiv").css({"backgroundColor":$(this).css("backgroundColor")});
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$('#' + currentTemplate ).css('display', 'block');
 		$(".clothESpot").each(function(){
 			fitSize(this);
 		});
-		if(currentTemplate == "template3"){
-			alert("Tie's cannot have white!");
+		if(tieMessage == true && currentTemplate == "template3"){
+			//alert("Tie's cannot have white!");
+			popup('popUpDiv');
+			tieMessage = !tieMessage;
 		}
     });
 	
-	$('.buttonDiv')
+	$('.buttonDiv:odd')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
 	.mouseleave(function() {
-		$(this).css({"backgroundColor":"#5555555"})
+		$(this).css({"backgroundColor":"#888888"})
+	});
+	
+	$('.buttonDiv:even')
+	.mouseenter(function() {
+		$(this).css({"backgroundColor":"#444444"})
+	})
+	.mouseleave(function() {
+		$(this).css({"backgroundColor":"#555555"})
 	});
 	
 	
@@ -449,7 +471,53 @@ $(document).ready(function() {
     $(".closeButton").click(function(){
     	console.log("close clicked");
     });
+	
+	$(".colorSelection").click(function(evt) {
+		$(this).stop().animate({
+			'width': '125px',
+			'height': '265px'
+		}, 200);
+		$("#colorTable").show();
+		$(".colorSwatch").each(function() {
+			$( this ).css('display', 'block');
+		});
+		$("#ExitButton2").show();
+	});
     
+	$("#ExitButton2").click(function(evt) {
+		evt.stopPropagation();
+		$(this).hide();
+		$(".colorSelection").stop().animate({
+			'width': '60px',
+			'height': '40px'
+		}, 200);
+		$("#colorTable").hide();
+		$(".colorSwatch").each(function() {
+			$( this ).css('display', 'none');
+		});
+	});
+	
+	$(".colorSwatch")
+		.hover(function() {
+			$(this).css("box-shadow", "2px 1px 8px black");
+		}, function() {
+			if (this == Selected) {
+				$(this).css("box-shadow", "2px 1px 8px black");
+			} else {
+				$(this).css("box-shadow", "none");
+			}
+			
+		})
+		.click(function(evt) {
+			evt.stopPropagation();
+			Selected = this;
+			$(".colorSwatch").each(function() {
+				$(this).css("box-shadow", "none");
+			});
+			$(this).css("box-shadow", "2px 1px 8px black");
+			var color = $(this).css("backgroundColor");
+			$(".templateDiv").css("backgroundColor", color);
+		});
 }); //document.ready function closing tag
 
 //create elements dynamically
@@ -635,10 +703,19 @@ window.onload = function() {
     	currentThreshold = slider.value = slider2.value;
     	//showThreshold();
     });
+	
     colorThreshold = slider.value = slider2.value = 50;
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
+	
+	var red = document.getElementById("redSlider");
+	var green = document.getElementById("greenSlider");
+	var blue = document.getElementById("blueSlider");
+	
+	red.value = blue.value = green.value = 0;
+	
+	
 }
 
 // Onclick event for the window. allows user to deselect when clicking off the canvas
@@ -683,7 +760,7 @@ function ShowEditCanvas(element) {
 					"max-height":300 });
 	$("#ElementDisplay").stop().animate({
 				width: elmWidth + 150,
-				height: elmHeight + 50,
+				height: elmHeight + 85,
 				left: pos.left - elmWidth - 150, 
 				top: pos.top,
 				}).slideDown();
