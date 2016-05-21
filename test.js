@@ -413,15 +413,20 @@ $(document).ready(function() {
 
     $( "#signature" ).keyup(function() {
 		updateFont();  
-     });
+    });
 
 
     $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
-    	var ElementsDiv = $(this).parent().find(".templateBackground")[0]
-    	previewClothing(ElementsDiv);
+		var layout;
+    	var ElementsDiv = $(this).parent().find(".templateBackground")[0];
+		$(ElementsDiv).children(".layouts").each(function() {
+			if ($(this).is(":visible")) {
+				layout = this;
+			}
+		});
+    	previewClothing(ElementsDiv, layout);
     });
-
 
     $("#fontStyleButtons").change(function(){
     	updateFont();  
@@ -431,7 +436,7 @@ $(document).ready(function() {
     $('.templateButtons, .buttonDiv').click(function(evt){
 		evt.stopPropagation();
 		if ($(this).attr('class') == 'buttonDiv') {
-			console.log("HEHERE");
+			
 			var child = $(this).children()[0];
 			$( ".templateDiv" ).each(function() {
 				$(this).css('display', 'none');
@@ -472,6 +477,14 @@ $(document).ready(function() {
 		$("#layoutsMenu").css({"left": -$("#layoutsMenu").width(), "top":pos.top});
 		var value = $(this).attr("value");
 		$("#layoutTitle").text("Layouts: " + value);
+		$(".layouts").each(function() {
+			$(this).hide();
+		});
+		$(".templateDiv").each(function() {
+			$(this).hide();
+		});
+		$("#" + value + "layoutPreview").show();
+		$("#" + value + "layoutPreview").closest(".templateDiv").show();
 		switch(value) {
 			case "Shirts":
 				$(".LayoutNames").each(function() {
@@ -518,16 +531,20 @@ $(document).ready(function() {
 		}
 	});
 	
-	$(".LayoutNames").click(function() {
-		var value = $(this).attr("value");
-		$(".layouts").each(function() {
-			$(this).hide();
-		});
-		$(".templateDiv").each(function() {
-			$(this).hide();
-		});
-		$("#" + value).closest(".templateDiv").show();
-		$("#" + value).show();
+	$(".LayoutNames")
+		.click(function() {
+			var value = $(this).attr("value");
+			$(".layouts").each(function() {
+				$(this).hide();
+			});
+			$("#" + value).show();
+		})
+		.mouseenter(function() {
+			var value = $(this).attr("value");
+			$(".layouts").each(function() {
+				$(this).hide();
+			});
+			$("#" + value).show();
 	});
 	
 	$('.buttonDiv:odd, .LayoutNames:odd')
@@ -550,7 +567,7 @@ $(document).ready(function() {
 		$('.dropdown-content').stop().slideDown();
 	});
 	
-	$('.dropdown, .dropdown-content').click(function() {
+	$('.dropdown, .dropdown-content, .LayoutNames').click(function() {
 		$('.dropdown-content').stop().slideUp();
 		$("#layoutsMenu").hide();
 	});
@@ -959,7 +976,7 @@ function drop(ev, canvas = ev.target) {
 }
 
 //collapse canvas and create preview
-function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0]){
+function previewClothing(template, curLayout, previewCanvas = $("#clothingPreviewCanvas")[0]){
 	template = $(template);
 	var templateValue = template.parent().attr("value");
 	var backgroundImage = template.parent().find(".previewBackground")[0];
@@ -970,22 +987,21 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 	ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 	
 	var leftOffset, topOffset, width, height;
-
-	template.find(".wrapper").each(function(){
+	$(curLayout).find(".wrapper").each(function(){
+		console.log(template.width());
 
 		if(templateValue == 'Customized Scarf'){
-			leftOffset = $(this).position().left / $(this).parent().width() * 1.2;
-			topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
+			leftOffset = $(this).position().left / template.width() * 1.2;
+			topOffset = $(this).position().top / template.height() * 1.2 - .25;
 			width = $(this).width();
 			height = $(this).height();
 		}else if(templateValue == 'Customized Tie'){
-			leftOffset = $(this).position().left / $(this).parent().width() * .8 + .25;
-			topOffset = $(this).position().top / $(this).parent().height() * .8 + .2;
-			width = $(this).width() * .9 * previewCanvas.width / $(this).parent().width();
-			height = $(this).height() * .9 * previewCanvas.width / $(this).parent().width();
+			leftOffset = $(this).position().left / template.width() * .8 + .25;
+			topOffset = $(this).position().top / template.height() * .8 + .2;
+			width = $(this).width() * .9 * previewCanvas.width / template.width();
+			height = $(this).height() * .9 * previewCanvas.width / template.width();
 		}
     	if(getRotationDegrees($(this)) != 0){
-    		console.log("width" + width + " height" + height);
     		ctx.save();
     		ctx.translate(leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height());
     		ctx.translate(width / 2, height / 2);
