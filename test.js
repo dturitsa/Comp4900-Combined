@@ -1016,20 +1016,41 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 	ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 	
 	var leftOffset, topOffset, width, height;
+	var leftOffsetRatio;
 	$(curLayout).find(".wrapper").each(function(){
-		console.log(template.width());
+		leftOffsetRatio = $(this).position().left / template.width();
 
 		if(templateValue == 'Customized Scarf'){
-			leftOffset = $(this).position().left / template.width() * 1.2;
+			leftOffset = leftOffsetRatio * 1.2;
 			topOffset = $(this).position().top / template.height() * 1.2 - .25;
 			width = $(this).width();
 			height = $(this).height();
+			ctx.globalAlpha = .9;
 		}else if(templateValue == 'Customized Tie'){
-			leftOffset = $(this).position().left / template.width() * .8 + .25;
+			leftOffset = leftOffsetRatio * .8 + .25;
 			topOffset = $(this).position().top / template.height() * .8 + .2;
 			width = $(this).width() * .9 * previewCanvas.width / template.width();
 			height = $(this).height() * .9 * previewCanvas.width / template.width();
+			ctx.globalAlpha = .9;
+		}else if(templateValue == 'Customized Hat'){
+			leftOffset = leftOffsetRatio * 2 - .8;
+			topOffset = $(this).position().top / template.height() - .4;
+			width = $(this).width() * 2 * previewCanvas.width / template.width();
+			height = $(this).height() * 2 * previewCanvas.width / template.width();
+			ctx.globalAlpha = 0.8;
+		}else if(templateValue == 'Customized Leggings'){
+			if(leftOffsetRatio < .5){
+				leftOffset = leftOffsetRatio * 1 -.057;
+			} else{
+				leftOffset = leftOffsetRatio * 1 -.15;
+			}
+			
+			topOffset = $(this).position().top / template.height() * 1 + 0;
+			width = $(this).width() * 1 * previewCanvas.height / template.height();
+			height = $(this).height() * 1 * previewCanvas.height / template.height();
+			ctx.globalAlpha = .8;
 		}
+
     	if(getRotationDegrees($(this)) != 0){
     		ctx.save();
     		ctx.translate(leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height());
@@ -1042,6 +1063,7 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
     		ctx.drawImage($(this).find("canvas")[0], leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height(), width, height);
     	}
 	});
+	ctx.globalAlpha = 1;
 	ctx.drawImage(backgroundImage, 0, 0, previewCanvas.width, previewCanvas.height);
 }
 
