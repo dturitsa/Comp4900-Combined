@@ -318,6 +318,10 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = true;
 		$('#editCrop').css({display: 'none'});
+		$('#editCrop2').css({display: 'none'});
+		$('#thresSlider4').css({display: 'none'});
+		$('#thresSlider3').css({display: 'none'});
+		$('#eraseSlider').css({display: 'inline'});
 		$('#wand').css({"backgroundColor":"black"});
 		$('#colorElim').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
@@ -330,9 +334,13 @@ $(document).ready(function() {
 		erasing = false;
 		erasing2 = false;
 		$('#editCrop').css({display: ''});
+		$('#thresSlider4').css({display: 'none'});
+		$('#editCrop2').css({display: 'none'});
 		$('#erase').css({"backgroundColor":"black"});
 		$('#colorElim').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
+		$('#thresSlider3').css({display: 'inline'});
+		$('#eraseSlider').css({display: 'none'});
 	});
 
 	$('#colorElim').click(function() {
@@ -341,13 +349,20 @@ $(document).ready(function() {
 		wandFlag = false;
 		erasing = false;
 		erasing2 = false;
-		$('#editCrop').css({display: ''});
+		$('#editCrop2').css({display: ''});
+		$('#thresSlider3').css({display: 'none'});
+		$('#editCrop').css({display: 'none'});
 		$('#wand').css({"backgroundColor":"black"});
 		$('#erase').css({"backgroundColor":"black"});
 		$(this).css({"backgroundColor":"#444444"});
+		$('#thresSlider4').css({display: 'inline'});
+		$('#eraseSlider').css({display: 'none'});
 	});
 
 	$('#editCrop').click(function() {
+		cropOut2();
+	});
+	$('#editCrop2').click(function() {
 		cropOut2();
 	});
 
@@ -694,18 +709,32 @@ window.onload = function() {
     slider = document.getElementById("thresSlider");
 
     slider.addEventListener("change", function() {
-    	currentThreshold = slider2.value = slider.value;
+    	currentThreshold = slider2.value = slider3.value = slider4.value = slider.value;
     	//showThreshold();
     });
 
     slider2 = document.getElementById("thresSlider2");
 	
     slider2.addEventListener("change", function() {
-    	currentThreshold = slider.value = slider2.value;
+    	currentThreshold = slider.value = slider3.value = slider4.value = slider2.value;
     	//showThreshold();
     });
 	
-    colorThreshold = slider.value = slider2.value = 50;
+	slider3 = document.getElementById("thresSlider3");
+	
+    slider3.addEventListener("change", function() {
+    	currentThreshold = slider.value = slider2.value = slider4.value = slider3.value;
+    	//showThreshold();
+    });
+
+    slider4 = document.getElementById("thresSlider4");
+	
+    slider4.addEventListener("change", function() {
+    	currentThreshold = slider.value = slider2.value = slider3.value = slider4.value;
+    	//showThreshold();
+    });
+
+    colorThreshold = slider.value = slider2.value = slider3.value = slider4.value = 50;
     currentThreshold = colorThreshold;
     //showThreshold();
     setInterval(function () { hatchTick(); }, 300);
@@ -749,9 +778,9 @@ function ShowEditCanvas(element) {
 	canvas.width = width;
 	canvas.height = height;
 	var elmWidth = width, elmHeight = height;
-	if(elmWidth < 300) {
+	if(elmWidth != 300) {
 		elmWidth = 300;
-	}
+	} 
 	if(elmHeight > 300) {
 		elmHeight = 300;
 	}
@@ -1017,7 +1046,11 @@ function imgChange (inp) {
 		.promise().done(function() {
 			$("#toolBar").slideDown();
 		});
+		var red = document.getElementById("redSlider");
+		var green = document.getElementById("greenSlider");
+		var blue = document.getElementById("blueSlider");
 		
+		red.value = blue.value = green.value = 0;
 		
     }
 };
@@ -1118,7 +1151,7 @@ function editMouseDown(e) {
 		ctx = document.getElementById("ElementCanvas").getContext("2d");
 		//ctx = imageInfo.context;
 		//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
-		radius = 3;
+		radius = document.getElementById("eraseSlider").value;;
 		ctx.beginPath();
 			ctx.globalCompositeOperation = "destination-out";
 			ctx.fillStyle = "red";

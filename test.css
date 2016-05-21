@@ -28,7 +28,7 @@
 	left: 0px;
 }
 
-#wand, #erase, #editCrop, #colorElim {
+#wand, #erase, #editCrop, #editCrop2, #colorElim {
 	background-color:transparent;
 	border-color: transparent;
 	color: white;
