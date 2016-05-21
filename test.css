@@ -433,6 +433,10 @@
 	height: 20%;
 }
 
+
+#finalPreviewDiv{
+	display: none;
+}
 .templates {
 	position: relative;
 }
@@ -489,7 +493,6 @@ td {
 	display: block;
 	margin:auto;
 	margin-top: 10px;
-	
 }
 
 #t1Ele1{
