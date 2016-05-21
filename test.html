@@ -8,7 +8,6 @@
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="magic-wand-min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="colorPicker.js"></script>
 	<script type="text/javascript" src="css-pop.js"></script>
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript" src="test.js"></script>
@@ -24,7 +23,7 @@
 	    	<a href="#" onclick="popup('popUpDiv')" >Close</a>
 		</div>	
 		<div id="toolBar">
-			<button id="hideToolButton" data-toggle="tooltip" title="Hide the toolbar" type="button" class="btnFocus btn btn-default">Hide</button>
+			<button id="hideToolButton" data-toggle="tooltip" data-placement="right" title="Hide the toolbar" type="button" class="btnFocus btn btn-default">Hide</button>
 			<button id="undoButton" type="button" class="btnFocus btn btn-inverted">Undo</button>
 			<button id="tool1" type="button" data-toggle="tooltip" title="Crop out a part of your image" class="btnFocus btn btn-default"><img src="img/crop2.png" width="100%"></button>
 			<button id="tool2" type="button" data-toggle="tooltip" title="Magic wand to remove part of your image" class="btnFocus btn btn-default"><img src="img/MagicWand2.png" width="100%"></button>
@@ -68,10 +67,10 @@
 				<div id="ElementDisplay">
 					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
 					</canvas>
-					<button id="erase" type="button" class="btn btn-default"><img src="img/eraser.png" height="50px" width="100%"></button>
-					<button id="wand" type="button" class="btn btn-default"><img src="img/MagicWand2.png" height="50px" width="100%"></button>
-					<button id="colorElim" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" height="50px" width="100%"></button>
-					<button id="editCrop" style="display: none;" type="button" class="btn btn-default"><img src="img/cut-icon.png" height="50px" width="100%"></button>
+					<button id="erase" type="button" class="btn btn-default"><img src="img/eraser.png" height="50px" width="50px"></button>
+					<button id="wand" type="button" class="btn btn-default"><img src="img/MagicWand2.png" height="50px" width="50px"></button>
+					<button id="colorElim" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" height="50px" width="50px"></button>
+					<button id="editCrop" style="display: none;" type="button" class="btn btn-default"><img src="img/cut-icon.png" height="50px" width="50px"></button>
 					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
 			</div>
@@ -110,18 +109,6 @@
 				<div id="textEditing">
 					<!-- colorpicker element -->
 					<h2 id="templateTitle">Customized Shirt</h2>
-					<div class="preview"></div>
-						<div class="colorpicker" style="display:none; z-index: 10;">
-						    <canvas id="picker" var="3" width="300" height="300"></canvas>
-
-						    <div class="controls">
-						        <div><label>R</label> <input type="text" id="rVal" /></div>
-						        <div><label>G</label> <input type="text" id="gVal" /></div>
-						        <div><label>B</label> <input type="text" id="bVal" /></div>
-						        <div><label>RGB</label> <input type="text" id="rgbVal" /></div>
-						        <div><label>HEX</label> <input type="text" id="hexVal" /></div>
-						    </div>
-						</div>	
 					<input type="text" id="signature" placeholder="Signature">
 					<select id="fontSelect">
 						<option value="Arial">Arial</option>
@@ -156,11 +143,11 @@
 					
 					<div id="finalPreviewDiv" class="ui-dialog">
 						<canvas id="clothingPreviewCanvas" width="100" height="100"></canvas>
-						<img class="hiddenAssets" id="scarfPreviewBackground" src="img/scarf_preview.png"/>
 					</div>
 					
 					<div class="templateDiv" id="template2" value="Customized Scarf">
-						<button id="previewBut">Preview</button>
+						<button class="previewBut">Preview</button>
+						<img class="hiddenAssets previewBackground" src="img/scarf_preview.png"/>
 						<div class="templateBackground freeDropZone flipTop" id="template2Background">
 							<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
 							<div class="draggable resizable wrapper" id="t2Ele1">
@@ -177,6 +164,8 @@
 					</div>
 
 					<div class="templateDiv" id="template3" value="Customized Tie">
+						<button class="previewBut">Preview</button>
+					<img class="hiddenAssets previewBackground" src="img/tie_preview.png"/>
 						<div class="templateBackground" id="template3Background">
 							<img src="img/Tie2_Template_Empty_Small2.png" class="shirtOverlay" />
 							<div class="draggable resizable wrapper" id="t3Ele1">

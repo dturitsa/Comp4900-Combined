@@ -391,22 +391,6 @@
 	display: none;
 }
 
- /* colorpicker styles */
-.colorpicker {
-    background-color: #222222;
-    border-radius: 5px 5px 5px 5px;
-    box-shadow: 2px 2px 2px #444444;
-    color: #FFFFFF;
-    font-size: 12px;
-    position: absolute;
-    width: 460px;
-}
-#picker {
-    cursor: crosshair;
-    float: left;
-    margin: 10px;
-    border: 0;
-}
 .controls {
     float: right;
     margin: 10px;
@@ -449,6 +433,10 @@
 	height: 20%;
 }
 
+
+#finalPreviewDiv{
+	display: none;
+}
 .templates {
 	position: relative;
 }
@@ -505,7 +493,6 @@ td {
 	display: block;
 	margin:auto;
 	margin-top: 10px;
-	
 }
 
 #t1Ele1{
