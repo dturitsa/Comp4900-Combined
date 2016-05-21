@@ -498,9 +498,16 @@ $(document).ready(function() {
 		var value = $(this).attr("value");
 		$(".layouts").each(function() {
 			$(this).hide();
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
+
 		});
 		$(".templateDiv").each(function() {
 			$(this).hide();
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
 		});
 		var child = $(this).children()[0];
 		var currentTemplate =  $(child).attr("value");
