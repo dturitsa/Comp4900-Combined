@@ -16,6 +16,11 @@ var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
 var Selected;
+var shirtLayouts = ["Customize Yourself", "nothing", "nothing", "nothing"];
+var scarfLayouts = ["Customize Yourself", "One Image Both Sides", "One Picture Across", "One Picture Repeated"];
+var tieLayouts = ["Customize Yourself", "One Large Image", "Few Medium Images", "Repeated Small Images"];
+var hatLayouts = ["Customize Yourself", "One Image Covering", "One Image Left Side", "Few Images Around Brim"];
+var leggingLayouts = ["Customize Yourself", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -423,39 +428,141 @@ $(document).ready(function() {
 
     $( "#signature" ).keyup(function() {
 		updateFont();  
-     });
+    });
 
 
     $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
-    	var ElementsDiv = $(this).parent().find(".templateBackground")[0]
-    	previewClothing(ElementsDiv);
+		var layout;
+    	var ElementsDiv = $(this).parent().find(".templateBackground")[0];
+		$(ElementsDiv).children(".layouts").each(function() {
+			if ($(this).is(":visible")) {
+				layout = this;
+			}
+		});
+    	previewClothing(ElementsDiv, layout);
     });
-
 
     $("#fontStyleButtons").change(function(){
     	updateFont();  
     }); 
 
     //switch between templates
-    $('.templateButtons').click(function(){
-       	$( ".templateDiv" ).each(function() {
-  			$( this ).css('display', 'none');
-		});
-		var currentTemplate =  $(this).attr("value");
-		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
-		$('#' + currentTemplate ).css('display', 'block');
-		$(".clothESpot").each(function(){
-			fitSize(this);
-		});
-		if(tieMessage == true && currentTemplate == "template3"){
-			//alert("Tie's cannot have white!");
-			popup('popUpDiv');
-			tieMessage = !tieMessage;
+    $('.templateButtons, .buttonDiv').click(function(evt){
+		evt.stopPropagation();
+		if ($(this).attr('class') == 'buttonDiv') {
+			
+			var child = $(this).children()[0];
+			$( ".templateDiv" ).each(function() {
+				$(this).css('display', 'none');
+			});
+			var currentTemplate =  $(child).attr("value");
+			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
+			$('#' + currentTemplate ).css('display', 'block');
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
+			if(tieMessage == true && currentTemplate == "template3"){
+				//alert("Tie's cannot have white!");
+				popup('popUpDiv');
+				tieMessage = !tieMessage;
+			}
+		} else {	
+			$( ".templateDiv" ).each(function() {
+				$( this ).css('display', 'none');
+			});
+			var currentTemplate =  $(this).attr("value");
+			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
+			$('#' + currentTemplate ).css('display', 'block');
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
+			if(tieMessage == true && currentTemplate == "template3"){
+				//alert("Tie's cannot have white!");
+				popup('popUpDiv');
+				tieMessage = !tieMessage;
+			}
 		}
     });
 	
-	$('.buttonDiv:odd')
+	$(".buttonDiv").mouseenter(function() {
+		var i = 0;
+		var pos = $(this).offset();
+		$("#layoutsMenu").slideDown();
+		$("#layoutsMenu").css({"left": -$("#layoutsMenu").width(), "top":pos.top});
+		var value = $(this).attr("value");
+		$("#layoutTitle").text("Layouts: " + value);
+		$(".layouts").each(function() {
+			$(this).hide();
+		});
+		$(".templateDiv").each(function() {
+			$(this).hide();
+		});
+		$("#" + value + "layoutPreview").show();
+		$("#" + value + "layoutPreview").closest(".templateDiv").show();
+		switch(value) {
+			case "Shirts":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(shirtLayouts[i]);
+					i++;
+				});
+				break;
+			case "Scarves":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(scarfLayouts[i]);
+					i++;
+				});
+				break;
+			case "Ties":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(tieLayouts[i]);
+					i++;
+				});
+				break;
+			case "Hats":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(hatLayouts[i]);
+					i++;
+				});
+				break;
+			case "Leggings":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(leggingLayouts[i]);
+					i++;
+				});
+				break;
+			default:
+				$(".LayoutNames").each(function() {
+					$(this).attr("value","layout" + i);
+					$(this).text('');
+					i++;
+				});
+				break;
+		}
+	});
+	
+	$(".LayoutNames")
+		.click(function() {
+			var value = $(this).attr("value");
+			$(".layouts").each(function() {
+				$(this).hide();
+			});
+			$("#" + value).show();
+		})
+		.mouseenter(function() {
+			var value = $(this).attr("value");
+			$(".layouts").each(function() {
+				$(this).hide();
+			});
+			$("#" + value).show();
+	});
+	
+	$('.buttonDiv:odd, .LayoutNames:odd')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
@@ -463,7 +570,7 @@ $(document).ready(function() {
 		$(this).css({"backgroundColor":"#888888"})
 	});
 	
-	$('.buttonDiv:even')
+	$('.buttonDiv:even, .LayoutNames:even')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
@@ -471,17 +578,18 @@ $(document).ready(function() {
 		$(this).css({"backgroundColor":"#555555"})
 	});
 	
-	
-	$(".dropdown, .dropdown-content").mouseenter(function() {
+	$(".dropdown, .dropdown-content, #layoutsMenu").mouseenter(function() {
 		$('.dropdown-content').stop().slideDown();
 	});
 	
-	$('.dropdown, .dropdown-content').click(function() {
+	$('.dropdown, .dropdown-content, .LayoutNames').click(function() {
 		$('.dropdown-content').stop().slideUp();
+		$("#layoutsMenu").hide();
 	});
 	
 	$('.dropdown').mouseleave(function() {
 		$('.dropdown-content').stop().slideUp();
+		$("#layoutsMenu").hide();
 	});
     
     $(".closeButton").click(function(){
@@ -490,13 +598,14 @@ $(document).ready(function() {
 	$(".colorSelection").click(function(evt) {
 		$(this).stop().animate({
 			'width': '125px',
-			'height': '265px'
+			'height': '270px'
 		}, 200);
 		$("#colorTable").show();
 		$(".colorSwatch").each(function() {
 			$( this ).css('display', 'block');
 		});
 		$("#ExitButton2").show();
+		$(this).css("cursor", "auto");
 	});
     
 	$("#ExitButton2").click(function(evt) {
@@ -510,6 +619,7 @@ $(document).ready(function() {
 		$(".colorSwatch").each(function() {
 			$( this ).css('display', 'none');
 		});
+		$(".colorSelection").css("cursor", "pointer");
 	});
 	
 	$(".colorSwatch")
@@ -895,7 +1005,7 @@ function drop(ev, canvas = ev.target) {
 }
 
 //collapse canvas and create preview
-function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0]){
+function previewClothing(template, curLayout, previewCanvas = $("#clothingPreviewCanvas")[0]){
 	template = $(template);
 	var templateValue = template.parent().attr("value");
 	var backgroundImage = template.parent().find(".previewBackground")[0];
@@ -907,26 +1017,26 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 	
 	var leftOffset, topOffset, width, height;
 	var leftOffsetRatio;
-	template.find(".wrapper").each(function(){
-		leftOffsetRatio = $(this).position().left / $(this).parent().width();
+	$(curLayout).find(".wrapper").each(function(){
+		leftOffsetRatio = $(this).position().left / template.width();
 
 		if(templateValue == 'Customized Scarf'){
 			leftOffset = leftOffsetRatio * 1.2;
-			topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
+			topOffset = $(this).position().top / template.height() * 1.2 - .25;
 			width = $(this).width();
 			height = $(this).height();
 			ctx.globalAlpha = .9;
 		}else if(templateValue == 'Customized Tie'){
 			leftOffset = leftOffsetRatio * .8 + .25;
-			topOffset = $(this).position().top / $(this).parent().height() * .8 + .2;
-			width = $(this).width() * .9 * previewCanvas.width / $(this).parent().width();
-			height = $(this).height() * .9 * previewCanvas.width / $(this).parent().width();
+			topOffset = $(this).position().top / template.height() * .8 + .2;
+			width = $(this).width() * .9 * previewCanvas.width / template.width();
+			height = $(this).height() * .9 * previewCanvas.width / template.width();
 			ctx.globalAlpha = .9;
 		}else if(templateValue == 'Customized Hat'){
 			leftOffset = leftOffsetRatio * 2 - .8;
-			topOffset = $(this).position().top / $(this).parent().height() - .4;
-			width = $(this).width() * 2 * previewCanvas.width / $(this).parent().width();
-			height = $(this).height() * 2 * previewCanvas.width / $(this).parent().width();
+			topOffset = $(this).position().top / template.height() - .4;
+			width = $(this).width() * 2 * previewCanvas.width / template.width();
+			height = $(this).height() * 2 * previewCanvas.width / template.width();
 			ctx.globalAlpha = 0.8;
 		}else if(templateValue == 'Customized Leggings'){
 			if(leftOffsetRatio < .5){
@@ -935,9 +1045,9 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 				leftOffset = leftOffsetRatio * 1 -.15;
 			}
 			
-			topOffset = $(this).position().top / $(this).parent().height() * 1 + 0;
-			width = $(this).width() * 1 * previewCanvas.height / $(this).parent().height();
-			height = $(this).height() * 1 * previewCanvas.height / $(this).parent().height();
+			topOffset = $(this).position().top / template.height() * 1 + 0;
+			width = $(this).width() * 1 * previewCanvas.height / template.height();
+			height = $(this).height() * 1 * previewCanvas.height / template.height();
 			ctx.globalAlpha = .8;
 		}
 
