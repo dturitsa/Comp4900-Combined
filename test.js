@@ -942,7 +942,6 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 		}
 
     	if(getRotationDegrees($(this)) != 0){
-    		console.log("width" + width + " height" + height);
     		ctx.save();
     		ctx.translate(leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height());
     		ctx.translate(width / 2, height / 2);
