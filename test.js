@@ -55,7 +55,7 @@ $(document).ready(function() {
 		var ctx = OrigCanvas.getContext('2d');
 		ctx.clearRect(0,0, OrigCanvas.width, OrigCanvas.height);
 		ctx.drawImage(tmp, 0, 0);
-		$("#ElementDisplay").fadeOut();
+		$("#ElementDisplay").stop().slideUp();
 		whichElement = null;
 	});
 	
@@ -485,7 +485,6 @@ $(document).ready(function() {
 	});
     
     $(".closeButton").click(function(){
-    	console.log("close clicked");
     });
 	
 	$(".colorSelection").click(function(evt) {
@@ -858,6 +857,7 @@ function dragstart(ev) {
 	draggedElement = ev.target;
 	//console.log(ev.target);
 	//console.log(draggedElement);
+	//console.log(draggedElement.id);
 }
 
 
@@ -988,6 +988,11 @@ function fitSize(content, wrap = $(content).parent()){
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
+	
+	//If the target and source are the same canvas, do nothing
+	if(canvas.id == draggedElement.id) {
+		return;
+	}
 	$(canvas).parent().data("used", true);
 	fitSize(draggedElement, $(canvas).parent());
 	canvas.width = draggedElement.width;
@@ -1529,7 +1534,6 @@ function copyImageData() {
 // Copy the data before changing the colours 
 
 function copyColourData() {
-	console.log("hey");
 	originalImageInfo.data = document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
@@ -1555,7 +1559,7 @@ function colorChange() {
 		var negGreen = false;
 		
 		
-		console.log(originalImageInfo.data.data.length);
+		//console.log(originalImageInfo.data.data.length);
 		for(var i = 0; i < originalImageInfo.data.data.length; i += 4)
 		{
 			red = originalImageInfo.data.data[i]>>>0;
