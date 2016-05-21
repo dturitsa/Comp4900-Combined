@@ -287,6 +287,7 @@
 	padding:5px 12px;
 	border: 1px solid black;
 	border-top: none;
+	cursor: pointer;
 }
 
 .templateButtons {
@@ -492,6 +493,44 @@ td {
 	margin:auto;
 	margin-top: 10px;
 	
+}
+
+#layoutsMenu {
+	position: absolute;
+	display: none;
+	box-shadow: 2px 1px 8px black;
+	color:white;
+	z-index: 5;
+}
+
+.LayoutNames, #layoutTitle {
+	width: 150px;
+	height: 40px;
+	border: 1px solid black;
+	border-top: none;
+	cursor: pointer;
+	background-color: #888888;
+	padding-left: 7px;
+	padding-top: 10px;
+	font-size: 12px;
+}
+
+#layoutTitle {
+	font-weight:bold;
+	font-size: 15px;
+	border-top: 1px solid black;
+}
+
+.LayoutNames:nth-child(even) {
+	background-color: #555555;
+}
+
+.LayoutNames:nth-child(odd) {
+	background-color: #888888;
+}
+
+#shirtLayout2 {
+	display: none;
 }
 
 #t1Ele1{
