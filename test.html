@@ -23,7 +23,7 @@
 	    	<a href="#" onclick="popup('popUpDiv')" >Close</a>
 		</div>	
 		<div id="toolBar">
-			<button id="hideToolButton" data-toggle="tooltip" title="Hide the toolbar" type="button" class="btnFocus btn btn-default">Hide</button>
+			<button id="hideToolButton" data-toggle="tooltip" data-placement="right" title="Hide the toolbar" type="button" class="btnFocus btn btn-default">Hide</button>
 			<button id="undoButton" type="button" class="btnFocus btn btn-inverted">Undo</button>
 			<button id="tool1" type="button" data-toggle="tooltip" title="Crop out a part of your image" class="btnFocus btn btn-default"><img src="img/crop2.png" width="100%"></button>
 			<button id="tool2" type="button" data-toggle="tooltip" title="Magic wand to remove part of your image" class="btnFocus btn btn-default"><img src="img/MagicWand2.png" width="100%"></button>
@@ -39,18 +39,18 @@
 			<input id="eraserSlider" type="range" orient="vertical" min="1" max="5" value="2" style="display: none; writing-mode: bt-lr; -webkit-appearance: slider-vertical; height: 100px;"/>
 			<button id="tool3" type="button" data-toggle="tooltip" title="Colour Choices" class="btnFocus  btn btn-default"><img src="img/colour.png" width="100%"></button>
 			<label for="redSlider" id="redLabel" style="display: none; color:white;">Red</label>
-			<input id="redSlider" class="colorSlider" type="range"  value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<input id="redSlider" class="colorSlider" type="range"  value="0" min="-100" max="100" style="display: none;" onchange="colorChange()"/>
 			<label for="greenSlider" id="greenLabel" style="display: none; color:white;">Green</label>
-			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<input id="greenSlider" class="colorSlider" type="range" value="0" min="-100" max="100" style="display: none;" onchange="colorChange()"/>
 			<label for="blueSlider" id="blueLabel" style="display: none; color:white;">Blue</label>
-			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-40" max="40" style="display: none;" onchange="colorChange()"/>
+			<input id="blueSlider" class="colorSlider" type="range" value="0" min="-100" max="100" style="display: none;" onchange="colorChange()"/>
 			<!--
 			<label for="brightnessSlider" id="brightLabel" style="display: none;">Brightness</label>
 			<input id="brightnessSlider" type="range" value="0" min="-50" max="50" style="display: none;"/>
 			-->
 			<!--<label for="greyScaleButton" id="greyScaleLabel" data-toggle="tooltip" title="Convert to black and white" style="display: none;">Black and White</label>-->
 			
-			<button id="greyScaleButton" type="button" class="btnFocus btn btn-default" style="display:none;"><img src="img/GreyScale.png" width="100%"></button>
+			<button id="greyScaleButton" type="button" class="btnFocus btn btn-default" style="display:none;" data-toggle="tooltip" title="Convert to black and white"><img src="img/GreyScale.png" width="100%"></button>
 			
 		</div>
 		<div id="content">
@@ -68,9 +68,13 @@
 					<canvas id="ElementCanvas" onmousedown="editMouseDown.apply(this, arguments)" onmouseup="editMouseUp.apply(this, arguments)" onmousemove="editMouseMove.apply(this, arguments)">
 					</canvas>
 					<button id="erase" type="button" class="btn btn-default"><img src="img/eraser.png" height="50px" width="50px"></button>
+					<input id="eraseSlider" type="range" min="1" max="5" value="3" style="display: none; width: 100px;"/>
 					<button id="wand" type="button" class="btn btn-default"><img src="img/MagicWand2.png" height="50px" width="50px"></button>
-					<button id="colorElim" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" height="50px" width="50px"></button>
+					<input id="thresSlider3" type="range" min="1" max="100" value="50" style="display: none; width: 100px;"/>
 					<button id="editCrop" style="display: none;" type="button" class="btn btn-default"><img src="img/cut-icon.png" height="50px" width="50px"></button>
+					<button id="colorElim" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" height="50px" width="50px"></button>
+					<input id="thresSlider4" type="range" min="1" max="100" value="50" style="display: none; width: 100px;"/>
+					<button id="editCrop2" style="display: none;" type="button" class="btn btn-default"><img src="img/cut-icon.png" height="50px" width="50px"></button>
 					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
 			</div>
