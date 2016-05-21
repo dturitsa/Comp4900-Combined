@@ -413,7 +413,8 @@ $(document).ready(function() {
 
     $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
-    	previewClothing($(this).parent().find(".templateBackground")[0]);
+    	var ElementsDiv = $(this).parent().find(".templateBackground")[0]
+    	previewClothing(ElementsDiv);
     });
 
 
@@ -872,7 +873,7 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 	previewCanvas.width = backgroundImage.naturalWidth;
 	previewCanvas.height = backgroundImage.naturalHeight;
 	var ctx = previewCanvas.getContext("2d");
-	ctx.fillStyle="#FF0000";
+	ctx.fillStyle = template.parent().css('background-color');
 	ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 	
 	var leftOffset, topOffset, width, height;
