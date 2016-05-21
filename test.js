@@ -879,12 +879,12 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 
 	template.find(".wrapper").each(function(){
 
-		if(templateValue == 'Scarf'){
+		if(templateValue == 'Customized Scarf'){
 			leftOffset = $(this).position().left / $(this).parent().width() * 1.2;
 			topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
 			width = $(this).width();
 			height = $(this).height();
-		}else if(templateValue == 'Tie'){
+		}else if(templateValue == 'Customized Tie'){
 			leftOffset = $(this).position().left / $(this).parent().width() * .8 + .25;
 			topOffset = $(this).position().top / $(this).parent().height() * .8 + .2;
 			width = $(this).width() * .9 * previewCanvas.width / $(this).parent().width();
