@@ -906,22 +906,42 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 	ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 	
 	var leftOffset, topOffset, width, height;
-
+	var leftOffsetRatio;
 	template.find(".wrapper").each(function(){
+		leftOffsetRatio = $(this).position().left / $(this).parent().width();
 
 		if(templateValue == 'Customized Scarf'){
-			leftOffset = $(this).position().left / $(this).parent().width() * 1.2;
+			leftOffset = leftOffsetRatio * 1.2;
 			topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
 			width = $(this).width();
 			height = $(this).height();
+			ctx.globalAlpha = .9;
 		}else if(templateValue == 'Customized Tie'){
-			leftOffset = $(this).position().left / $(this).parent().width() * .8 + .25;
+			leftOffset = leftOffsetRatio * .8 + .25;
 			topOffset = $(this).position().top / $(this).parent().height() * .8 + .2;
 			width = $(this).width() * .9 * previewCanvas.width / $(this).parent().width();
 			height = $(this).height() * .9 * previewCanvas.width / $(this).parent().width();
+			ctx.globalAlpha = .9;
+		}else if(templateValue == 'Customized Hat'){
+			leftOffset = leftOffsetRatio * 2 - .8;
+			topOffset = $(this).position().top / $(this).parent().height() - .4;
+			width = $(this).width() * 2 * previewCanvas.width / $(this).parent().width();
+			height = $(this).height() * 2 * previewCanvas.width / $(this).parent().width();
+			ctx.globalAlpha = 0.8;
+		}else if(templateValue == 'Customized Leggings'){
+			if(leftOffsetRatio < .5){
+				leftOffset = leftOffsetRatio * 1 -.057;
+			} else{
+				leftOffset = leftOffsetRatio * 1 -.15;
+			}
+			
+			topOffset = $(this).position().top / $(this).parent().height() * 1 + 0;
+			width = $(this).width() * 1 * previewCanvas.height / $(this).parent().height();
+			height = $(this).height() * 1 * previewCanvas.height / $(this).parent().height();
+			ctx.globalAlpha = .8;
 		}
+
     	if(getRotationDegrees($(this)) != 0){
-    		console.log("width" + width + " height" + height);
     		ctx.save();
     		ctx.translate(leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height());
     		ctx.translate(width / 2, height / 2);
@@ -933,6 +953,7 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
     		ctx.drawImage($(this).find("canvas")[0], leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height(), width, height);
     	}
 	});
+	ctx.globalAlpha = 1;
 	ctx.drawImage(backgroundImage, 0, 0, previewCanvas.width, previewCanvas.height);
 }
 
