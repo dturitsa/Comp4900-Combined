@@ -23,7 +23,7 @@
 	    	<a href="#" onclick="popup('popUpDiv')" >Close</a>
 		</div>	
 		<div id="toolBar">
-			<button id="hideToolButton" data-toggle="tooltip" title="Hide the toolbar" type="button" class="btnFocus btn btn-default">Hide</button>
+			<button id="hideToolButton" data-toggle="tooltip" data-placement="right" title="Hide the toolbar" type="button" class="btnFocus btn btn-default">Hide</button>
 			<button id="undoButton" type="button" class="btnFocus btn btn-inverted">Undo</button>
 			<button id="tool1" type="button" data-toggle="tooltip" title="Crop out a part of your image" class="btnFocus btn btn-default"><img src="img/crop2.png" width="100%"></button>
 			<button id="tool2" type="button" data-toggle="tooltip" title="Magic wand to remove part of your image" class="btnFocus btn btn-default"><img src="img/MagicWand2.png" width="100%"></button>
@@ -50,7 +50,7 @@
 			-->
 			<!--<label for="greyScaleButton" id="greyScaleLabel" data-toggle="tooltip" title="Convert to black and white" style="display: none;">Black and White</label>-->
 			
-			<button id="greyScaleButton" type="button" class="btnFocus btn btn-default" style="display:none;"><img src="img/GreyScale.png" width="100%"></button>
+			<button id="greyScaleButton" type="button" class="btnFocus btn btn-default" style="display:none;" data-toggle="tooltip" title="Convert to black and white"><img src="img/GreyScale.png" width="100%"></button>
 			
 		</div>
 		<div id="content">
@@ -90,31 +90,38 @@
 				<div class="dropdown">
 					<button id="clothesButton" class="btnFocus templateHover"><p style="margin: 0px; display:inline;">Clothing</p>&#x25BC;</button>
 					<div id="myDropdown" class="dropdown-content" style="z-index: 5;">
-						<div class="buttonDiv" width="40px" height="40px">
+						<div class="buttonDiv" width="40px" height="40px" value="Shirts">
 							<button class="templateButtons" value="template1" style="margin-top:5px;">
 								<img src="img/T-Shirt-icon2.png" width="100%">
 							</button>
 						</div>
-						<div class="buttonDiv" width="40px" height="40px">
+						<div class="buttonDiv" width="40px" height="40px" value="Scarves">
 							<button class="templateButtons" value="template2">
 								<img src="img/Scarf-white.png" width="100%">
 							</button>
 						</div>
-						<div class="buttonDiv" width="40px" height="40px">
+						<div class="buttonDiv" width="40px" height="40px" value="Ties">
 							<button class="templateButtons" value="template3">
 								<img src="img/Tie2.png" width="100%">
 							</button>
 						</div>
-						<div class="buttonDiv" width="40px" height="40px">
+						<div class="buttonDiv" width="40px" height="40px" value="Hats">
 							<button class="templateButtons" value="template4">
 								<img src="img/winter-hat.png" width="100%">
 							</button>
 						</div>
-						<div class="buttonDiv" width="40px" height="40px">
+						<div class="buttonDiv" width="40px" height="40px" value="Leggings">
 							<button class="templateButtons" value="template5">
 								<img src="img/Leggings_White.png" width="100%">
 							</button>
 						</div>
+					</div>
+					<div id="layoutsMenu">
+						<div id="layoutTitle"></div>
+						<div class="LayoutNames" value="layout1"></div>
+						<div class="LayoutNames" value="layout2"></div>
+						<div class="LayoutNames" value="layout3"></div>
+						<div class="LayoutNames" value="layout4"></div>
 					</div>
 				</div>
 				<div id="textEditing">
@@ -122,10 +129,9 @@
 					<h2 id="templateTitle">Customized Shirt</h2>
 					<input type="text" id="signature" placeholder="Signature">
 					<select id="fontSelect">
+						<option value="Gochi Hand">Gochi Hand</option>
 						<option value="Arial">Arial</option>
       					<option value="Verdana">Verdana</option>
-      					<option value="Gochi Hand">Gochi Hand</option>
-      		
 					</select>
 
 					<div id="fontStyleButtons">
@@ -138,16 +144,26 @@
 					<div class="templateDiv" id="template1" value="Customized Shirt">
 						<div class="templateBackground freeDropZone" id="template1Background">
 							<img src="img/tshirtDiagram.png" class="shirtOverlay" />
-							<div class="draggable resizable wrapper" id="t1Ele1">
-								<canvas class="clothESpot dragDest multiPaste1 "></canvas>	
+							<div class="layouts" id="ShirtslayoutPreview">
 							</div>
-	   
-							<div class="draggable resizable wrapper" id="t1Ele2">
-								<canvas class="clothESpot dragDest multiPaste2"></canvas>
-							</div>
+							<div class="layouts" id="Shirtslayout0">
+								<div class="draggable resizable wrapper" id="t1Ele1">
+									<canvas class="clothESpot dragDest multiPaste1 "></canvas>	
+								</div>
+		   
+								<div class="draggable resizable wrapper" id="t1Ele2">
+									<canvas class="clothESpot dragDest multiPaste2"></canvas>
+								</div>
 
-							<div class="draggable resizable wrapper" id="t1Ele3">
-								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								<div class="draggable resizable wrapper" id="t1Ele3">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
+							</div>
+							<div class="layouts" id="Shirtslayout1">
+							</div>
+							<div class="layouts" id="Shirtslayout2">
+							</div>
+							<div class="layouts" id="Shirtslayout3">
 							</div>
 						</div>
 					</div>
@@ -161,15 +177,31 @@
 						<img class="hiddenAssets previewBackground" src="img/scarf_preview.png"/>
 						<div class="templateBackground freeDropZone flipTop" id="template2Background">
 							<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
-							<div class="draggable resizable wrapper" id="t2Ele1">
-								<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+							<div id="ScarveslayoutPreview">
 							</div>
-	   
-							<div class="draggable resizable wrapper" id="t2Ele2">
-								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							<div class="layouts" id="Scarveslayout0">
 							</div>
-							<div class="draggable resizable wrapper" id="t2Ele3">
-								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+							<div class="layouts" id="Scarveslayout1">
+								<div class="draggable resizable wrapper" id="t2Ele1">
+									<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+								</div>
+		   
+								<div class="draggable resizable wrapper" id="t2Ele2">
+									<canvas class="clothESpot dragDest multiPaste2"></canvas>
+								</div>
+								<div class="draggable resizable wrapper" id="t2Ele3">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
+							</div>
+							<div class="layouts" id="Scarveslayout2">
+								<div class="draggable resizable wrapper" id="t2Ele3">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
+							</div>
+							<div class="layouts" id="Scarveslayout3">
+								<div class="draggable resizable wrapper" id="t2Ele3">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -179,73 +211,108 @@
 					<img class="hiddenAssets previewBackground" src="img/tie_preview.png"/>
 						<div class="templateBackground" id="template3Background">
 							<img src="img/Tie2_Template_Empty_Small2.png" class="shirtOverlay" />
-							<div class="draggable resizable wrapper" id="t3Ele1">
-								<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+							<div id="TieslayoutPreview">
 							</div>
-	   
-							<div class="draggable resizable wrapper" id="t3Ele2">
-								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							<div class="layouts" id="Tieslayout0">
 							</div>
+							<div class="layouts" id="Tieslayout1">
+								<div class="draggable resizable wrapper" id="t3Ele1">
+									<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+								</div>
+		   
+								<div class="draggable resizable wrapper" id="t3Ele2">
+									<canvas class="clothESpot dragDest multiPaste2"></canvas>
+								</div>
 
-							<div class="draggable resizable wrapper" id="t3Ele3">
-								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
-							</div>
+								<div class="draggable resizable wrapper" id="t3Ele3">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
 
-							<div class="draggable resizable wrapper" id="t3Ele4">
-								<canvas class="clothESpot dragDest multiPaste4"></canvas>
-							</div>
+								<div class="draggable resizable wrapper" id="t3Ele4">
+									<canvas class="clothESpot dragDest multiPaste4"></canvas>
+								</div>
 
-							<div class="draggable resizable wrapper" id="t3Ele5">
-								<canvas class="clothESpot dragDest multiPaste5"></canvas>
+								<div class="draggable resizable wrapper" id="t3Ele5">
+									<canvas class="clothESpot dragDest multiPaste5"></canvas>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="templateDiv" id="template4" value="Customized Hat">
+						<button class="previewBut">Preview</button>
+						<img class="hiddenAssets previewBackground" src="img/hat_preview.png"/>
 						<div class="templateBackground" id="template4Background">
 							<img src="img/Hat_Template_Empty2.png" class="shirtOverlay" />
-	   
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele1">
-								<canvas class="clothESpot dragDest multiPaste2"></canvas>
+							<div id="HatslayoutPreview">
 							</div>
-							
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele2">
-								<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+							<div class="layouts" id="Hatslayout0">
 							</div>
-	   
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele3">
-								<canvas class="clothESpot dragDest multiPaste3"></canvas>
+							<div class="layouts" id="Hatslayout1">
 							</div>
-							
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele4">
-								<canvas class="clothESpot dragDest multiPaste4"></canvas>	
+							<div class="layouts" id="Hatslayout2">
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele6">
+									<canvas class="clothESpot dragDest multiPaste3"></canvas>	
+								</div>
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele8">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
 							</div>
-	   
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele5">
-								<canvas class="clothESpot dragDest multiPaste2"></canvas>
-							</div>
-	   
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele6">
-								<canvas class="clothESpot dragDest multiPaste1"></canvas>
-							</div>
-							
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele7">
-								<canvas class="clothESpot dragDest multiPaste3"></canvas>	
-							</div>
+							<div class="layouts" id="Hatslayout3">
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele1">
+									<canvas class="clothESpot dragDest multiPaste2"></canvas>
+								</div>
+								
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele2">
+									<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+								</div>
+		   
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele3">
+									<canvas class="clothESpot dragDest multiPaste3"></canvas>
+								</div>
+								
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele4">
+									<canvas class="clothESpot dragDest multiPaste4"></canvas>	
+								</div>
+		   
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele5">
+									<canvas class="clothESpot dragDest multiPaste2"></canvas>
+								</div>
+		   
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele6">
+									<canvas class="clothESpot dragDest multiPaste1"></canvas>
+								</div>
+								
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele7">
+									<canvas class="clothESpot dragDest multiPaste3"></canvas>	
+								</div>
 
-							<div class="draggable resizable t4ESpot wrapper" id="t4Ele8">
-								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele8">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="templateDiv" id="template5" value="Customized Leggings">
+						<button class="previewBut">Preview</button>
+						<img class="hiddenAssets previewBackground" src="img/leggings_preview.png"/>
 						<div class="templateBackground freeDropZone flipTop" id="template5Background">
 							<img src="img/Leggings_Empty.png" class="shirtOverlay" />
-							<div class="draggable resizable wrapper" id="t5Ele1">
-								<canvas class="clothESpot dragDest multiPaste1"></canvas>
+							<div id="LeggingslayoutPreview">
 							</div>
-							
-							<div class="draggable resizable t4ESpot wrapper" id="t5Ele2">
-								<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+							<div class="layouts" id="Leggingslayout0">
+							</div>
+							<div class="layouts" id="Leggingslayout1">
+								<div class="draggable resizable wrapper" id="t5Ele1">
+									<canvas class="clothESpot dragDest multiPaste1"></canvas>
+								</div>
+								
+								<div class="draggable resizable t4ESpot wrapper" id="t5Ele2">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
+							</div>
+							<div class="layouts" id="Leggingslayout2">
+							</div>
+							<div class="layouts" id="Leggingslayout3">
 							</div>
 						</div>
 					</div>

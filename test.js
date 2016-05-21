@@ -16,6 +16,11 @@ var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
 var Selected;
+var shirtLayouts = ["Customize Yourself", "nothing", "nothing", "nothing"];
+var scarfLayouts = ["Customize Yourself", "One Image Both Sides", "One Picture Across", "One Picture Repeated"];
+var tieLayouts = ["Customize Yourself", "One Large Image", "Few Medium Images", "Repeated Small Images"];
+var hatLayouts = ["Customize Yourself", "One Image Covering", "One Image Left Side", "Few Images Around Brim"];
+var leggingLayouts = ["Customize Yourself", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -55,7 +60,7 @@ $(document).ready(function() {
 		var ctx = OrigCanvas.getContext('2d');
 		ctx.clearRect(0,0, OrigCanvas.width, OrigCanvas.height);
 		ctx.drawImage(tmp, 0, 0);
-		$("#ElementDisplay").fadeOut();
+		$("#ElementDisplay").stop().slideUp();
 		whichElement = null;
 	});
 	
@@ -455,39 +460,141 @@ $(document).ready(function() {
 
     $( "#signature" ).keyup(function() {
 		updateFont();  
-     });
+    });
 
 
     $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
-    	var ElementsDiv = $(this).parent().find(".templateBackground")[0]
-    	previewClothing(ElementsDiv);
+		var layout;
+    	var ElementsDiv = $(this).parent().find(".templateBackground")[0];
+		$(ElementsDiv).children(".layouts").each(function() {
+			if ($(this).is(":visible")) {
+				layout = this;
+			}
+		});
+    	previewClothing(ElementsDiv, layout);
     });
-
 
     $("#fontStyleButtons").change(function(){
     	updateFont();  
     }); 
 
     //switch between templates
-    $('.templateButtons').click(function(){
-       	$( ".templateDiv" ).each(function() {
-  			$( this ).css('display', 'none');
-		});
-		var currentTemplate =  $(this).attr("value");
-		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
-		$('#' + currentTemplate ).css('display', 'block');
-		$(".clothESpot").each(function(){
-			fitSize(this);
-		});
-		if(tieMessage == true && currentTemplate == "template3"){
-			//alert("Tie's cannot have white!");
-			popup('popUpDiv');
-			tieMessage = !tieMessage;
+    $('.templateButtons, .buttonDiv').click(function(evt){
+		evt.stopPropagation();
+		if ($(this).attr('class') == 'buttonDiv') {
+			
+			var child = $(this).children()[0];
+			$( ".templateDiv" ).each(function() {
+				$(this).css('display', 'none');
+			});
+			var currentTemplate =  $(child).attr("value");
+			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
+			$('#' + currentTemplate ).css('display', 'block');
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
+			if(tieMessage == true && currentTemplate == "template3"){
+				//alert("Tie's cannot have white!");
+				popup('popUpDiv');
+				tieMessage = !tieMessage;
+			}
+		} else {	
+			$( ".templateDiv" ).each(function() {
+				$( this ).css('display', 'none');
+			});
+			var currentTemplate =  $(this).attr("value");
+			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
+			$('#' + currentTemplate ).css('display', 'block');
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
+			if(tieMessage == true && currentTemplate == "template3"){
+				//alert("Tie's cannot have white!");
+				popup('popUpDiv');
+				tieMessage = !tieMessage;
+			}
 		}
     });
 	
-	$('.buttonDiv:odd')
+	$(".buttonDiv").mouseenter(function() {
+		var i = 0;
+		var pos = $(this).offset();
+		$("#layoutsMenu").slideDown();
+		$("#layoutsMenu").css({"left": -$("#layoutsMenu").width(), "top":pos.top});
+		var value = $(this).attr("value");
+		$("#layoutTitle").text("Layouts: " + value);
+		$(".layouts").each(function() {
+			$(this).hide();
+		});
+		$(".templateDiv").each(function() {
+			$(this).hide();
+		});
+		$("#" + value + "layoutPreview").show();
+		$("#" + value + "layoutPreview").closest(".templateDiv").show();
+		switch(value) {
+			case "Shirts":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(shirtLayouts[i]);
+					i++;
+				});
+				break;
+			case "Scarves":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(scarfLayouts[i]);
+					i++;
+				});
+				break;
+			case "Ties":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(tieLayouts[i]);
+					i++;
+				});
+				break;
+			case "Hats":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(hatLayouts[i]);
+					i++;
+				});
+				break;
+			case "Leggings":
+				$(".LayoutNames").each(function() {
+					$(this).attr("value", value + "layout" + i);
+					$(this).text(leggingLayouts[i]);
+					i++;
+				});
+				break;
+			default:
+				$(".LayoutNames").each(function() {
+					$(this).attr("value","layout" + i);
+					$(this).text('');
+					i++;
+				});
+				break;
+		}
+	});
+	
+	$(".LayoutNames")
+		.click(function() {
+			var value = $(this).attr("value");
+			$(".layouts").each(function() {
+				$(this).hide();
+			});
+			$("#" + value).show();
+		})
+		.mouseenter(function() {
+			var value = $(this).attr("value");
+			$(".layouts").each(function() {
+				$(this).hide();
+			});
+			$("#" + value).show();
+	});
+	
+	$('.buttonDiv:odd, .LayoutNames:odd')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
@@ -495,7 +602,7 @@ $(document).ready(function() {
 		$(this).css({"backgroundColor":"#888888"})
 	});
 	
-	$('.buttonDiv:even')
+	$('.buttonDiv:even, .LayoutNames:even')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
@@ -503,33 +610,34 @@ $(document).ready(function() {
 		$(this).css({"backgroundColor":"#555555"})
 	});
 	
-	
-	$(".dropdown, .dropdown-content").mouseenter(function() {
+	$(".dropdown, .dropdown-content, #layoutsMenu").mouseenter(function() {
 		$('.dropdown-content').stop().slideDown();
 	});
 	
-	$('.dropdown, .dropdown-content').click(function() {
+	$('.dropdown, .dropdown-content, .LayoutNames').click(function() {
 		$('.dropdown-content').stop().slideUp();
+		$("#layoutsMenu").hide();
 	});
 	
 	$('.dropdown').mouseleave(function() {
 		$('.dropdown-content').stop().slideUp();
+		$("#layoutsMenu").hide();
 	});
     
     $(".closeButton").click(function(){
-    	console.log("close clicked");
     });
 	
 	$(".colorSelection").click(function(evt) {
 		$(this).stop().animate({
 			'width': '125px',
-			'height': '265px'
+			'height': '270px'
 		}, 200);
 		$("#colorTable").show();
 		$(".colorSwatch").each(function() {
 			$( this ).css('display', 'block');
 		});
 		$("#ExitButton2").show();
+		$(this).css("cursor", "auto");
 	});
     
 	$("#ExitButton2").click(function(evt) {
@@ -543,6 +651,7 @@ $(document).ready(function() {
 		$(".colorSwatch").each(function() {
 			$( this ).css('display', 'none');
 		});
+		$(".colorSelection").css("cursor", "pointer");
 	});
 	
 	$(".colorSwatch")
@@ -895,6 +1004,7 @@ function dragstart(ev) {
 	draggedElement = ev.target;
 	//console.log(ev.target);
 	//console.log(draggedElement);
+	//console.log(draggedElement.id);
 }
 
 
@@ -932,7 +1042,7 @@ function drop(ev, canvas = ev.target) {
 }
 
 //collapse canvas and create preview
-function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0]){
+function previewClothing(template, curLayout, previewCanvas = $("#clothingPreviewCanvas")[0]){
 	template = $(template);
 	var templateValue = template.parent().attr("value");
 	var backgroundImage = template.parent().find(".previewBackground")[0];
@@ -943,22 +1053,42 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
 	ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 	
 	var leftOffset, topOffset, width, height;
-
-	template.find(".wrapper").each(function(){
+	var leftOffsetRatio;
+	$(curLayout).find(".wrapper").each(function(){
+		leftOffsetRatio = $(this).position().left / template.width();
 
 		if(templateValue == 'Customized Scarf'){
-			leftOffset = $(this).position().left / $(this).parent().width() * 1.2;
-			topOffset = $(this).position().top / $(this).parent().height() * 1.2 - .25;
+			leftOffset = leftOffsetRatio * 1.2;
+			topOffset = $(this).position().top / template.height() * 1.2 - .25;
 			width = $(this).width();
 			height = $(this).height();
+			ctx.globalAlpha = .9;
 		}else if(templateValue == 'Customized Tie'){
-			leftOffset = $(this).position().left / $(this).parent().width() * .8 + .25;
-			topOffset = $(this).position().top / $(this).parent().height() * .8 + .2;
-			width = $(this).width() * .9 * previewCanvas.width / $(this).parent().width();
-			height = $(this).height() * .9 * previewCanvas.width / $(this).parent().width();
+			leftOffset = leftOffsetRatio * .8 + .25;
+			topOffset = $(this).position().top / template.height() * .8 + .2;
+			width = $(this).width() * .9 * previewCanvas.width / template.width();
+			height = $(this).height() * .9 * previewCanvas.width / template.width();
+			ctx.globalAlpha = .9;
+		}else if(templateValue == 'Customized Hat'){
+			leftOffset = leftOffsetRatio * 2 - .8;
+			topOffset = $(this).position().top / template.height() - .4;
+			width = $(this).width() * 2 * previewCanvas.width / template.width();
+			height = $(this).height() * 2 * previewCanvas.width / template.width();
+			ctx.globalAlpha = 0.8;
+		}else if(templateValue == 'Customized Leggings'){
+			if(leftOffsetRatio < .5){
+				leftOffset = leftOffsetRatio * 1 -.057;
+			} else{
+				leftOffset = leftOffsetRatio * 1 -.15;
+			}
+			
+			topOffset = $(this).position().top / template.height() * 1 + 0;
+			width = $(this).width() * 1 * previewCanvas.height / template.height();
+			height = $(this).height() * 1 * previewCanvas.height / template.height();
+			ctx.globalAlpha = .8;
 		}
+
     	if(getRotationDegrees($(this)) != 0){
-    		console.log("width" + width + " height" + height);
     		ctx.save();
     		ctx.translate(leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height());
     		ctx.translate(width / 2, height / 2);
@@ -970,6 +1100,7 @@ function previewClothing(template, previewCanvas = $("#clothingPreviewCanvas")[0
     		ctx.drawImage($(this).find("canvas")[0], leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height(), width, height);
     	}
 	});
+	ctx.globalAlpha = 1;
 	ctx.drawImage(backgroundImage, 0, 0, previewCanvas.width, previewCanvas.height);
 }
 
@@ -1025,6 +1156,11 @@ function fitSize(content, wrap = $(content).parent()){
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
+	
+	//If the target and source are the same canvas, do nothing
+	if(canvas.id == draggedElement.id) {
+		return;
+	}
 	$(canvas).parent().data("used", true);
 	fitSize(draggedElement, $(canvas).parent());
 	canvas.width = draggedElement.width;
@@ -1566,7 +1702,6 @@ function copyImageData() {
 // Copy the data before changing the colours 
 
 function copyColourData() {
-	console.log("hey");
 	originalImageInfo.data = document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
