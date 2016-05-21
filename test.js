@@ -659,7 +659,7 @@ $(document).ready(function() {
     	
     	// checks if there isn't already another element in the drop position
     	if(!$(ev.target).hasClass("clothESpot")){
-    		$(this).append(newElement);
+    		$(ev.target).append(newElement);
 
     		//sets position of new element	
     		var xPos = ev.pageX - $(ev.target).offset().left - newElement.width() / 2;
@@ -1025,7 +1025,7 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 			topOffset = $(this).position().top / template.height() * 1.2 - .25;
 			width = $(this).width();
 			height = $(this).height();
-			ctx.globalAlpha = .9;
+			ctx.globalAlpha = 1;
 		}else if(templateValue == 'Customized Tie'){
 			leftOffset = leftOffsetRatio * .8 + .25;
 			topOffset = $(this).position().top / template.height() * .8 + .2;
@@ -1037,7 +1037,7 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 			topOffset = $(this).position().top / template.height() - .4;
 			width = $(this).width() * 2 * previewCanvas.width / template.width();
 			height = $(this).height() * 2 * previewCanvas.width / template.width();
-			ctx.globalAlpha = 0.8;
+			ctx.globalAlpha = 0.9;
 		}else if(templateValue == 'Customized Leggings'){
 			if(leftOffsetRatio < .5){
 				leftOffset = leftOffsetRatio * 1 -.057;
@@ -1048,7 +1048,7 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 			topOffset = $(this).position().top / template.height() * 1 + 0;
 			width = $(this).width() * 1 * previewCanvas.height / template.height();
 			height = $(this).height() * 1 * previewCanvas.height / template.height();
-			ctx.globalAlpha = .8;
+			ctx.globalAlpha = .9;
 		}
 
     	if(getRotationDegrees($(this)) != 0){
