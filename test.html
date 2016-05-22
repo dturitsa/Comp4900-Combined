@@ -90,11 +90,11 @@
 				<div class="dropdown">
 					<button id="clothesButton" class="btnFocus templateHover"><p style="margin: 0px; display:inline;">Clothing</p>&#x25BC;</button>
 					<div id="myDropdown" class="dropdown-content" style="z-index: 5;">
-						<div class="buttonDiv" width="40px" height="40px" value="Shirts">
+						<!--<div class="buttonDiv" width="40px" height="40px" value="Shirts">
 							<button class="templateButtons" value="template1" style="margin-top:5px;">
 								<img src="img/T-Shirt-icon2.png" width="100%">
 							</button>
-						</div>
+						</div>-->
 						<div class="buttonDiv" width="40px" height="40px" value="Scarves">
 							<button class="templateButtons" value="template2">
 								<img src="img/Scarf-white.png" width="100%">
@@ -128,7 +128,7 @@
 				</div>
 				<div id="textEditing">
 					<!-- colorpicker element -->
-					<h2 id="templateTitle">Customized Shirt</h2>
+					<h2 id="templateTitle">Customized Scarf</h2>
 					<input type="text" id="signature" placeholder="Signature">
 					<select id="fontSelect">
 						<option value="Gochi Hand">Gochi Hand</option>
@@ -137,13 +137,14 @@
 					</select>
 
 					<div id="fontStyleButtons">
-  						<input type="checkbox" id="bCheck"><label for="bCheck">B</label>
-  						<input type="checkbox" id="iCheck"><label for="iCheck">I</label>
+  						<input type="checkbox" id="bCheck"><label for="bCheck" style="font-weight:bold;">B</label>
+  						<input type="checkbox" id="iCheck"><label for="iCheck" style="font-style:italic;">I</label>
 					</div>
 					
 				</div>
 				<div class="templates">
-					<div class="templateDiv" id="template1" value="Customized Shirt">
+					<button class="previewBut" style="margin-left: 10%;">Preview</button>
+					<!--<div class="templateDiv" id="template1" value="Customized Shirt">
 						<div class="templateBackground freeDropZone" id="template1Background">
 							<img src="img/tshirtDiagram.png" class="shirtOverlay" />
 							<div id="ShirtslayoutPreview">
@@ -168,14 +169,14 @@
 							<div class="layouts" id="Shirtslayout3">
 							</div>
 						</div>
-					</div>
+					</div>-->
 					
 					<div id="finalPreviewDiv" class="ui-dialog">
+						<p id="paragraph"></p>
 						<canvas id="clothingPreviewCanvas" width="100" height="100"></canvas>
 					</div>
 					
 					<div class="templateDiv" id="template2" value="Customized Scarf">
-						<button class="previewBut">Preview</button>
 						<img class="hiddenAssets previewBackground" src="img/scarf_preview.png"/>
 						<div class="templateBackground freeDropZone flipTop" id="template2Background">
 							<img src="img/scarf2_template_empty.png" class="shirtOverlay" />
@@ -196,6 +197,9 @@
 								</div>
 							</div>
 							<div class="layouts" id="Scarveslayout2">
+								<div class="draggable resizable wrapper" id="t2Ele4">
+									<canvas class="clothESpot dragDest multiPaste1"></canvas>	
+								</div>
 								<div class="draggable resizable wrapper" id="t2Ele3">
 									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
 								</div>
@@ -207,10 +211,8 @@
 							</div>
 						</div>
 					</div>
-
 					<div class="templateDiv" id="template3" value="Customized Tie">
-						<button class="previewBut">Preview</button>
-					<img class="hiddenAssets previewBackground" src="img/tie_preview.png"/>
+						<img class="hiddenAssets previewBackground" src="img/tie_preview.png"/>
 						<div class="templateBackground" id="template3Background">
 							<img src="img/Tie2_Template_Empty_Small2.png" class="shirtOverlay" />
 							<div id="TieslayoutPreview">
@@ -218,16 +220,20 @@
 							<div class="layouts" id="Tieslayout0">
 							</div>
 							<div class="layouts" id="Tieslayout1">
+								<div class="wrapper" id="t3Ele6">
+									<canvas class="clothESpot dragDest multiPaste5"></canvas>
+								</div>
+								<div class="wrapper" id="t3Ele3">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
+							</div>
+							<div class="layouts" id="Tieslayout2">
 								<div class="wrapper" id="t3Ele1">
 									<canvas class="clothESpot dragDest multiPaste1"></canvas>	
 								</div>
 		   
 								<div class="wrapper" id="t3Ele2">
 									<canvas class="clothESpot dragDest multiPaste2"></canvas>
-								</div>
-
-								<div class="wrapper" id="t3Ele3">
-									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
 								</div>
 
 								<div class="wrapper" id="t3Ele4">
@@ -237,11 +243,16 @@
 								<div class="wrapper" id="t3Ele5">
 									<canvas class="clothESpot dragDest multiPaste5"></canvas>
 								</div>
+								
+								<div class="wrapper" id="t3Ele3">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
+							</div>
+							<div class="layouts" id="Tieslayout3">
 							</div>
 						</div>
 					</div>
 					<div class="templateDiv" id="template4" value="Customized Hat">
-						<button class="previewBut">Preview</button>
 						<img class="hiddenAssets previewBackground" src="img/hat_preview.png"/>
 						<div class="templateBackground" id="template4Background">
 							<img src="img/Hat_Template_Empty2.png" class="shirtOverlay" />
@@ -250,6 +261,12 @@
 							<div class="layouts" id="Hatslayout0">
 							</div>
 							<div class="layouts" id="Hatslayout1">
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele9">
+									<canvas class="clothESpot dragDest multiPaste3"></canvas>	
+								</div>
+								<div class="draggable resizable t4ESpot wrapper" id="t4Ele8">
+									<canvas class="clothESpot dragDest signatureCanvas"></canvas>
+								</div>
 							</div>
 							<div class="layouts" id="Hatslayout2">
 								<div class="draggable resizable t4ESpot wrapper" id="t4Ele6">
@@ -295,7 +312,6 @@
 						</div>
 					</div>
 					<div class="templateDiv" id="template5" value="Customized Leggings">
-						<button class="previewBut">Preview</button>
 						<img class="hiddenAssets previewBackground" src="img/leggings_preview.png"/>
 						<div class="templateBackground freeDropZone" id="template5Background">
 							<img src="img/Leggings_Empty.png" class="shirtOverlay" />

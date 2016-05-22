@@ -16,11 +16,11 @@ var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
 var Selected;
-var shirtLayouts = ["Customize Yourself", "nothing", "nothing", "nothing"];
-var scarfLayouts = ["Customize Yourself", "One Image Both Sides", "One Image Across", "One Picture Repeated"];
-var tieLayouts = ["Customize Yourself", "One Large Image", "Few Medium Images", "Repeated Small Images"];
-var hatLayouts = ["Customize Yourself", "One Image Covering", "One Image Left Side", "Few Images Around Brim"];
-var leggingLayouts = ["Customize Yourself", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
+var shirtLayouts = ["Customize Your Own", "nothing", "nothing", "nothing"];
+var scarfLayouts = ["Customize Your Own", "One Image Both Sides", "One Image Across", "One Picture Repeated"];
+var tieLayouts = ["Customize Your Own", "One Large Image", "Few Medium Images", "Repeated Small Images"];
+var hatLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Side", "Few Images Around Brim"];
+var leggingLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
 
 // JQuery Style onload initialization function
 $(document).ready(function() {
@@ -528,7 +528,12 @@ $(document).ready(function() {
     $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
 		var layout;
-    	var ElementsDiv = $(this).parent().find(".templateBackground")[0];
+		var ElementsDiv;
+		$(this).siblings(".templateDiv").each(function() {
+			if ($(this).is(":visible")) {
+				ElementsDiv = $(this).children(".templateBackground");
+			}	
+		});
 		$(ElementsDiv).children(".layouts").each(function() {
 			if ($(this).is(":visible")) {
 				layout = this;
@@ -545,39 +550,28 @@ $(document).ready(function() {
     //switch between templates
     $('.templateButtons, .buttonDiv').click(function(evt){
 		evt.stopPropagation();
+		var currentTemplate;
+		var child;
 		if ($(this).attr('class') == 'buttonDiv') {
-			
-			var child = $(this).children()[0];
-			$( ".templateDiv" ).each(function() {
-				$(this).css('display', 'none');
-			});
-			var currentTemplate =  $(child).attr("value");
-			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
-			$('#' + currentTemplate ).css('display', 'block');
-			$(".clothESpot").each(function(){
-				fitSize(this);
-			});
-			if(tieMessage == true && currentTemplate == "template3"){
-				//alert("Tie's cannot have white!");
-				popup('popUpDiv');
-				tieMessage = !tieMessage;
-			}
+			child = $(this).children()[0];
+			currentTemplate =  $(child).attr("value");
 		} else {	
-			$( ".templateDiv" ).each(function() {
-				$( this ).css('display', 'none');
-			});
-			var currentTemplate =  $(this).attr("value");
-			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
-			$('#' + currentTemplate ).css('display', 'block');
-			$(".clothESpot").each(function(){
-				fitSize(this);
-			});
-			if(tieMessage == true && currentTemplate == "template3"){
-				//alert("Tie's cannot have white!");
-				popup('popUpDiv');
-				tieMessage = !tieMessage;
-			}
+			currentTemplate =  $(this).attr("value");
 		}
+		$( ".templateDiv" ).each(function() {
+			$(this).css('display', 'none');
+		});
+		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
+		$('#' + currentTemplate ).css('display', 'block');
+		$(".clothESpot").each(function(){
+			fitSize(this);
+		});
+		if(tieMessage == true && currentTemplate == "template3"){
+			//alert("Tie's cannot have white!");
+			popup('popUpDiv');
+			tieMessage = !tieMessage;
+		}
+		$(".dropdown-content").slideUp();
     });
 	// mouseOver listner for the Clothing drop down menu,
 	// displaying the drop down menu when hovered over
@@ -660,6 +654,7 @@ $(document).ready(function() {
 	$('.dropdown').mouseleave(function() {
 		$('.dropdown-content').stop().slideUp();
 	});
+	
 	// Listener for the color selection menu button,
 	// displays the list of selectable colors and
 	// adds a new listener that will hide the menu
@@ -902,11 +897,11 @@ $(window).resize(function() {
 			var size = $("#ElementDisplay").width();
 			$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
 		}
-		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
+		$("#rightSection").stop().css({width:(Size * rightPercent) - 50});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
 		$("#centerBeam").stop().css({left:(Size * leftPercent)});
 	} else {
-		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
+		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50},
 			{step: function() {
 					if (whichElement != null) {
 						var pos = $("#" + whichElement.id).offset();
@@ -1134,6 +1129,11 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 	template = $(template);
 	var templateValue = template.parent().attr("value");
 	var backgroundImage = template.parent().find(".previewBackground")[0];
+	if (backgroundImage == null) {
+		$("#paragraph").text("No Image Available");
+		return;
+	}
+	$("#paragraph").text("");
 	previewCanvas.width = backgroundImage.naturalWidth;
 	previewCanvas.height = backgroundImage.naturalHeight;
 	var ctx = previewCanvas.getContext("2d");
@@ -1250,7 +1250,7 @@ function drawCopiedImage(canvas, ev){
 	}
 	$(canvas).parent().data("used", true);
 	fitSize(draggedElement, $(canvas).parent());
-	canvas.width = draggedElement.width;
+	canvas.fitSizewidth = draggedElement.width;
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	if($(canvas).hasClass("tieClass")) {
@@ -1407,6 +1407,7 @@ function editMouseDown(e) {
 // listener for the mousecMove event, gets the current mouse position
 // within the main canvas
 function onMouseMove(e) {
+	e.preventDefault();
     if (allowDraw) {
 		if(erasing) {
 			ctx = imageInfo.context;
