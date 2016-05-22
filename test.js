@@ -16,12 +16,11 @@ var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
 var Selected;
-var oldLayout;
-var shirtLayouts = ["Customize Yourself", "nothing", "nothing", "nothing"];
-var scarfLayouts = ["Customize Yourself", "One Image Both Sides", "One Image Across", "One Picture Repeated"];
-var tieLayouts = ["Customize Yourself", "One Large Image", "Few Medium Images", "Repeated Small Images"];
-var hatLayouts = ["Customize Yourself", "One Image Covering", "One Image Left Side", "Few Images Around Brim"];
-var leggingLayouts = ["Customize Yourself", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
+var shirtLayouts = ["Customize Your Own", "nothing", "nothing", "nothing"];
+var scarfLayouts = ["Customize Your Own", "One Image Both Sides", "One Image Across", "One Picture Repeated"];
+var tieLayouts = ["Customize Your Own", "One Large Image", "Few Medium Images", "Repeated Small Images"];
+var hatLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Side", "Few Images Around Brim"];
+var leggingLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -492,7 +491,12 @@ $(document).ready(function() {
     $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
 		var layout;
-    	var ElementsDiv = $(this).parent().find(".templateBackground")[0];
+		var ElementsDiv;
+		$(this).siblings(".templateDiv").each(function() {
+			if ($(this).is(":visible")) {
+				ElementsDiv = $(this).children(".templateBackground");
+			}	
+		});
 		$(ElementsDiv).children(".layouts").each(function() {
 			if ($(this).is(":visible")) {
 				layout = this;
@@ -1080,6 +1084,11 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 	template = $(template);
 	var templateValue = template.parent().attr("value");
 	var backgroundImage = template.parent().find(".previewBackground")[0];
+	if (backgroundImage == null) {
+		$("#paragraph").text("No Image Available");
+		return;
+	}
+	$("#paragraph").text("");
 	previewCanvas.width = backgroundImage.naturalWidth;
 	previewCanvas.height = backgroundImage.naturalHeight;
 	var ctx = previewCanvas.getContext("2d");
@@ -1197,7 +1206,7 @@ function drawCopiedImage(canvas, ev){
 	}
 	$(canvas).parent().data("used", true);
 	fitSize(draggedElement, $(canvas).parent());
-	canvas.width = draggedElement.width;
+	canvas.fitSizewidth = draggedElement.width;
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	if($(canvas).hasClass("tieClass")) {
@@ -1379,6 +1388,7 @@ function editMouseDown(e) {
 }
 // listener for the mousecMove event, gets the current mouse position
 function onMouseMove(e) {
+	e.preventDefault();
     if (allowDraw) {
 		if(erasing) {
 			//ctx = document.getElementById("uploadedImage").getContext("2d");
