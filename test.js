@@ -493,7 +493,7 @@ $(document).ready(function() {
   		stop: function( event, ui ) {
    		$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
    		$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
-  		},
+  		}
   		
 	});
 
