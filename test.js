@@ -16,6 +16,7 @@ var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
 var Selected;
+var oldLayout;
 var shirtLayouts = ["Customize Yourself", "nothing", "nothing", "nothing"];
 var scarfLayouts = ["Customize Yourself", "One Image Both Sides", "One Image Across", "One Picture Repeated"];
 var tieLayouts = ["Customize Yourself", "One Large Image", "Few Medium Images", "Repeated Small Images"];
@@ -459,39 +460,28 @@ $(document).ready(function() {
     //switch between templates
     $('.templateButtons, .buttonDiv').click(function(evt){
 		evt.stopPropagation();
+		var currentTemplate;
+		var child;
 		if ($(this).attr('class') == 'buttonDiv') {
-			
-			var child = $(this).children()[0];
-			$( ".templateDiv" ).each(function() {
-				$(this).css('display', 'none');
-			});
-			var currentTemplate =  $(child).attr("value");
-			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
-			$('#' + currentTemplate ).css('display', 'block');
-			$(".clothESpot").each(function(){
-				fitSize(this);
-			});
-			if(tieMessage == true && currentTemplate == "template3"){
-				//alert("Tie's cannot have white!");
-				popup('popUpDiv');
-				tieMessage = !tieMessage;
-			}
+			child = $(this).children()[0];
+			currentTemplate =  $(child).attr("value");
 		} else {	
-			$( ".templateDiv" ).each(function() {
-				$( this ).css('display', 'none');
-			});
-			var currentTemplate =  $(this).attr("value");
-			$("#templateTitle").text($("#" + currentTemplate).attr("value"));
-			$('#' + currentTemplate ).css('display', 'block');
-			$(".clothESpot").each(function(){
-				fitSize(this);
-			});
-			if(tieMessage == true && currentTemplate == "template3"){
-				//alert("Tie's cannot have white!");
-				popup('popUpDiv');
-				tieMessage = !tieMessage;
-			}
+			currentTemplate =  $(this).attr("value");
 		}
+		$( ".templateDiv" ).each(function() {
+			$(this).css('display', 'none');
+		});
+		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
+		$('#' + currentTemplate ).css('display', 'block');
+		$(".clothESpot").each(function(){
+			fitSize(this);
+		});
+		if(tieMessage == true && currentTemplate == "template3"){
+			//alert("Tie's cannot have white!");
+			popup('popUpDiv');
+			tieMessage = !tieMessage;
+		}
+		$(".dropdown-content").slideUp();
     });
 	
 	$(".buttonDiv").mouseenter(function() {
@@ -562,9 +552,6 @@ $(document).ready(function() {
 	$('.dropdown').mouseleave(function() {
 		$('.dropdown-content').stop().slideUp();
 	});
-    
-    $(".closeButton").click(function(){
-    });
 	
 	$(".colorSelection").click(function(evt) {
 		$(this).stop().animate({
@@ -800,11 +787,11 @@ $(window).resize(function() {
 			var size = $("#ElementDisplay").width();
 			$("#ElementDisplay").stop().css({left: pos.left - size, top: pos.top});
 		}
-		$("#rightSection").stop().css({width:(Size * rightPercent) - 50.5});
+		$("#rightSection").stop().css({width:(Size * rightPercent) - 50});
 		$("#leftSection").stop().css({width:(Size * leftPercent) - 50});
 		$("#centerBeam").stop().css({left:(Size * leftPercent)});
 	} else {
-		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50.5},
+		$("#rightSection").stop().animate({width:(Size * rightPercent) - 50},
 			{step: function() {
 					if (whichElement != null) {
 						var pos = $("#" + whichElement.id).offset();
