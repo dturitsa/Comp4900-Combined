@@ -388,6 +388,7 @@ $(document).ready(function() {
 	$(".dragDest").each(function() {
 		this.ondrop = drop;
 		this.ondragover = allowDrop;
+		
 	});
 
 	$(".freeDropZone").each(function() {
@@ -1030,6 +1031,12 @@ function drop(ev, canvas = ev.target) {
 			break;
 	}
 	drawCopiedImage(canvas, ev); 
+
+	if($(canvas).hasClass('tileDropCanvas')){
+		//console.log("tiles be dropping yo");
+			tileImage(draggedElement, $(".tileCanvas")[0]);
+		}
+
 	//loops through multipaste elements and draws image on all of them
 	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5", "signatureCanvas"];
 	for (var i = 0; i < multiPasteClasses.length; i++) {
@@ -1061,8 +1068,8 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 		if(templateValue == 'Customized Scarf'){
 			leftOffset = leftOffsetRatio * 1.2;
 			topOffset = $(this).position().top / template.height() * 1.2 - .25;
-			width = $(this).width();
-			height = $(this).height();
+			width = $(this).width() * 1.1 * previewCanvas.width / template.width();
+			height = $(this).height() * 1.1 * previewCanvas.width / template.width();
 			ctx.globalAlpha = 1;
 		}else if(templateValue == 'Customized Tie'){
 			leftOffset = leftOffsetRatio * .8 + .25;
@@ -1154,6 +1161,25 @@ function fitSize(content, wrap = $(content).parent()){
  	$(wrap).css('background', 'transparent');
 }
 
+//draw tiled image
+function tileImage(sourceImage, destCanvas){
+	var tempCanvas = document.createElement("canvas");
+	tempCanvas.width = 100;
+	tempCanvas.height = 100;
+	destCanvas.width = 1000; //width of tiled canvas
+	destCanvas.height = ($(destCanvas).parent().height() / $(destCanvas).parent().width()) * destCanvas.width
+	console.log(destCanvas.width, destCanvas.height);
+
+    tCtx = tempCanvas.getContext("2d");
+    tCtx.drawImage(sourceImage, 0 , 0, tempCanvas.width, tempCanvas.height)
+
+	var ctx=destCanvas.getContext("2d");
+	var pat=ctx.createPattern(tempCanvas,"repeat");
+	ctx.rect(0,0,destCanvas.width, destCanvas.height);
+	ctx.fillStyle=pat;
+	ctx.fill();
+}
+
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
@@ -1168,12 +1194,8 @@ function drawCopiedImage(canvas, ev){
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	if($(canvas).hasClass("tieClass")) {
-		//console.log("Tie Class found");
-		//console.log(draggedElement);
 		var tmp = draggedElement.getContext('2d');
-		//console.log(tmp);
 		var data = tmp.getImageData(0,0,draggedElement.width,draggedElement.height);
-		//console.log(data.data)
 		var image = {
 	        data: data.data,
 	        width: draggedElement.width,
