@@ -274,11 +274,15 @@
 	box-shadow: 2px 1px 8px black;
 }
 
-.dropdown {
+.dropdown, .dropdown2 {
 	position:relative;
 	display: inline-block;
 	z-index: 5;
 	float: right;
+}
+
+.dropdown2 {
+	left: -150px;
 }
 
 .buttonDiv {
@@ -429,13 +433,13 @@
 	top: 11px;	
 }
 
-.dynamicElement{
+.dynamicElement {
 	width: 20%;
 	height: 20%;
 }
 
 
-#finalPreviewDiv{
+#finalPreviewDiv {
 	display: none;
 }
 .templates {
@@ -500,10 +504,9 @@ td {
 
 #layoutsMenu {
 	position: absolute;
-	display: none;
-	box-shadow: 2px 1px 8px black;
 	color:white;
-	z-index: 5;
+	z-index: 1;
+	box-shadow: 2px 1px 8px black;
 }
 
 .LayoutNames, #layoutTitle {
@@ -516,12 +519,19 @@ td {
 	padding-left: 7px;
 	padding-top: 10px;
 	font-size: 12px;
+	display: none;
+}
+
+#ShirtslayoutPreview, #ScarveslayoutPreview,
+ #TieslayoutPreview, #HatslayoutPreview, #LeggingslayoutPreview {
+	display: block;
 }
 
 #layoutTitle {
 	font-weight:bold;
 	font-size: 15px;
-	border-top: 1px solid black;
+	z-index: 1;
+	display: block;
 }
 
 .LayoutNames:nth-child(even) {
@@ -533,12 +543,12 @@ td {
 }
 
 .layouts {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 	width: 100%;
 	height: 100%;
-}
 
-#shirtLayout2 {
-	display: none;
 }
 
 #t1Ele1{
