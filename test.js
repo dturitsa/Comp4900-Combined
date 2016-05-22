@@ -327,13 +327,16 @@ $(document).ready(function() {
 		$('#thresSlider4').css({display: 'none'});
 		$('#thresSlider3').css({display: 'none'});
 		$('#eraseSlider').css({display: 'inline'});
-		$('#wand').css({"backgroundColor":"black"});
-		$('#color').css({"backgroundColor":"black"});
-		$('#colorElim').css({"backgroundColor":"black"});
-		$(this).css({"backgroundColor":"#444444"});
+		$('#wand').css({"backgroundColor":"black","bottom": "0px"});
+		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$('#colorElim').css({"backgroundColor":"black","bottom": "0px"});
+		$(this).css({"backgroundColor":"#444444", "bottom": "0px"});
 		$('#editRedSlider').css({display: 'none'});
 		$('#editGreenSlider').css({display: 'none'});
 		$('#editBlueSlider').css({display: 'none'});
+		$('#editRedLabel').css({display: 'none'});
+		$('#editGreenLabel').css({display: 'none'});
+		$('#editBlueLabel').css({display: 'none'});
 	});
 
 	$('#color').click(function() {
@@ -347,13 +350,20 @@ $(document).ready(function() {
 		$('#thresSlider4').css({display: 'none'});
 		$('#thresSlider3').css({display: 'none'});
 		$('#eraseSlider').css({display: 'none'});
-		$('#wand').css({"backgroundColor":"black"});
-		$('#colorElim').css({"backgroundColor":"black"});
-		$('#erase').css({"backgroundColor":"black"});
-		$(this).css({"backgroundColor":"#444444"});
+		$('#wand').css({"backgroundColor":"black", "position":"relative",
+	"bottom": "14px"});
+		$('#colorElim').css({"backgroundColor":"black", "position":"relative",
+	"bottom": "14px"});
+		$('#erase').css({"backgroundColor":"black", "position":"relative",
+	"bottom": "14px"});
+		$(this).css({"backgroundColor":"#444444", "position":"relative",
+	"bottom": "14px"});
 		$('#editRedSlider').css({display: 'inline'});
 		$('#editGreenSlider').css({display: 'inline'});
 		$('#editBlueSlider').css({display: 'inline'});
+		$('#editRedLabel').css({display: ''});
+		$('#editGreenLabel').css({display: ''});
+		$('#editBlueLabel').css({display: ''});
 	});
 
 	$('#wand').click(function() {
@@ -365,15 +375,18 @@ $(document).ready(function() {
 		$('#editCrop').css({display: ''});
 		$('#thresSlider4').css({display: 'none'});
 		$('#editCrop2').css({display: 'none'});
-		$('#erase').css({"backgroundColor":"black"});
-		$('#colorElim').css({"backgroundColor":"black"});
-		$('#color').css({"backgroundColor":"black"});
-		$(this).css({"backgroundColor":"#444444"});
+		$('#erase').css({"backgroundColor":"black","bottom": "0px"});
+		$('#colorElim').css({"backgroundColor":"black","bottom": "0px"});
+		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$(this).css({"backgroundColor":"#444444","bottom": "0px"});
 		$('#thresSlider3').css({display: 'inline'});
 		$('#eraseSlider').css({display: 'none'});
 		$('#editRedSlider').css({display: 'none'});
 		$('#editGreenSlider').css({display: 'none'});
 		$('#editBlueSlider').css({display: 'none'});
+		$('#editRedLabel').css({display: 'none'});
+		$('#editGreenLabel').css({display: 'none'});
+		$('#editBlueLabel').css({display: 'none'});
 	});
 
 	$('#colorElim').click(function() {
@@ -385,15 +398,18 @@ $(document).ready(function() {
 		$('#editCrop2').css({display: ''});
 		$('#thresSlider3').css({display: 'none'});
 		$('#editCrop').css({display: 'none'});
-		$('#wand').css({"backgroundColor":"black"});
-		$('#erase').css({"backgroundColor":"black"});
-		$('#color').css({"backgroundColor":"black"});
-		$(this).css({"backgroundColor":"#444444"});
+		$('#wand').css({"backgroundColor":"black","bottom": "0px"});
+		$('#erase').css({"backgroundColor":"black","bottom": "0px"});
+		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$(this).css({"backgroundColor":"#444444","bottom": "0px"});
 		$('#thresSlider4').css({display: 'inline'});
 		$('#eraseSlider').css({display: 'none'});
 		$('#editRedSlider').css({display: 'none'});
 		$('#editGreenSlider').css({display: 'none'});
 		$('#editBlueSlider').css({display: 'none'});
+		$('#editRedLabel').css({display: 'none'});
+		$('#editGreenLabel').css({display: 'none'});
+		$('#editBlueLabel').css({display: 'none'});
 	});
 
 	$('#editCrop').click(function() {
@@ -946,6 +962,11 @@ function ShowEditCanvas(element) {
     EditInfo.data = ctx.getImageData(0, 0, EditInfo.width, EditInfo.height);
     mask2 = null;
     setInterval(function() { editTick(); }, 300);
+    var red = document.getElementById("editRedSlider");
+	var green = document.getElementById("editGreenSlider");
+	var blue = document.getElementById("editBlueSlider");
+	
+	red.value = blue.value = green.value = 0; 
     //console.log(EditInfo);
 }
 
@@ -970,12 +991,7 @@ function preview(img2, selection) {
 				selection.width,
 				selection.height
 				);   
-	}
-	var red = document.getElementById("editRedSlider");
-		var green = document.getElementById("editGreenSlider");
-		var blue = document.getElementById("editBlueSlider");
-		
-		red.value = blue.value = green.value = 0;         
+	}        
 }
 
 //uploading image function
@@ -1787,7 +1803,9 @@ function colorChange() {
 			negGreen = false;
 			negBlue = false;
 			imageInfo.data.data[i + 3] = alpha; // not changing the transparency
+			//console.log("working");
 		}
+		//console.log("done");
 	}
 };
 
@@ -1797,7 +1815,7 @@ function colorChange2() {
 		//copyColourData();
 		//copyImageData();
 		
-		console.log("change color");
+		//console.log("change color");
 		var red = null;
 		var green = null;
 		var blue = null;
@@ -1878,12 +1896,9 @@ function colorChange2() {
 			negGreen = false;
 			negBlue = false;
 			EditInfo.data.data[i + 3] = alpha; // not changing the transparency
+			//console.log("working");
 		}
-		//console.log(imagedata.data[0], imagedata.data[1], imagedata.data[2]);
-		//ctx.clearRect(0, 0, w, h);
-		//console.log(cnv.getContext('2d').getImageData(0, 0, w, h).data);
-		//ctx.putImageData(imagedata, 0, 0, 0, 0, w, h);
-		//console.log(ctx.getImageData(0, 0, w, h).data);
+		//console.log("done");
 	}
 };
 
