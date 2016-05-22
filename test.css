@@ -349,6 +349,13 @@
 	max-width: 500px;
 }
 
+.previewBut {
+	margin: auto;
+	display:block;
+	position:relative;
+	
+}
+
 .shirtOverlay { 
 	position:relative;
 	z-index: 2;
@@ -717,7 +724,10 @@ td {
 	left: 3%;
 	width: 93.9%;
 	height: 83.5%;
-	
+	max-width:93.9%;
+	min-width:93.9%;
+	max-height:83.5%;
+	min-height:83.5%;
 }
 
 #t5Ele1 {
