@@ -336,9 +336,43 @@ $(document).ready(function() {
 		$('#thresSlider4').css({display: 'none'});
 		$('#thresSlider3').css({display: 'none'});
 		$('#eraseSlider').css({display: 'inline'});
-		$('#wand').css({"backgroundColor":"black"});
-		$('#colorElim').css({"backgroundColor":"black"});
-		$(this).css({"backgroundColor":"#444444"});
+		$('#wand').css({"backgroundColor":"black","bottom": "0px"});
+		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$('#colorElim').css({"backgroundColor":"black","bottom": "0px"});
+		$(this).css({"backgroundColor":"#444444", "bottom": "0px"});
+		$('#editRedSlider').css({display: 'none'});
+		$('#editGreenSlider').css({display: 'none'});
+		$('#editBlueSlider').css({display: 'none'});
+		$('#editRedLabel').css({display: 'none'});
+		$('#editGreenLabel').css({display: 'none'});
+		$('#editBlueLabel').css({display: 'none'});
+	});
+
+	$('#color').click(function() {
+		colourFlag = true;
+		colorElimFlag = false;
+		wandFlag = false;
+		erasing = false;
+		erasing2 = false;
+		$('#editCrop').css({display: 'none'});
+		$('#editCrop2').css({display: 'none'});
+		$('#thresSlider4').css({display: 'none'});
+		$('#thresSlider3').css({display: 'none'});
+		$('#eraseSlider').css({display: 'none'});
+		$('#wand').css({"backgroundColor":"black", "position":"relative",
+	"bottom": "14px"});
+		$('#colorElim').css({"backgroundColor":"black", "position":"relative",
+	"bottom": "14px"});
+		$('#erase').css({"backgroundColor":"black", "position":"relative",
+	"bottom": "14px"});
+		$(this).css({"backgroundColor":"#444444", "position":"relative",
+	"bottom": "14px"});
+		$('#editRedSlider').css({display: 'inline'});
+		$('#editGreenSlider').css({display: 'inline'});
+		$('#editBlueSlider').css({display: 'inline'});
+		$('#editRedLabel').css({display: ''});
+		$('#editGreenLabel').css({display: ''});
+		$('#editBlueLabel').css({display: ''});
 	});
 
 	$('#wand').click(function() {
@@ -350,11 +384,18 @@ $(document).ready(function() {
 		$('#editCrop').css({display: ''});
 		$('#thresSlider4').css({display: 'none'});
 		$('#editCrop2').css({display: 'none'});
-		$('#erase').css({"backgroundColor":"black"});
-		$('#colorElim').css({"backgroundColor":"black"});
-		$(this).css({"backgroundColor":"#444444"});
+		$('#erase').css({"backgroundColor":"black","bottom": "0px"});
+		$('#colorElim').css({"backgroundColor":"black","bottom": "0px"});
+		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$(this).css({"backgroundColor":"#444444","bottom": "0px"});
 		$('#thresSlider3').css({display: 'inline'});
 		$('#eraseSlider').css({display: 'none'});
+		$('#editRedSlider').css({display: 'none'});
+		$('#editGreenSlider').css({display: 'none'});
+		$('#editBlueSlider').css({display: 'none'});
+		$('#editRedLabel').css({display: 'none'});
+		$('#editGreenLabel').css({display: 'none'});
+		$('#editBlueLabel').css({display: 'none'});
 	});
 
 	$('#colorElim').click(function() {
@@ -366,11 +407,18 @@ $(document).ready(function() {
 		$('#editCrop2').css({display: ''});
 		$('#thresSlider3').css({display: 'none'});
 		$('#editCrop').css({display: 'none'});
-		$('#wand').css({"backgroundColor":"black"});
-		$('#erase').css({"backgroundColor":"black"});
-		$(this).css({"backgroundColor":"#444444"});
+		$('#wand').css({"backgroundColor":"black","bottom": "0px"});
+		$('#erase').css({"backgroundColor":"black","bottom": "0px"});
+		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$(this).css({"backgroundColor":"#444444","bottom": "0px"});
 		$('#thresSlider4').css({display: 'inline'});
 		$('#eraseSlider').css({display: 'none'});
+		$('#editRedSlider').css({display: 'none'});
+		$('#editGreenSlider').css({display: 'none'});
+		$('#editBlueSlider').css({display: 'none'});
+		$('#editRedLabel').css({display: 'none'});
+		$('#editGreenLabel').css({display: 'none'});
+		$('#editBlueLabel').css({display: 'none'});
 	});
 
 	$('#editCrop').click(function() {
@@ -926,8 +974,8 @@ function ShowEditCanvas(element) {
 	canvas.width = width;
 	canvas.height = height;
 	var elmWidth = width, elmHeight = height;
-	if(elmWidth != 300) {
-		elmWidth = 300;
+	if(elmWidth != 400) {
+		elmWidth = 400;
 	} 
 	if(elmHeight > 300) {
 		elmHeight = 300;
@@ -953,6 +1001,11 @@ function ShowEditCanvas(element) {
     EditInfo.data = ctx.getImageData(0, 0, EditInfo.width, EditInfo.height);
     mask2 = null;
     setInterval(function() { editTick(); }, 300);
+    var red = document.getElementById("editRedSlider");
+	var green = document.getElementById("editGreenSlider");
+	var blue = document.getElementById("editBlueSlider");
+	
+	red.value = blue.value = green.value = 0; 
     //console.log(EditInfo);
 }
 
@@ -977,7 +1030,7 @@ function preview(img2, selection) {
 				selection.width,
 				selection.height
 				);   
-	}         
+	}        
 }
 
 //uploading image function
@@ -1031,11 +1084,6 @@ function drop(ev, canvas = ev.target) {
 			break;
 	}
 	drawCopiedImage(canvas, ev); 
-
-	if($(canvas).hasClass('tileDropCanvas')){
-		//console.log("tiles be dropping yo");
-			tileImage(draggedElement, $(".tileCanvas")[0]);
-		}
 
 	//loops through multipaste elements and draws image on all of them
 	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5", "signatureCanvas"];
@@ -1163,11 +1211,12 @@ function fitSize(content, wrap = $(content).parent()){
 
 //draw tiled image
 function tileImage(sourceImage, destCanvas){
+	$(destCanvas).parent().data("used", true);
 	var tempCanvas = document.createElement("canvas");
-	tempCanvas.width = 100;
-	tempCanvas.height = 100;
+	tempCanvas.width = 100; //width off pattern element
+	tempCanvas.height = ($(sourceImage).height() / $(sourceImage).width()) * tempCanvas.width;
 	destCanvas.width = 1000; //width of tiled canvas
-	destCanvas.height = ($(destCanvas).parent().height() / $(destCanvas).parent().width()) * destCanvas.width
+	destCanvas.height = ($(destCanvas).parent().height() / $(destCanvas).parent().width()) * destCanvas.width;
 	console.log(destCanvas.width, destCanvas.height);
 
     tCtx = tempCanvas.getContext("2d");
@@ -1189,6 +1238,12 @@ function drawCopiedImage(canvas, ev){
 		return;
 	}
 	$(canvas).parent().data("used", true);
+
+	if($(canvas).hasClass('tileDropCanvas')){
+		//console.log("tiles be dropping yo");
+		tileImage(draggedElement, $(".tileCanvas")[0]);
+	}
+
 	fitSize(draggedElement, $(canvas).parent());
 	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
@@ -1350,7 +1405,7 @@ function editMouseDown(e) {
 		radius = document.getElementById("eraseSlider").value;;
 		ctx.beginPath();
 			ctx.globalCompositeOperation = "destination-out";
-			ctx.fillStyle = "red";
+			//ctx.fillStyle = "red";
 			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
 			ctx.fill();
 			ctx.globalCompositeOperation = "source-atop";
@@ -1810,7 +1865,102 @@ function colorChange() {
 			negGreen = false;
 			negBlue = false;
 			imageInfo.data.data[i + 3] = alpha; // not changing the transparency
+			//console.log("working");
 		}
+		//console.log("done");
+	}
+};
+
+function colorChange2() {
+	if(colourFlag) {
+	
+		//copyColourData();
+		//copyImageData();
+		
+		//console.log("change color");
+		var red = null;
+		var green = null;
+		var blue = null;
+		var alpha = null;
+		var redChange = null;
+		var greenChange = null;
+		var blueChange = null;
+		var negRed = false;
+		var negBlue = false;
+		var negGreen = false;
+		
+		/*var cnv = document.getElementById("ElementCanvas");
+		console.log(cnv);
+		var ctx = cnv.getContext('2d');
+		var h = cnv.height, w = cnv.width;
+		var imagedata = ctx.getImageData(0, 0, w, h);
+		
+		console.log(h, w);
+		console.log(imagedata);*/
+		//console.log(imagedata.data.length);
+		for(var i = 0; i < EditInfo.data.data.length; i += 4)
+		{
+			red = EditInfo.data.data[i]>>>0;
+			green = EditInfo.data.data[i + 1]>>>0;
+			blue = EditInfo.data.data[i + 2]>>>0;
+			alpha = EditInfo.data.data[i + 3];
+			
+			if(document.getElementById("editRedSlider").value < 0) {
+				negRed = true;
+				//console.log("negRed");
+				redChange = (document.getElementById("editRedSlider").value * -1)>>>0;
+			} else {
+				redChange = document.getElementById("editRedSlider").value>>>0;
+			}
+			if(document.getElementById("editGreenSlider").value < 0) {
+				negGreen = true;
+				greenChange = (document.getElementById("editGreenSlider").value * -1)>>>0;
+			} else {
+				greenChange = document.getElementById("editGreenSlider").value>>>0;
+			}
+			if(document.getElementById("editBlueSlider").value < 0) {
+				negBlue = true;
+				blueChange = (document.getElementById("editBlueSlider").value * -1)>>>0;
+			} else {
+				blueChange = document.getElementById("editBlueSlider").value>>>0;
+			}
+			
+			if(negRed){
+				EditInfo.data.data[i] = red - redChange;
+			} else if(red + redChange > 255) {
+				EditInfo.data.data[i] = 255>>>0;
+			} else if(red - redChange < 0) {
+				EditInfo.data.data[i] = 0>>>0;
+			} else {
+				EditInfo.data.data[i] += redChange>>>0;
+			}
+			
+			if(negGreen){
+				EditInfo.data.data[i + 1] -= greenChange;
+			} else if(green + greenChange > 255) {
+				EditInfo.data.data[i + 1] = 255>>>0;
+			} else if(green - greenChange < 0) {
+				EditInfo.data.data[i + 1] = 0>>>0;			
+			} else {
+				EditInfo.data.data[i + 1] += greenChange>>>0;
+			}
+			
+			if(negBlue){
+				EditInfo.data.data[i + 2] -= blueChange;
+			} else if(blue + blueChange > 255) {
+				EditInfo.data.data[i + 2] = 255>>>0;
+			} else if(blue - blueChange < 0) {
+				EditInfo.data.data[i + 2] = 0>>>0;			
+			} else {
+				EditInfo.data.data[i + 2] += blueChange>>>0;
+			}
+			negRed = false;
+			negGreen = false;
+			negBlue = false;
+			EditInfo.data.data[i + 3] = alpha; // not changing the transparency
+			//console.log("working");
+		}
+		//console.log("done");
 	}
 };
 
