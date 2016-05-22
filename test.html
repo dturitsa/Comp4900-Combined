@@ -75,6 +75,13 @@
 					<button id="colorElim" type="button" class="btn btn-default"><img src="img/ColorSelection-icon.png" height="50px" width="50px"></button>
 					<input id="thresSlider4" type="range" min="1" max="100" value="50" style="display: none; width: 100px;"/>
 					<button id="editCrop2" style="display: none;" type="button" class="btn btn-default"><img src="img/cut-icon.png" height="50px" width="50px"></button>
+					<button id="color" type="button" class="btn btn-default elmBtn"><img src="img/colour.png" height="50px" width="50px"></button>
+					<label for="editRedSlider" id="editRedLabel" style="display: none; color:white;">R</label>
+					<input id="editRedSlider" class="colorSlider2" orient="vertical" type="range"  value="0" min="-100" max="100" style="display: none;" width="50px" onchange="colorChange2()"/>
+					<label for="editGreenSlider" id="editGreenLabel" style="display: none; color:white;">G</label>
+					<input id="editGreenSlider" class="colorSlider2" orient="vertical" type="range" value="0" min="-100" max="100" style="display: none;" width="50px" onchange="colorChange2()"/>
+					<label for="editBlueSlider" id="editBlueLabel" style="display: none; color:white;">B</label>
+					<input id="editBlueSlider" class="colorSlider2" orient="vertical" type="range" value="0" min="-100" max="100" style="display: none;" width="50px" onchange="colorChange2()"/>
 					<button id="ExitButton" type="button" class="btn btn-default btn-sm">X</button>
 				</div>
 			</div>
