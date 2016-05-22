@@ -493,8 +493,8 @@ $(document).ready(function() {
   		stop: function( event, ui ) {
    		$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
    		$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
-  		},
-  		
+  		}
+  		// THIS IS A TEST OF DENIS'S FAIL GIT
 	});
 
    //makes element draggable in the template div (uses % instead of px to scale when template is resized)
