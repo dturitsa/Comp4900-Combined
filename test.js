@@ -1,17 +1,17 @@
-var toolFlag = false;
-var wandFlag = false;
-var colorElimFlag = false;
-var colourFlag = false;
-var tieMessage = true;
+var toolFlag = false; // Crop tools flag for main canvas
+var wandFlag = false; // Magic wand tools flag for main canvas
+var colorElimFlag = false; // Color selection flag for main canvas
+var colourFlag = false; // RGB maniplation flag for main canvas
+var tieMessage = true; // Flag that enbales the Reqiurments for the tie template
 var leftPercent = 0.5;
 var rightPercent = 0.5;
 var dragOrclick = true;
-var draggedElement;
+var draggedElement; // global that holds the element that is being draggedd
 var allowDraw;
 var font;
 var brightness = 0;
-var erasing = false;
-var erasing2 = false;
+var erasing = false; // Flag that allows erasing on the main canvas
+var erasing2 = false; // Flag that allows erasing on the Edit popup window canvas
 var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
@@ -21,6 +21,8 @@ var scarfLayouts = ["Customize Your Own", "One Image Both Sides", "One Image Acr
 var tieLayouts = ["Customize Your Own", "One Large Image", "Few Medium Images", "Repeated Small Images"];
 var hatLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Side", "Few Images Around Brim"];
 var leggingLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
+
+// JQuery Style onload initialization function
 $(document).ready(function() {
 	var item = 0;
 	var item2 = 0;
@@ -30,6 +32,7 @@ $(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip();   
 	
 	var value;
+	// Fills layouts of shown template
 	$(".templateBackground").each(function() {
 		if ($(this).is(":visible")) {
 			var str = $(this).parent().attr("value");
@@ -38,6 +41,8 @@ $(document).ready(function() {
 	});
 	makeLabels(value);
 	
+	// Listener for the button that expands the left side of the
+	// document and shrinks the right side
 	$("#leftButton").click(function() {
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		if (item == 0) {
@@ -51,6 +56,8 @@ $(document).ready(function() {
 		$(window).trigger('resize');
 	});
 	
+	// Listener for the button that expand the right side of the
+	// document and shrinks the left side
 	$("#rightButton").click(function() {
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		if (item2 == 0) {
@@ -64,6 +71,7 @@ $(document).ready(function() {
 		$(window).trigger('resize');
 	});
 	
+	// Listener for the button on the Edit popup that closes the Edit popup
 	$("#ExitButton").click(function() {
 		var tmp = document.getElementById('ElementCanvas');
 		var ctx = OrigCanvas.getContext('2d');
@@ -73,6 +81,7 @@ $(document).ready(function() {
 		whichElement = null;
 	});
 	
+	// Listener for toolbar button for the main canvas, show the toolbar when clicked
 	$("#toolButton").click(function() {
 		toolFlag = true;
 		$(this).fadeOut();
@@ -86,6 +95,7 @@ $(document).ready(function() {
 		});
 	});
 	
+	// Listener for the hide button on the toolbar for the main canvas
 	$("#hideToolButton").click(function() {
 		toolFlag = false;
 		$('#tool2, #tool1, #tool4').css({"backgroundColor":"black"});
@@ -100,12 +110,15 @@ $(document).ready(function() {
 		
 	});
 	
+	// hover listener for the element boxes in the center column
 	$(".Elements").hover(function() {
 			$(this.id).css({borderColor:"#0000ff"});
 		}, function() {
 			$(this.id).css({borderColor:"#000000"});
 	});
 	
+	// onClick listener for the element boxes
+	// Shows the Edit popup for the clicked element
 	$(".Elements").click(function() {
 		switch(this.id) {
 			case "Element1":
@@ -134,9 +147,9 @@ $(document).ready(function() {
 				}
 				break;
 		}
-		
 	});
 	
+	// Listener for the crop button on the main canvas's toolbar
 	$("#tool1").click(function() {
 		wandFlag = false;
 		colorElimFlag = false;
@@ -165,6 +178,7 @@ $(document).ready(function() {
 		$('#eraserSlider').css({display: 'none'});
 	});
 	
+	// Listener for the magic wand tool on the main canvas's toolbar
 	$("#tool2").click(function() {
 		wandFlag = true;
 		colorElimFlag = false;
@@ -193,6 +207,8 @@ $(document).ready(function() {
 		$('#eraserSlider').css({display: 'none'});
 	});
 	
+	// Listeners for the RGB color maninpuation for the main canvas
+	// Displays the RGB sliders as well as the convert to Greyscale button
 	$("#tool3").click(function() {
 		colourFlag = true;
 		colorElimFlag = false;
@@ -229,6 +245,8 @@ $(document).ready(function() {
 		$('#blueSlider').css({display: ''});
 	});
 
+	// Listener for the white elimnation tool on the main 
+	// canvas's toolbar
 	$('#tool5').click(function () {
 		colourFlag = false;
 		colorElimFlag = false;
@@ -255,14 +273,19 @@ $(document).ready(function() {
 		cropOut();
 	});
 	
+	// listener for the cut button for the magic wand on the 
+	// main canvas's toolbar
 	$("#cropOut").click(function() {
 		cropOut();
 
 	});
+	// listener for the cut button for the color selector on the 
+	// main canvas's toolbar
 	$("#cropOut2").click(function() {
 		cropOut();
 		
 	});
+	// Listener for the color selector on the main canvas's toolbar
 	$("#tool4").click(function() {
 		wandFlag = false;
 		colorElimFlag = true;
@@ -292,15 +315,20 @@ $(document).ready(function() {
 		$('#greyScaleButton').css({display: 'none'});
 		$('#eraserSlider').css({display: 'none'});
 	});
-	
+	// Listener for the undo button on the main canvas's
+	// toolbar
 	$('#undoButton').click(function() {
 		undo();
 	});
 	
+	// Listener for the converting to greyscale button on the
+	// main canvas's toolbar
 	$('#greyScaleButton').click(function() {
 		greyScale();
 	});
 	
+	// Listener for the erase button on the main canva's
+	// toolbar
 	$('#eraserButton').click(function() {
 		colourFlag = false;
 		colorElimFlag = false;
@@ -325,6 +353,7 @@ $(document).ready(function() {
 		$('#eraserSlider').css({display: ''});
 	});
 	
+	// Listener for the erase button on the Edit popup
 	$('#erase').click(function() {
 		colourFlag = false;
 		colorElimFlag = false;
@@ -348,6 +377,8 @@ $(document).ready(function() {
 		$('#editBlueLabel').css({display: 'none'});
 	});
 
+	// Listener for RGB manipulation button on the Edit popup,
+	// displays the RGB sliders
 	$('#color').click(function() {
 		colourFlag = true;
 		colorElimFlag = false;
@@ -375,6 +406,7 @@ $(document).ready(function() {
 		$('#editBlueLabel').css({display: ''});
 	});
 
+	// Listener for the magic wand tool on the Edit popup
 	$('#wand').click(function() {
 		colourFlag = false;
 		colorElimFlag = false;
@@ -398,6 +430,7 @@ $(document).ready(function() {
 		$('#editBlueLabel').css({display: 'none'});
 	});
 
+	// Listener for the color selector tool on the Edit popup
 	$('#colorElim').click(function() {
 		colourFlag = false;
 		colorElimFlag = true;
@@ -421,29 +454,32 @@ $(document).ready(function() {
 		$('#editBlueLabel').css({display: 'none'});
 	});
 
+	// Listener for the cut button for the magic wand on
+	// the Edit popup
 	$('#editCrop').click(function() {
 		cropOut2();
 	});
+	// Listener for the cut button for the color selection
+	// on the Edit popup
 	$('#editCrop2').click(function() {
 		cropOut2();
 	});
-
+	// Listener that enable the dragging function for the Elements
 	$(".dragSource").each(function() {
 		this.onmousedown = mousedown;
 		this.ondragstart = dragstart;
 	});
-	  
+	// Listeners that enables the dropping function into elements on 
+	// the Template
 	$(".dragDest").each(function() {
 		this.ondrop = drop;
 		this.ondragover = allowDrop;
 	});
-
+	// Listener that enables free drop on the Template
 	$(".freeDropZone").each(function() {
 		this.ondrop = freeDrop;
 		this.ondragover = allowDrop;
 	});
-	
-	$("#imgInp").change(function(){ readURL(this); });
 
 	//make elements resizable
   	$( ".resizable" ).resizable({
@@ -469,6 +505,7 @@ $(document).ready(function() {
 		}
 	});
 
+   // mouseOut Listener for Templates background
    $(".templateBackground").mouseout(function() {
    		$( '.draggable' ).draggable().trigger( 'mouseup' );
 	});
@@ -478,16 +515,16 @@ $(document).ready(function() {
 	$( "#fontSelect" ).change(function(){
 		updateFont();
 	});
-
+	// Sets the font for the font selection dropdown
 	$("#fontSelect").find("option").each(function(){
 		$(this).css('fontFamily', $(this).val());
 	});
-
+	// Keyup listener for the signature text input
     $( "#signature" ).keyup(function() {
 		updateFont();  
     });
-
-
+    // Listener for th preview button for the Template,
+    // displays a preview of what the item may look like
     $(".previewBut").click(function(){
     	$( "#finalPreviewDiv" ).dialog();
 		var layout;
@@ -505,6 +542,7 @@ $(document).ready(function() {
     	previewClothing(ElementsDiv, layout);
     });
 
+    // onChange Listener for the font style buttons
     $("#fontStyleButtons").change(function(){
     	updateFont();  
     }); 
@@ -535,7 +573,8 @@ $(document).ready(function() {
 		}
 		$(".dropdown-content").slideUp();
     });
-	
+	// mouseOver listner for the Clothing drop down menu,
+	// displaying the drop down menu when hovered over
 	$(".buttonDiv").mouseenter(function() {
 		var value = $(this).attr("value");
 		$(".layouts").each(function() {
@@ -552,6 +591,8 @@ $(document).ready(function() {
 		makeLabels(value);
 	});
 	
+	// mouseOver Listener for the default layout,
+	// displays the drop down when moused over and hides otherwise
 	$("#layoutsMenu")
 		.mouseenter(function() {
 			$(".LayoutNames").stop().slideDown();
@@ -560,6 +601,9 @@ $(document).ready(function() {
 			$(".LayoutNames").stop().slideUp();
 	});
 	
+	// Listener for the Layouts dropdown menu,
+	// Shows a preview of the layout when moused over
+	// and sets it on click
 	$(".LayoutNames")
 		.click(function() {
 			var value = $(this).attr("value");
@@ -577,6 +621,9 @@ $(document).ready(function() {
 			$("#" + value).show();
 	});
 	
+	// mouseOver Listeners for the buttons in the Clothing
+	// selection drop down, Applys CSS styling to each of the
+	// elements based on even/odd position when moused over
 	$('.buttonDiv:odd, .LayoutNames:odd')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
@@ -584,7 +631,6 @@ $(document).ready(function() {
 	.mouseleave(function() {
 		$(this).css({"backgroundColor":"#888888"})
 	});
-	
 	$('.buttonDiv:even, .LayoutNames:even')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
@@ -593,18 +639,26 @@ $(document).ready(function() {
 		$(this).css({"backgroundColor":"#555555"})
 	});
 	
+	// mouseOver Listener for the Clothing selection drop down,
+	// animateds the drop downs display
 	$(".dropdown, .dropdown-content").mouseenter(function() {
 		$('.dropdown-content').stop().slideDown();
 	});
-	
+	// click Listener for the Clothing selection drop down,
+	// animateds the drop downs hide
 	$('.dropdown, .dropdown-content').click(function() {
 		$('.dropdown-content').stop().slideUp();
 	});
-	
+	// mouseOver Listener for the Clothing selection drop down,
+	// animateds the drop downs hide
 	$('.dropdown').mouseleave(function() {
 		$('.dropdown-content').stop().slideUp();
 	});
 	
+	// Listener for the color selection menu button,
+	// displays the list of selectable colors and
+	// adds a new listener that will hide the menu
+	// when the button is clicked again
 	$(".colorSelection").click(function(evt) {
 		$(this).stop().animate({
 			'width': '125px',
@@ -617,7 +671,9 @@ $(document).ready(function() {
 		$("#ExitButton2").show();
 		$(this).css("cursor", "auto");
 	});
-    
+    // Listener for the color selection menu button,
+    // This hides the menu of colors and restores the
+    // default listener
 	$("#ExitButton2").click(function(evt) {
 		evt.stopPropagation();
 		$(this).hide();
@@ -631,7 +687,9 @@ $(document).ready(function() {
 		});
 		$(".colorSelection").css("cursor", "pointer");
 	});
-	
+	// Listener for the selectable colors of the color menu,
+	// gives some animation and visual changes to indicate
+	// selection
 	$(".colorSwatch")
 		.hover(function() {
 			$(this).css("box-shadow", "2px 1px 8px black");
@@ -656,71 +714,69 @@ $(document).ready(function() {
 }); //document.ready function closing tag
 
 //create elements dynamically
-    function freeDrop(ev) {
-    	ev.preventDefault();
+function freeDrop(ev) {
+	ev.preventDefault();
+	
+	var newElement = $(
+		'<div class="draggable resizable wrapper dynamicElement">\
+			<canvas class="clothESpot dragDest"></canvas>\
+			<img src="img/close_icon.png" class="closeButton"/>\
+		</div>');
+	
+	// checks if there isn't already another element in the drop position
+	if(!$(ev.target).hasClass("clothESpot")){
+		$(ev.target).append(newElement);
+
+		//sets position of new element	
+		var xPos = ev.pageX - $(ev.target).offset().left - newElement.width() / 2;
+		var yPos = ev.pageY - $(ev.target).offset().top - newElement.width() / 2;
+		var leftPercent = xPos / ($(this).width() / 100);
+		var topPercent = yPos / ($(this).height() / 100);
+		newElement.css("left", leftPercent + "%");
+		newElement.css("top", topPercent +"%");
+
+			//flips upside down if in top part of a flipTop class
+			if($(this).hasClass("flipTop") && topPercent < 50){
+				newElement.css('-ms-transform', 'rotate(180deg)'); //IE9
+				newElement.css('-webkit-transform', 'rotate(180deg)'); //Safari
+				newElement.css('transform', 'rotate(180deg)');
+			}
+
+		//enable drop on new element
+		$(newElement).find(".dragDest").each(function() {
+			this.ondrop = drop;
+			this.ondragover = allowDrop;
+		});
+
+		//makes new element draggable
+		newElement.draggable({
+			stop: function( event, ui ) {
+				$(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
+				$(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
+			}
+		});
+
+		//make new element resizable
+		$(newElement).resizable({
+			//locks the aspect ratio when resizing
+			aspectRatio:true,
+			//forces resizable height and width to use % instead of px 
+			stop: function( event, ui ) {
+				$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
+				$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
+			}
+		});
+
+		$(".closeButton").click(function(){
+			$(this).parent().remove();
+		});
 		
-    	var newElement = $(
-    		'<div class="draggable resizable wrapper dynamicElement">\
-    			<canvas class="clothESpot dragDest"></canvas>\
-    			<img src="img/close_icon.png" class="closeButton"/>\
-    		</div>');
-
-
-    	
-    	// checks if there isn't already another element in the drop position
-    	if(!$(ev.target).hasClass("clothESpot")){
-    		$(ev.target).append(newElement);
-
-    		//sets position of new element	
-    		var xPos = ev.pageX - $(ev.target).offset().left - newElement.width() / 2;
-    		var yPos = ev.pageY - $(ev.target).offset().top - newElement.width() / 2;
-    		var leftPercent = xPos / ($(this).width() / 100);
-    		var topPercent = yPos / ($(this).height() / 100);
-    		newElement.css("left", leftPercent + "%");
-   			newElement.css("top", topPercent +"%");
-
-   			//flips upside down if in top part of a flipTop class
-   			if($(this).hasClass("flipTop") && topPercent < 50){
-   				newElement.css('-ms-transform', 'rotate(180deg)'); //IE9
-   				newElement.css('-webkit-transform', 'rotate(180deg)'); //Safari
-   				newElement.css('transform', 'rotate(180deg)');
-  			}
-
-    		//enable drop on new element
-    		$(newElement).find(".dragDest").each(function() {
-				this.ondrop = drop;
-				this.ondragover = allowDrop;
-			});
-
-    		//makes new element draggable
-   			newElement.draggable({
-  				stop: function( event, ui ) {
-   				$(this).css("left",parseInt($(this).css("left")) / ($(this).parent().width() / 100)+"%");
-   				$(this).css("top",parseInt($(this).css("top")) / ($(this).parent().height() / 100)+"%");
-  				}
-			});
-
-			//make new element resizable
-  			$(newElement).resizable({
-  				//locks the aspect ratio when resizing
-  				aspectRatio:true,
-  				//forces resizable height and width to use % instead of px 
-  				stop: function( event, ui ) {
-   					$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
-   					$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
-  				}
-  			});
-
-  			$(".closeButton").click(function(){
-    			$(this).parent().remove();
-    		});
-  			
-  			//draws image in the newly created canvas
-  			drawCopiedImage($(newElement).find(".dragDest")[0], ev);
-    	}
-    	ev.stopPropagation();
-    	 return false;
-    }
+		//draws image in the newly created canvas
+		drawCopiedImage($(newElement).find(".dragDest")[0], ev);
+	}
+	ev.stopPropagation();
+	 return false;
+}
 
 //update signature font style and family, then draw it on multiple canvases 
 function updateFont(){
@@ -768,9 +824,10 @@ function drawSignature(canvas, style, fontFamily){
   	fontSize = maxFontSize;
   }
   ctx.fillText(text, 10, fontSize);
-  
 }
 
+// Function dynamically builds the Layout drop down menu,
+// based on value input
 function makeLabels(value) {
 	var i = 0;
 	var item = value;
@@ -828,9 +885,10 @@ function makeLabels(value) {
 			});
 			break;
 	}
-	
 }
 
+// Listener for window resize, adjusts the styling of the elements 
+// when the window is scaled
 $(window).resize(function() {
 	var Size = parseFloat($("#content").width());
 	if (dragOrclick) {
@@ -858,11 +916,13 @@ $(window).resize(function() {
 	}
 });
 
-/*
-    Onload function for the window. initializes the globals and listeners
-    for the magic wand select.
-*/
+
+// Pure JS style Onload function for the window. 
+// initializes the globals and listeners
+// for the magic wand select, Color select, and related sliders,
+// as well as the RGB sliders
 window.onload = function() {
+	// Pure JS Globals
     blurRadius = 5;
     simplifyTolerant = 0;
     simplifyCount = 30;
@@ -880,42 +940,30 @@ window.onload = function() {
 	currentCanvas = null;
     allowDraw = false;
     OrigCanvas = null;
-	/*
-	brightnessSlider = document.getElementById("brightnessSlider");
-	
-	brightnessSlider.addEventListener("change", greyScale());
-	*/
-    slider = document.getElementById("thresSlider");
 
+    slider = document.getElementById("thresSlider");
     slider.addEventListener("change", function() {
     	currentThreshold = slider2.value = slider3.value = slider4.value = slider.value;
-    	//showThreshold();
     });
 
     slider2 = document.getElementById("thresSlider2");
-	
     slider2.addEventListener("change", function() {
     	currentThreshold = slider.value = slider3.value = slider4.value = slider2.value;
-    	//showThreshold();
     });
 	
 	slider3 = document.getElementById("thresSlider3");
-	
     slider3.addEventListener("change", function() {
     	currentThreshold = slider.value = slider2.value = slider4.value = slider3.value;
-    	//showThreshold();
     });
 
     slider4 = document.getElementById("thresSlider4");
-	
     slider4.addEventListener("change", function() {
     	currentThreshold = slider.value = slider2.value = slider3.value = slider4.value;
-    	//showThreshold();
     });
 
     colorThreshold = slider.value = slider2.value = slider3.value = slider4.value = 50;
     currentThreshold = colorThreshold;
-    //showThreshold();
+
     setInterval(function () { hatchTick(); }, 300);
 	
 	var red = document.getElementById("redSlider");
@@ -923,8 +971,6 @@ window.onload = function() {
 	var blue = document.getElementById("blueSlider");
 	
 	red.value = blue.value = green.value = 0;
-	
-	
 }
 
 // Onclick event for the window. allows user to deselect when clicking off the canvas
@@ -989,13 +1035,11 @@ function ShowEditCanvas(element) {
 	var blue = document.getElementById("editBlueSlider");
 	
 	red.value = blue.value = green.value = 0; 
-    //console.log(EditInfo);
 }
 
 //draw selection on a canvas
 function preview(img2, selection) {
 	var canvas = $('#previewCanvas')[0];
-	//console.log(selection.width);
 	var ctx = canvas.getContext("2d");  
 	var maxSize = 200;
 	var destX = 0;
@@ -1012,7 +1056,7 @@ function preview(img2, selection) {
 				destY, 
 				selection.width,
 				selection.height
-				);   
+		);   
 	}        
 }
 
@@ -1020,7 +1064,6 @@ function preview(img2, selection) {
 function readURL(input) {
 	if (input.files && input.files[0]) {
 		var reader = new FileReader();
-		
 		reader.onload = function (e) {
 			$('#uploadedImage').attr('src', e.target.result);
 		}           
@@ -1028,27 +1071,29 @@ function readURL(input) {
 	}
 }
 
+// Allows Elements to be droped in to other elements
 function allowDrop(ev) {
 	ev.preventDefault();
 }
 
+// Gets the X and Y position for the mouse cursor, needed
+// for drag and drop features
 function mousedown(ev) {
 	startOffsetX = ev.offsetX;
 	startOffsetY = ev.offsetY;
 }
 
+// Gets currently dragged element and saves it in a global 
+// for later use 
 function dragstart(ev) {
 	ev.dataTransfer.setData("Text", ev.target.id);
 	draggedElement = ev.target;
-	//console.log(ev.target);
-	//console.log(draggedElement);
-	//console.log(draggedElement.id);
 }
 
-
+// Take dragged element and paints it on the canvas
+// that it was dropped into
 function drop(ev, canvas = ev.target) {
 	ev.preventDefault();
-	//var canvas = ev.target;
 	switch (canvas.id) {
 		case "pic1":
 			ElementsFull[0] = true;
@@ -1079,7 +1124,7 @@ function drop(ev, canvas = ev.target) {
 	}
 }
 
-//collapse canvas and create preview
+// collapse canvas and create preview
 function previewClothing(template, curLayout, previewCanvas = $("#clothingPreviewCanvas")[0]){
 	template = $(template);
 	var templateValue = template.parent().attr("value");
@@ -1136,7 +1181,6 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
     		ctx.translate(leftOffset * $(previewCanvas).width(), topOffset * $(previewCanvas).height());
     		ctx.translate(width / 2, height / 2);
     		ctx.rotate(getRotationDegrees($(this)) * Math.PI/180);
-    		//ctx.drawImage($(this).find("canvas")[0], -width / 2, -height / 2, width, height);
 			ctx.drawImage($(this).find("canvas")[0], -(width/2), -(height/2), width, height);
 			ctx.restore();
     	} else{
@@ -1147,7 +1191,7 @@ function previewClothing(template, curLayout, previewCanvas = $("#clothingPrevie
 	ctx.drawImage(backgroundImage, 0, 0, previewCanvas.width, previewCanvas.height);
 }
 
-//gets the element rotation in degrees
+// gets the element rotation in degrees
 function getRotationDegrees(obj) {
     var matrix = obj.css("-webkit-transform") ||
     obj.css("-moz-transform")    ||
@@ -1210,23 +1254,16 @@ function drawCopiedImage(canvas, ev){
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	if($(canvas).hasClass("tieClass")) {
-		//console.log("Tie Class found");
-		//console.log(draggedElement);
 		var tmp = draggedElement.getContext('2d');
-		//console.log(tmp);
 		var data = tmp.getImageData(0,0,draggedElement.width,draggedElement.height);
-		//console.log(data.data)
 		var image = {
 	        data: data.data,
 	        width: draggedElement.width,
 	        height: draggedElement.height,
 	        bytes: 4
 	    };
-	    //console.log(image.data.data);
 		var mask = eliminateWhite(image, 64);
-		//console.log(mask.data);
 		cropOut3(mask, data, ctx);
-		//console.log("done Tie class");
 	} else {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.drawImage(draggedElement, 0, 0, canvas.width, canvas.height);
@@ -1235,17 +1272,12 @@ function drawCopiedImage(canvas, ev){
 
 // loads the image and draws it on the canvas.
 function imgChange (inp) {
-	
     if (inp.files && inp.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            //var img = document.getElementById("test-picture");
-            //img.setAttribute('src', e.target.result);
             var ctx = document.getElementById("uploadedImage").getContext('2d');
-			//ctx.globalCompositeOperation = "source-atop";
             img = new Image;
             img.src = URL.createObjectURL(inp.files[0]);
-            //console.log(img);
             img.onload = function() {
                 window.initCanvas(img);
                 ctx.drawImage(img, 0, 0);
@@ -1267,7 +1299,6 @@ function imgChange (inp) {
 		var blue = document.getElementById("blueSlider");
 		
 		red.value = blue.value = green.value = 0;
-		
     }
 };
 // Initializes the canvas and image info
@@ -1275,7 +1306,7 @@ function initCanvas(img) {
     var cvs = document.getElementById("uploadedImage");
     cvs.width = img.width;
     cvs.height = img.height;
-    //console.log(img);
+
 	originalImageInfo = {
 		width: img.width,
 		height: img.height,
@@ -1300,53 +1331,43 @@ function initCanvas(img) {
     imageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	oldImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
 	originalImageInfo.data = tempCtx.getImageData(0, 0, imageInfo.width, imageInfo.height);
-	
 };
 // Gets the current position of the mouse on  the canvas 'UpuloadedImage'
 function getMousePosition(e) { // NOTE*: These may need tweeking to work properly
-
     var p = $(e.target).offset(),
     	widthScale = document.getElementById('uploadedImage').offsetWidth / img.width,
     	heightScale = document.getElementById('uploadedImage').offsetHeight / img.height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY) - p.top) / heightScale);
-        //console.log(x, y);
-        //console.log(e.pageY);
     return { x: x, y: y };
 }
 
-
+// Gets the current posision of the mouse on the Edit popup's canvas 
 function getMousePosition2(e) { // NOTE*: These may need tweeking to work properly
-
     var p = $(e.target).offset(),
     	widthScale = document.getElementById('ElementCanvas').offsetWidth / document.getElementById('ElementCanvas').width,
     	heightScale = document.getElementById('ElementCanvas').offsetHeight / document.getElementById('ElementCanvas').height,
         x = Math.round(((e.clientX || e.pageX) - p.left) / widthScale),
         y = Math.round(((e.pageY || e.clientY) - p.top) / heightScale);
-        //console.log(e.pageY);
     return { x: x, y: y };
 }
 
 
-// listener for the mouseDown event. Checks if applicilable mode is in enabled
+// listener for the mouseDown event.
+// Checks if applicilable mode is in enabled
 // and makes the selection
-
 function onMouseDown(e) {
-	//console.log(erasing);
 	if(wandFlag || colorElimFlag) {
 	    if (e.button == 0) {
 	        allowDraw = true;
 	        downPoint = getMousePosition(e);
 	        drawMask(downPoint.x, downPoint.y);
-	        //console.log(mask);
-	        //console.log(mask.data.length);
 	    }
 	    else allowDraw = false;
 	} else if(erasing) {
 		copyImageData();
 		allowDraw = true;
 		downPoint = getMousePosition(e);
-		//ctx = document.getElementById("uploadedImage").getContext("2d");
 		ctx = imageInfo.context;
 		radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 		ctx.beginPath();
@@ -1358,19 +1379,18 @@ function onMouseDown(e) {
 		ctx.closePath();
 	} 
 }
-
+// listener for the mouseDown event for the Edit popup.
+// Checks if applicilable mode is in enabled
+// and makes the selection
 function editMouseDown(e) {
 	if(erasing2) {
 		copyImageData();
 		allowDraw = true;
 		downPoint = getMousePosition2(e);
 		ctx = document.getElementById("ElementCanvas").getContext("2d");
-		//ctx = imageInfo.context;
-		//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 		radius = document.getElementById("eraseSlider").value;;
 		ctx.beginPath();
 			ctx.globalCompositeOperation = "destination-out";
-			//ctx.fillStyle = "red";
 			ctx.arc(downPoint.x, downPoint.y, radius, 0, 2 * Math.PI);
 			ctx.fill();
 			ctx.globalCompositeOperation = "source-atop";
@@ -1380,18 +1400,16 @@ function editMouseDown(e) {
 	        allowDraw = true;
 	        downPoint = getMousePosition2(e);
 	        drawEditMask(downPoint.x, downPoint.y);
-	        //console.log(mask);
-	        //console.log(mask.data.length);
 	    }
 	    else allowDraw = false;
 	}
 }
 // listener for the mousecMove event, gets the current mouse position
+// within the main canvas
 function onMouseMove(e) {
 	e.preventDefault();
     if (allowDraw) {
 		if(erasing) {
-			//ctx = document.getElementById("uploadedImage").getContext("2d");
 			ctx = imageInfo.context;
 			radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 			downPoint = getMousePosition(e);
@@ -1403,10 +1421,7 @@ function onMouseMove(e) {
 			ctx.closePath();
 			ctx.globalCompositeOperation = "source-atop";
 			imageInfo.context = ctx;
-			//ctx.fillRect(downPoint.x,downPoint.y,75,50);
-			//console.log("Fill");
 		} else {
-			
 			var p = getMousePosition(e);
 			if (p.x != downPoint.x || p.y != downPoint.y) {
 				var dx = p.x - downPoint.x,
@@ -1416,19 +1431,16 @@ function onMouseMove(e) {
 					ady = Math.abs(dy),
 					sign = adx > ady ? dx / adx : dy / ady;
 				sign = sign < 0 ? sign / 5 : sign / 3;
-				//var thres = Math.min(Math.max(colorThreshold + Math.floor(sign * len), 1), 255);
-				//var thres = Math.min(colorThreshold + Math.floor(len / 3), 255);
 			}
         }
     }
 }
-
+// listener for the mousecMove event, gets the current mouse position
+// within the edit canvas
 function editMouseMove(e) {
 	if(allowDraw) {
 		if(erasing2) {
 			ctx = document.getElementById("ElementCanvas").getContext("2d");
-			//ctx = imageInfo.context;
-			//radius = document.getElementById("eraserSlider").value * (imageInfo.height / 250);
 			radius = 3;
 			downPoint = getMousePosition2(e);
 			ctx.beginPath();
@@ -1441,25 +1453,24 @@ function editMouseMove(e) {
 	}
 }
 
+// listner for the mouseUp event for the main canvas,
+// saves the changes made during the mouseDown and 
+// mouseMove Event
 function onMouseUp(e) {
 	if(allowDraw) {
 		allowDraw = false;
 		ctx = imageInfo.context;
 		imageInfo.context.globalCompositeOperation = "source-atop";
-		//console.log(imageInfo.data.data);
-		
+
 		if(erasing) {
 			imageInfo.data = ctx.getImageData(0, 0, imageInfo.width, imageInfo.height);
-			//var ctx = document.getElementById("uploadedImage").getContext('2d');
-			//ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
-			//ctx.putImageData(imageInfo.data, 0, 0);
-			
 		}
-		//currentThreshold = colorThreshold;
 	}
 }
 
-
+// listner for the mouseUp event for the main canvas,
+// saves the changes made during the mouseDown and 
+// mouseMove Event
 function editMouseUp(e) {
 	allowDraw = false;
 
@@ -1469,12 +1480,10 @@ function editMouseUp(e) {
 	}
 }
 
-
-// Finds the pixels and saves it in the mask, then draws a border around the selection
+// Finds the pixels and saves it in the mask, then draws 
+// a border around the selection on the main canvas
 function drawMask(x, y) {
     if (!imageInfo) return;
-    
-   // showThreshold();
     
     var image = {
         data: imageInfo.data.data,
@@ -1490,12 +1499,11 @@ function drawMask(x, y) {
     mask = MagicWand.gaussBlurOnlyBorder(mask, blurRadius);
     drawBorder();
 }
-
+// Finds the pixels and saves it in the mask, then draws 
+// a border around the selection on the Edit popup canvas
 function drawEditMask(x, y) {
     if (!EditInfo) return;
-    
-   // showThreshold();
-    //console.log("EditMask");
+
     var image = {
         data: EditInfo.data.data,
         width: EditInfo.width,
@@ -1512,17 +1520,20 @@ function drawEditMask(x, y) {
 }
 
 // Function that animates the border around the seleceted pixels
+// on the main canvas
 function hatchTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawBorder(true);
 }
-
+// Function that animates the border around the seleceted pixels
+// on the Edit popup's canvas
 function editTick() {
     hatchOffset = (hatchOffset + 1) % (hatchLength * 2);
     drawEditBorder(true);
 }
 
-// Draws a boarder around the selected pixels 
+// Draws a boarder around the selected pixels for the
+// main canvas
 function drawBorder(noBorder) {
     if (!mask) return;
     
@@ -1537,7 +1548,6 @@ function drawBorder(noBorder) {
     if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask);
     
     ctx.clearRect(0, 0, w, h);
-    //ctx.drawImage(img, 0, 0);
     var len = cacheInd.length;
     for (j = 0; j < len; j++) {
         i = cacheInd[j];
@@ -1553,10 +1563,11 @@ function drawBorder(noBorder) {
             res[k + 3] = 255;
         }
     }
-
     ctx.putImageData(imgData, 0, 0);
 }
 
+// Draws a boarder around the selected pixels for the
+// Edit popup's canvas
 function drawEditBorder(noBorder) {
     if (!mask2) return;
     
@@ -1571,7 +1582,6 @@ function drawEditBorder(noBorder) {
     if (!noBorder) cacheInd = MagicWand.getBorderIndices(mask2);
     
     ctx.clearRect(0, 0, w, h);
-    //ctx.drawImage(img, 0, 0);
     var len = cacheInd.length;
     for (j = 0; j < len; j++) {
         i = cacheInd[j];
@@ -1587,11 +1597,11 @@ function drawEditBorder(noBorder) {
             res[k + 3] = 255;
         }
     }
-
     ctx.putImageData(imgData, 0, 0);
 }
 
-// Function crops the selected pixels form the image
+// Function crops the selected pixels form the image,
+// for the main canvas
 function cropOut() {
 
 	if(mask == null) return;
@@ -1610,15 +1620,16 @@ function cropOut() {
 				imageInfo.data.data[tmp + 3] = 0;
 			}
 		}
-		//mask = null;
 		var ctx = document.getElementById("uploadedImage").getContext('2d');
 		ctx.clearRect(0, 0, imageInfo.width, imageInfo.height);
 		ctx.putImageData(imageInfo.data, 0, 0);
 	}, 300);
 };
 
+// Function crops the selected pixels form the image,
+// used only when the user selects the Tie template and
+// affects only the ties elements
 function cropOut3(mask, image, ctx) {
-	//console.log(mask);
 	if(mask == null) return;
 	var tmpMask = mask;
 	mask = null;
@@ -1632,105 +1643,72 @@ function cropOut3(mask, image, ctx) {
 				image.data[tmp + 3] = 0;
 			}
 		}
-		//mask = null;
-		//var ctx = document.getElementById("uploadedImage").getContext('2d');
 		ctx.clearRect(0, 0, image.width, image.height);
 		ctx.putImageData(image, 0, 0);
 };
 
+// Function crops the selected pixels form the image,
+// for the Edit popup canvas
 function cropOut2() {
-
 	if(mask2 == null) return;
 	var tmpMask = mask2;
 	mask2 = null;
 
-	//setTimeout(function() {
-	//	copyImageData();
-
-		for(i = 0; i < tmpMask.data.length; i++) {
-			if(tmpMask.data[i] != 0) {
-				var tmp = i * 4;
-				EditInfo.data.data[tmp] = 0;
-				EditInfo.data.data[tmp + 1] = 0;
-				EditInfo.data.data[tmp + 2] = 0;
-				EditInfo.data.data[tmp + 3] = 0;
-			}
+	for(i = 0; i < tmpMask.data.length; i++) {
+		if(tmpMask.data[i] != 0) {
+			var tmp = i * 4;
+			EditInfo.data.data[tmp] = 0;
+			EditInfo.data.data[tmp + 1] = 0;
+			EditInfo.data.data[tmp + 2] = 0;
+			EditInfo.data.data[tmp + 3] = 0;
 		}
-		//mask = null;
-		var ctx = document.getElementById("ElementCanvas").getContext('2d');
-		ctx.clearRect(0, 0, EditInfo.width, EditInfo.height);
-		ctx.putImageData(EditInfo.data, 0, 0);
-	//}, 300);
+	}
+	var ctx = document.getElementById("ElementCanvas").getContext('2d');
+	ctx.clearRect(0, 0, EditInfo.width, EditInfo.height);
+	ctx.putImageData(EditInfo.data, 0, 0);
 };
 
 // Fucntion finds the selected color (based on a threshold) from the image
 function colorElimination(image, x, y, threshold) {
-    // used for testing purposes
-    /*for(var i = 0, value = 1, size = image.width*image.height,
-         array = new Uint8Array(size); i < size; i++) array[i] = value;*/
     var tmp, ipix = (y * image.width * 4) + x * 4,
         pixel = [image.data[ipix], image.data[ipix+1], image.data[ipix+2], image.data[ipix+3]];
-    //console.log(x);
-    //console.log(y);
-    //console.log(ipix);
-    //console.log(pixel);
-    //console.log(image.data.length);
-    //console.log(4 * image.width * image.height);
     for(var i = 0, size = image.width*image.height,
         array = new Uint8Array(size); i < size; i++) {
-        
-        //ipix = (y * i) + b;
         tmp = image.data[i*4] - pixel[0];
-        //console.log(image.data[i*4]);
-        //console.log(pixel[0]);
-        //console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
         tmp = image.data[(i*4)+1] - pixel[1];
-        //console.log(image.data[(i*4)+1]);
-        //console.log(pixel[1]);
-        //console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
         tmp = image.data[(i*4)+2] - pixel[2];
-        //console.log(image.data[(i*4)+2]);
-        //console.log(pixel[2]);
-        //console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
         tmp = image.data[(i*4)+3] - pixel[3];
         if(tmp > threshold || tmp < -threshold) continue;
 
         array[i] = 1;
     }
-    //console.log('Done');
     return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
 };
 
+// Function removes any pixel that is with in the
+// white threshold from the image
 function eliminateWhite(image, threshold) {
 	var tmp;
-	//console.log(image.data);
     for(var i = 0, size = image.width*image.height,
         array = new Uint8Array(size); i < size; i++) {
-
         tmp = image.data[i*4] - 255;
-    	//console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
         tmp = image.data[(i*4)+1] - 255;
-        //console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
         tmp = image.data[(i*4)+2] - 255;
-		//console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
         tmp = image.data[(i*4)+3] - 255;
-        //console.log(tmp);
         if(tmp > threshold || tmp < -threshold) continue;
 
         array[i] = 1;
     }
-    //console.log("done");
     return {data: array, width:image.width,height:image.height,bounds:{minX:0,minY:0,maxX:image.width,maxY:image.height}};
 };
 
 // Swaps the old data with the new, "undoing" their last action
-
 function undo() {
 	if (imageInfo != null) {
 		imageInfo.data.data.set(oldImageInfo.data.data);
@@ -1738,27 +1716,20 @@ function undo() {
 };
 
 // Copy the data before making a change in case the user needs to "undo" their action
-
 function copyImageData() {
 	oldImageInfo.data =  document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
 // Copy the data before changing the colours 
-
 function copyColourData() {
 	originalImageInfo.data = document.getElementById("uploadedImage").getContext("2d").getImageData(0, 0, imageInfo.width, imageInfo.height);
 }
 
 // Filters and colour manipulation
 
-// Color changers
-
+// Color changers, for the main canvas
 function colorChange() {
 	if(colourFlag) {
-	
-		//copyColourData();
-		//copyImageData();
-		
 		var red = null;
 		var green = null;
 		var blue = null;
@@ -1770,8 +1741,6 @@ function colorChange() {
 		var negBlue = false;
 		var negGreen = false;
 		
-		
-		//console.log(originalImageInfo.data.data.length);
 		for(var i = 0; i < originalImageInfo.data.data.length; i += 4)
 		{
 			red = originalImageInfo.data.data[i]>>>0;
@@ -1831,19 +1800,14 @@ function colorChange() {
 			negGreen = false;
 			negBlue = false;
 			imageInfo.data.data[i + 3] = alpha; // not changing the transparency
-			//console.log("working");
 		}
-		//console.log("done");
 	}
 };
 
+// Color changers, for the Edit popup's canvas
 function colorChange2() {
 	if(colourFlag) {
-	
-		//copyColourData();
-		//copyImageData();
-		
-		//console.log("change color");
+
 		var red = null;
 		var green = null;
 		var blue = null;
@@ -1854,16 +1818,7 @@ function colorChange2() {
 		var negRed = false;
 		var negBlue = false;
 		var negGreen = false;
-		
-		/*var cnv = document.getElementById("ElementCanvas");
-		console.log(cnv);
-		var ctx = cnv.getContext('2d');
-		var h = cnv.height, w = cnv.width;
-		var imagedata = ctx.getImageData(0, 0, w, h);
-		
-		console.log(h, w);
-		console.log(imagedata);*/
-		//console.log(imagedata.data.length);
+
 		for(var i = 0; i < EditInfo.data.data.length; i += 4)
 		{
 			red = EditInfo.data.data[i]>>>0;
@@ -1873,7 +1828,6 @@ function colorChange2() {
 			
 			if(document.getElementById("editRedSlider").value < 0) {
 				negRed = true;
-				//console.log("negRed");
 				redChange = (document.getElementById("editRedSlider").value * -1)>>>0;
 			} else {
 				redChange = document.getElementById("editRedSlider").value>>>0;
@@ -1924,18 +1878,11 @@ function colorChange2() {
 			negGreen = false;
 			negBlue = false;
 			EditInfo.data.data[i + 3] = alpha; // not changing the transparency
-			//console.log("working");
 		}
-		//console.log("done");
 	}
 };
 
-// Brightness Hook
-
-function changeBrightness() {
-	
-};
-
+// Converts the image on the main canvas to greyscale
 function greyScale() {
 	
 	copyImageData();
@@ -1954,6 +1901,4 @@ function greyScale() {
         imageInfo.data.data[i + 2] = gray;
         imageInfo.data.data[i + 3] = alpha; // not changing the transparency
 	}
-	
-	
 };
