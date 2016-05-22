@@ -231,33 +231,31 @@
 }
 
 #fontStyleButtons{
-	padding-top: 5px;
-	margin: auto;
 	width: 82px;
+	display: inline-block;
 }
 
 #textEditing {
 	position: relative;
-	width: 50%;
+	width: 100%;
 	margin:auto;
 	text-align: center;
 }
 
 #signature {
+	width: 50%;
 	display: inline-block;
 }
 
 #fontSelect {
-	width: 100px;
-	display: block;
-	margin: auto;
-	margin-top: 5px;
+	width: 20px;
 }
 
 #file-upload {
 	position: relative;
 	margin: auto;
-	top: 50px;
+	top: 40px;
+	width: 184px;
 
 }
 
@@ -338,7 +336,7 @@
 	margin: auto;
 }
 
-#template2, #template3, #template4, #template5 {
+#template3, #template4, #template5 {
 	display: none;
 }
 
@@ -548,7 +546,7 @@ td {
 	left: 0px;
 	width: 100%;
 	height: 100%;
-
+	display: none;
 }
 
 #t1Ele1{
@@ -595,6 +593,19 @@ td {
     z-index: 1;
     width: 30%;
     height: 4%;
+}
+
+#t2Ele4 {
+	height: 90%;
+	width: 52.5%;
+	top: 6%;
+	left: 26.5%;
+	max-width: 52.5%;
+	min-height: 90%;
+	min-width: 52.5%;
+	max-height: 90%;
+	
+	
 }
 
 #t3Ele1{
@@ -646,6 +657,14 @@ td {
 	transform: rotate(-30deg);
 }
 
+#t3Ele6 {
+	top: 60%;
+	left: 37%;
+	width: 23%;
+	height: 30%;
+	
+}
+
 .t4ESpot {
 	width: 13%;
 	height: 23%;
@@ -693,6 +712,14 @@ td {
 	height: 7%;
 }
 
+#t4Ele9 {
+	top: 14%;
+	left: 3%;
+	width: 93.9%;
+	height: 83.5%;
+	
+}
+
 #t5Ele1 {
 	top: 68%;
 	left: 70%;
@@ -732,14 +759,31 @@ td {
 	padding-top:10px;
 }
 
-#popUpDiv a {position:relative; top: 25px; left:150px}
+#popUpDiv a {
+	position:relative;
+	top: 25px;
+	left:150px
+}
 
-#popUpDiv a:link, #mainContent a:visited {color:#fff; text-decoration:none; font-size:18px; background:#000000; padding:5px; -webkit-border-radius:10px;
--moz-border-radius:10px}
-#popUpDiv a:hover, #mainContent a:active {color:#fff; text-decoration:none; font-size:18px; background:#333333; padding:5px; -webkit-border-radius:10px;
--moz-border-radius:10px}
+#popUpDiv a:link, #mainContent a:visited {
+	color:#fff; 
+	text-decoration:none; 
+	font-size:18px; 
+	background:#000000; 
+	padding:5px; 
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px
+}
 
-
+#popUpDiv a:hover, #mainContent a:active {
+	color:#fff; 
+	text-decoration:none; 
+	font-size:18px; 
+	background:#333333; 
+	padding:5px; 
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px
+}
 
 .tileDrop{
 	top: 1%;

@@ -1083,7 +1083,11 @@ function drop(ev, canvas = ev.target) {
 			ElementsFull[4] = true;
 			break;
 	}
-	drawCopiedImage(canvas, ev); 
+	if($(canvas).hasClass('tileDropCanvas')){
+				tileImage(draggedElement, canvas);
+			} else{
+				drawCopiedImage(canvas, ev);
+			}
 
 	//loops through multipaste elements and draws image on all of them
 	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5", "signatureCanvas"];
@@ -1091,7 +1095,14 @@ function drop(ev, canvas = ev.target) {
 	   
 		if($(canvas).hasClass(multiPasteClasses[i])){
 			$("." + multiPasteClasses[i]).each(function() {
+
+			if($(this).hasClass('tileDropCanvas')){
+				tileImage(draggedElement, this);
+			} else{
 				drawCopiedImage(this, ev);
+			}
+
+				
 			});
 		}  
 	}
@@ -1100,6 +1111,7 @@ function drop(ev, canvas = ev.target) {
 //collapse canvas and create preview
 function previewClothing(template, curLayout, previewCanvas = $("#clothingPreviewCanvas")[0]){
 	template = $(template);
+	console.log(template);
 	var templateValue = template.parent().attr("value");
 	var backgroundImage = template.parent().find(".previewBackground")[0];
 	previewCanvas.width = backgroundImage.naturalWidth;
@@ -1211,7 +1223,6 @@ function fitSize(content, wrap = $(content).parent()){
 
 //draw tiled image
 function tileImage(sourceImage, destCanvas){
-	$(destCanvas).parent().data("used", true);
 	var tempCanvas = document.createElement("canvas");
 	tempCanvas.width = 100; //width off pattern element
 	tempCanvas.height = ($(sourceImage).height() / $(sourceImage).width()) * tempCanvas.width;
@@ -1227,6 +1238,7 @@ function tileImage(sourceImage, destCanvas){
 	ctx.rect(0,0,destCanvas.width, destCanvas.height);
 	ctx.fillStyle=pat;
 	ctx.fill();
+	$(destCanvas).parent().css('background', 'transparent');
 }
 
 //draws copied image on the canvas
@@ -1238,11 +1250,6 @@ function drawCopiedImage(canvas, ev){
 		return;
 	}
 	$(canvas).parent().data("used", true);
-
-	if($(canvas).hasClass('tileDropCanvas')){
-		//console.log("tiles be dropping yo");
-		tileImage(draggedElement, $(".tileCanvas")[0]);
-	}
 
 	fitSize(draggedElement, $(canvas).parent());
 	canvas.width = draggedElement.width;
