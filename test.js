@@ -16,6 +16,8 @@ var ElementsFull = [false, false, false, false, false];
 var whichElement;
 var font;
 var Selected;
+var LayoutSelect;
+var ClothingSelect;
 var shirtLayouts = ["Customize Your Own", "nothing", "nothing", "nothing"];
 var scarfLayouts = ["Customize Your Own", "One Image Both Sides", "One Image Across", "One Picture Repeated"];
 var tieLayouts = ["Customize Your Own", "One Large Image", "Few Medium Images", "Repeated Small Images"];
@@ -41,8 +43,14 @@ $(document).ready(function() {
 	// Fills layouts of shown template
 	$(".templateBackground").each(function() {
 		if ($(this).is(":visible")) {
+			var temp = this;
 			var str = $(this).parent().attr("value");
 			value = str.split(" ")[1];
+			$(".buttonDiv").each(function() {
+				if ($(this).children().attr("value") == $(temp).parent()[0].id) {
+					ClothingSelect = $(this).children()[0];
+				}
+			});
 		}
 	});
 	makeLabels(value);
@@ -557,11 +565,16 @@ $(document).ready(function() {
 		evt.stopPropagation();
 		var currentTemplate;
 		var child;
+		var value;
 		if ($(this).attr('class') == 'buttonDiv') {
 			child = $(this).children()[0];
 			currentTemplate =  $(child).attr("value");
+			value = $(this).attr("value");
+			ClothingSelect = $(this).children()[0];
 		} else {	
 			currentTemplate =  $(this).attr("value");
+			value = $(this).parent().attr("value");
+			ClothingSelect = this;
 		}
 		$( ".templateDiv" ).each(function() {
 			$(this).css('display', 'none');
@@ -577,7 +590,9 @@ $(document).ready(function() {
 			tieMessage = !tieMessage;
 		}
 		$(".dropdown-content").slideUp();
+		makeLabels(value);
     });
+	
 	// mouseOver listner for the Clothing drop down menu,
 	// displaying the drop down menu when hovered over
 	$(".buttonDiv").mouseenter(function() {
@@ -593,7 +608,6 @@ $(document).ready(function() {
 		$("#templateTitle").text($("#" + currentTemplate).attr("value"));
 		$("#" + value + "layoutPreview").show();
 		$("#" + value + "layoutPreview").closest(".templateDiv").show();
-		makeLabels(value);
 	});
 	
 	// mouseOver Listener for the default layout,
@@ -604,6 +618,12 @@ $(document).ready(function() {
 		})
 		.mouseleave(function() {
 			$(".LayoutNames").stop().slideUp();
+			var value = $(LayoutSelect).attr("value");
+			console.log(value);
+			$(".layouts").each(function() {
+				$(this).hide();
+			});
+			$("#" + value).show();
 	});
 	
 	// Listener for the Layouts dropdown menu,
@@ -619,7 +639,18 @@ $(document).ready(function() {
 			$(".clothESpot").each(function(){
 				fitSize(this);
 			});
+			switch (value) {
+				case "Scarveslayout3":
+				case "Tieslayout3":
+				case "Leggingslayout3":
+					$(".tileControls").show();
+					break;
+				default:
+					$(".tileControls").hide();
+					break;
+			}
 			$(".LayoutNames").slideUp();
+			LayoutSelect = this;
 		})
 		.mouseenter(function() {
 			var value = $(this).attr("value");
@@ -664,13 +695,26 @@ $(document).ready(function() {
 	// animateds the drop downs hide
 	$('.dropdown').mouseleave(function() {
 		$('.dropdown-content').stop().slideUp();
+		var value = $(ClothingSelect).attr("value");
+		console.log(value);
+		$(".layouts").each(function() {
+			$(this).hide();
+		});
+		$(".templateDiv").each(function() {
+			$(this).hide();
+		});
+		$("#templateTitle").text($("#" + value).attr("value"));
+		$('#' + value).css('display', 'block');
+		$(".clothESpot").each(function(){
+			fitSize(this);
+		});
 	});
 	
 	// Listener for the color selection menu button,
 	// displays the list of selectable colors and
 	// adds a new listener that will hide the menu
 	// when the button is clicked again
-	$(".colorSelection").click(function(evt) {
+	$(".colorSelection").click(function() {
 		$(this).stop().animate({
 			'width': '125px',
 			'height': '270px'
@@ -682,6 +726,31 @@ $(document).ready(function() {
 		$("#ExitButton2").show();
 		$(this).css("cursor", "auto");
 	});
+	
+	$(".tileControls").click(function() {
+		$(this).stop().animate({
+			'width':'125px',
+			'height':'240px',
+		}, 200);
+		$(".tileClass").show();
+		$("input[type=range]").show();
+		$("#ExitButton3").show();
+		$(this).css("cursor", "auto");
+	});
+	
+	$("#ExitButton3").click(function(evt) {
+		evt.stopPropagation();
+		$(this).hide();
+		$(".tileControls").stop().animate({
+			'width': '60px',
+			'height': '40px'
+		}, 200);
+		$("input[type=range]").hide();
+		$(".tileClass").hide();
+		$(".tileControls").css("cursor", "pointer");
+	});
+	
+	
     // Listener for the color selection menu button,
     // This hides the menu of colors and restores the
     // default listener

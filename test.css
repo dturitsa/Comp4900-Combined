@@ -129,7 +129,7 @@
 	border: none;
 	border-bottom-left-radius: 0px;
 	float:left;
-	background-color: #444444;
+	background-color: #555555;
 	color: white;
 	padding: 10px;
 	padding-left: 2px;
@@ -269,7 +269,6 @@
 	position: absolute;
 	min-width: 40px;
 	z-index: 5;
-	box-shadow: 2px 1px 8px black;
 }
 
 .dropdown, .dropdown2 {
@@ -316,7 +315,6 @@
 	height: 40px;
 	z-index: 5;
 	text-shadow: 2px 2px 8px black;
-	box-shadow: 2px 1px 8px black;
 	border-bottom: 1px solid black;
 }
 
@@ -353,6 +351,17 @@
 	margin: auto;
 	display:block;
 	position:relative;
+	margin-bottom: 5px;
+	font-weight: bold;
+	background-color: #555555;
+	border: none;
+	padding: 10px;
+	color: white;
+	text-shadow: 2px 2px 8px black;
+}
+
+.previewBut:hover, #layoutTitle:hover, #clothesButton:hover, #toolButton:hover {
+	background-color: #888888;
 	
 }
 
@@ -426,6 +435,7 @@
     text-transform: uppercase;
     width: 75px;
 }
+
 .preview {
     background: url("img/select.png") repeat scroll center center transparent;
     border-radius: 3px;
@@ -443,10 +453,10 @@
 	height: 20%;
 }
 
-
 #finalPreviewDiv {
 	display: none;
 }
+
 .templates {
 	position: relative;
 }
@@ -483,17 +493,30 @@ td {
 	padding-right: 85px;
 }
 
+#ExitButton3 {
+	position: absolute;
+	top:0px;
+	background-color: transparent;
+	border:none;
+	color: white;
+	height: 36px;
+	width: 100%;
+	padding-top: 8px;
+	padding-right: 85px;
+	left: 0px;
+
+}
+
 .colorSelection {
-	background-color:#444444;
+	background-color:#555555;
 	position:absolute;
 	width:60px;
 	height:40px;
 	float:right;
-	top: 0px;
+	top: 45px;
 	right: 0px;
 	z-index: 4;
 	text-shadow: 2px 2px 8px black;
-	box-shadow: 2px 1px 8px black;
 	color:white;
 	font-weight:bold;
 	border:none;
@@ -507,11 +530,18 @@ td {
 	margin-top: 10px;
 }
 
+input[type=range] {
+	display: none;
+}
+
+#colorTable {
+	display: none;
+}
+
 #layoutsMenu {
 	position: absolute;
 	color:white;
 	z-index: 1;
-	box-shadow: 2px 1px 8px black;
 }
 
 .LayoutNames, #layoutTitle {
@@ -537,6 +567,7 @@ td {
 	font-size: 15px;
 	z-index: 1;
 	display: block;
+	background-color:#555555;
 }
 
 .LayoutNames:nth-child(even) {
@@ -824,14 +855,30 @@ td {
 .tileControls{
 	position: absolute;
 	top: 180px;
-	right: 5px;
-	width: 100px;
-	height: 200px;
+	right: 0px;
 	z-index: 3;
-	background-color: rgba(150, 150, 150, .7);
+	padding: 10px;
+	background-color: #444444;
+	color: white;
+	text-shadow: 2px 2px 8px black;
+	box-shadow: 1px 1px 8px black;
+	font-weight: bold;
+	cursor: pointer;
+	display: none;
+}
+
+.tileClass {
+	display: none;	
 }
 
 .tileSlider {
 	height: 20px;
 	width: 30px;
+}
+
+#ControlName {
+	position: relative;
+	display: block;
+	margin:auto;
+	width: 40px;
 }
