@@ -494,7 +494,6 @@ $(document).ready(function() {
    		$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
    		$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
   		}
-  		
 	});
 
    //makes element draggable in the template div (uses % instead of px to scale when template is resized)
@@ -611,6 +610,9 @@ $(document).ready(function() {
 				$(this).hide();
 			});
 			$("#" + value).show();
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
 			$(".LayoutNames").slideUp();
 		})
 		.mouseenter(function() {
@@ -619,6 +621,9 @@ $(document).ready(function() {
 				$(this).hide();
 			});
 			$("#" + value).show();
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
 	});
 	
 	// mouseOver Listeners for the buttons in the Clothing
@@ -1111,14 +1116,23 @@ function drop(ev, canvas = ev.target) {
 			ElementsFull[4] = true;
 			break;
 	}
-	drawCopiedImage(canvas, ev); 
+	if($(canvas).hasClass('tileDropCanvas')){
+					tileImage(draggedElement, canvas);
+				} else{
+					drawCopiedImage(canvas, ev);
+				}
 	//loops through multipaste elements and draws image on all of them
 	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5", "signatureCanvas"];
 	for (var i = 0; i < multiPasteClasses.length; i++) {
 	   
-		if($(canvas).hasClass(multiPasteClasses[i])){
+		if($(this).hasClass(multiPasteClasses[i])){
 			$("." + multiPasteClasses[i]).each(function() {
-				drawCopiedImage(this, ev);
+				if($(this).hasClass('tileDropCanvas')){
+					tileImage(draggedElement, this);
+				} else{
+					drawCopiedImage(this, ev);
+				}
+
 			});
 		}  
 	}
@@ -1213,7 +1227,7 @@ function fitSize(content, wrap = $(content).parent()){
 	//sets default element size, if it hasn't already been set
 	if (typeof $(wrap).data('defaultWidthRatio') == 'undefined')
 	{
-		if($(wrap).parent().width() == 0){
+		if($(wrap).parent().css('display') == "none"){
 			$(wrap).data("defaultWidthRatio", parseFloat($(wrap).css("width")) / 100.0);
 			$(wrap).data("defaultHeightRatio", parseFloat($(wrap).css("height")) / 100.0);
 		} else{
@@ -1240,6 +1254,28 @@ function fitSize(content, wrap = $(content).parent()){
  	$(wrap).css('background', 'transparent');
 }
 
+//draw tiled image
+function tileImage(sourceImage, destCanvas){
+	var tempCanvas = document.createElement("canvas");
+	tempCanvas.width = 100; //width off pattern element
+	tempCanvas.height = ($(sourceImage).height() / $(sourceImage).width()) * tempCanvas.width;
+
+	//tiled image resolutions and aspect ratios
+	destCanvas.width = 1000; 
+	destCanvas.height = destCanvas.width * 2.48; 
+	console.log(destCanvas.width, destCanvas.height);
+
+    tCtx = tempCanvas.getContext("2d");
+    tCtx.drawImage(sourceImage, 0 , 0, tempCanvas.width, tempCanvas.height)
+
+	var ctx=destCanvas.getContext("2d");
+	var pat=ctx.createPattern(tempCanvas,"repeat");
+	ctx.rect(0,0,destCanvas.width, destCanvas.height);
+	ctx.fillStyle=pat;
+	ctx.fill();
+	$(destCanvas).parent().css('background', 'transparent');
+}
+
 //draws copied image on the canvas
 function drawCopiedImage(canvas, ev){
 	ev.preventDefault();
@@ -1250,7 +1286,7 @@ function drawCopiedImage(canvas, ev){
 	}
 	$(canvas).parent().data("used", true);
 	fitSize(draggedElement, $(canvas).parent());
-	canvas.fitSizewidth = draggedElement.width;
+	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	if($(canvas).hasClass("tieClass")) {
