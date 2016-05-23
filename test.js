@@ -283,7 +283,6 @@ $(document).ready(function() {
 	        bytes: 4
 	    };
 		mask = eliminateWhite(image, 64);
-		//console.log(mask);
 		cropOut();
 	});
 	
@@ -619,7 +618,6 @@ $(document).ready(function() {
 		.mouseleave(function() {
 			$(".LayoutNames").stop().slideUp();
 			var value = $(LayoutSelect).attr("value");
-			console.log(value);
 			$(".layouts").each(function() {
 				$(this).hide();
 			});
@@ -696,7 +694,6 @@ $(document).ready(function() {
 	$('.dropdown').mouseleave(function() {
 		$('.dropdown-content').stop().slideUp();
 		var value = $(ClothingSelect).attr("value");
-		console.log(value);
 		$(".layouts").each(function() {
 			$(this).hide();
 		});
