@@ -1304,7 +1304,7 @@ function tileImage(sourceImage, destCanvas){
 	}
 
 	var tempCanvas = document.createElement("canvas");
-	var spacing = destCanvas.width *  stampSpacing / 2;
+	var spacing = destCanvas.width *  stampSpacing / 3;
 	tempCanvas.width = destCanvas.width * stampSize; //width off pattern element
 	tempCanvas.height = ($(sourceImage).height() / $(sourceImage).width()) * tempCanvas.width;
 
@@ -1332,15 +1332,6 @@ function tileImage(sourceImage, destCanvas){
 
 		}
 	}
-
-/*
-	var ctx=destCanvas.getContext("2d");
-	var pat=ctx.createPattern(tempCanvas,"repeat");
-	ctx.rect(0,0,destCanvas.width, destCanvas.height);
-	ctx.fillStyle=pat;
-	ctx.fill();
-*/
-
 	
 }
 
