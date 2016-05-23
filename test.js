@@ -22,6 +22,12 @@ var tieLayouts = ["Customize Your Own", "One Large Image", "Few Medium Images", 
 var hatLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Side", "Few Images Around Brim"];
 var leggingLayouts = ["Customize Your Own", "One Picture Covering", "One Image Left Leg", "Repeated Image All Over"];
 
+//tiling tool settings
+var stampSize = .1 //number of stamps per row
+var stampSpacing = .1 //space between repeating stamps (0-1)
+var stampRandomness = 0  //variation in stamp positioning (0-1)
+var opacityFade = 0; //how much opacity fades as you go down the image (0-1)
+
 // JQuery Style onload initialization function
 $(document).ready(function() {
 	var item = 0;
@@ -493,8 +499,7 @@ $(document).ready(function() {
   		stop: function( event, ui ) {
    		$(this).css("width",parseInt($(this).css("width")) / ($(this).parent().width() / 100)+"%");
    		$(this).css("height",parseInt($(this).css("height")) / ($(this).parent().height() / 100)+"%");
-  		},
-  		
+  		}
 	});
 
    //makes element draggable in the template div (uses % instead of px to scale when template is resized)
@@ -611,6 +616,9 @@ $(document).ready(function() {
 				$(this).hide();
 			});
 			$("#" + value).show();
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
 			$(".LayoutNames").slideUp();
 		})
 		.mouseenter(function() {
@@ -619,6 +627,9 @@ $(document).ready(function() {
 				$(this).hide();
 			});
 			$("#" + value).show();
+			$(".clothESpot").each(function(){
+				fitSize(this);
+			});
 	});
 	
 	// mouseOver Listeners for the buttons in the Clothing
@@ -711,7 +722,11 @@ $(document).ready(function() {
 			var color = $(this).css("backgroundColor");
 			$(".templateDiv").css("backgroundColor", color);
 		});
+
+
 }); //document.ready function closing tag
+
+
 
 //create elements dynamically
 function freeDrop(ev) {
@@ -1111,17 +1126,31 @@ function drop(ev, canvas = ev.target) {
 			ElementsFull[4] = true;
 			break;
 	}
-	drawCopiedImage(canvas, ev); 
+
+	if($(canvas).hasClass('tileDropCanvas')){
+					tileImage(draggedElement, canvas);
+				} else{
+					drawCopiedImage(canvas);
+				}
 	//loops through multipaste elements and draws image on all of them
 	var multiPasteClasses = ["multiPaste1", "multiPaste2", "multiPaste3", "multiPaste4", "multiPaste5", "signatureCanvas"];
 	for (var i = 0; i < multiPasteClasses.length; i++) {
 	   
-		if($(canvas).hasClass(multiPasteClasses[i])){
+		if($(this).hasClass(multiPasteClasses[i])){
 			$("." + multiPasteClasses[i]).each(function() {
-				drawCopiedImage(this, ev);
+				if($(this).hasClass('tileDropCanvas')){
+					tileImage(draggedElement, this);
+				} else{
+					drawCopiedImage(this);
+				}
+
 			});
 		}  
 	}
+}
+
+function multipaste(canvas){
+
 }
 
 // collapse canvas and create preview
@@ -1213,7 +1242,7 @@ function fitSize(content, wrap = $(content).parent()){
 	//sets default element size, if it hasn't already been set
 	if (typeof $(wrap).data('defaultWidthRatio') == 'undefined')
 	{
-		if($(wrap).parent().width() == 0){
+		if($(wrap).parent().css('display') == "none"){
 			$(wrap).data("defaultWidthRatio", parseFloat($(wrap).css("width")) / 100.0);
 			$(wrap).data("defaultHeightRatio", parseFloat($(wrap).css("height")) / 100.0);
 		} else{
@@ -1240,9 +1269,74 @@ function fitSize(content, wrap = $(content).parent()){
  	$(wrap).css('background', 'transparent');
 }
 
+
+function tileSliderChange(){
+
+		stampSize = document.getElementById("stampSize").value / 100;
+		stampSpacing = document.getElementById("stampSpacing").value / 100;
+		stampRandomness = document.getElementById("stampRandomness").value / 100;
+		opacityFade = document.getElementById("opacityFade").value / 100;
+
+		$(".tileDropCanvas").each(function(){
+			tileImage(draggedElement, this);
+		});
+		
+	}
+
+//draw tiled image
+function tileImage(sourceImage, destCanvas){
+	
+	$(destCanvas).parent().css('background', 'transparent');
+
+	//tiled image resolutions and aspect ratios
+	if(destCanvas.id == "scarfTile"){
+		destCanvas.width = 1000; 
+		destCanvas.height = destCanvas.width * 2.48; 
+	} else if(destCanvas.id == "tieTile"){
+		destCanvas.width = 1000; 
+		destCanvas.height = destCanvas.width * 1.538; 
+	} else if(destCanvas.id == "hatTile"){
+		destCanvas.width = 2000; 
+		destCanvas.height == destCanvas.width * .546; 
+	} else if(destCanvas.id == "leggingTile"){
+		destCanvas.width = 3000; 
+		destCanvas.height = destCanvas.width * .622; 
+	}
+
+	var tempCanvas = document.createElement("canvas");
+	var spacing = destCanvas.width *  stampSpacing / 3;
+	tempCanvas.width = destCanvas.width * stampSize; //width off pattern element
+	tempCanvas.height = ($(sourceImage).height() / $(sourceImage).width()) * tempCanvas.width;
+
+	tempCanvas.width+= spacing;
+	tempCanvas.height+= spacing;
+
+    tCtx = tempCanvas.getContext("2d");
+    
+
+    var ctx=destCanvas.getContext("2d");
+    ctx.clearRect(0,0,destCanvas.width, destCanvas.height);
+
+    for (y = 0; y < destCanvas.height; y+= tempCanvas.height) { 
+    	for (x = 0; x < destCanvas.width; x+= tempCanvas.width) { 
+    		tCtx.clearRect(0,0, tempCanvas.width, tempCanvas.height);
+    		
+    		var marginX = Math.random() * stampRandomness *  spacing;
+    		var marginY = Math.random() * stampRandomness *  spacing;
+    		if(y > 0){
+    			tCtx.globalAlpha = 1 - ((y + marginY) / destCanvas.height) * opacityFade;
+    		}
+
+    		tCtx.drawImage(sourceImage, marginX, marginY, tempCanvas.width - spacing, tempCanvas.height - spacing)
+    		ctx.drawImage(tempCanvas, x, y, tempCanvas.width, tempCanvas.height);
+
+		}
+	}
+	
+}
+
 //draws copied image on the canvas
-function drawCopiedImage(canvas, ev){
-	ev.preventDefault();
+function drawCopiedImage(canvas){
 	
 	//If the target and source are the same canvas, do nothing
 	if(canvas.id == draggedElement.id) {
@@ -1250,7 +1344,7 @@ function drawCopiedImage(canvas, ev){
 	}
 	$(canvas).parent().data("used", true);
 	fitSize(draggedElement, $(canvas).parent());
-	canvas.fitSizewidth = draggedElement.width;
+	canvas.width = draggedElement.width;
 	canvas.height = draggedElement.height;
 	var ctx = canvas.getContext("2d");
 	if($(canvas).hasClass("tieClass")) {
