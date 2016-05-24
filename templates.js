@@ -1,52 +1,47 @@
 var scarf, tie, hat, leggings;
 var activeTemplate;
 var productId
-
-$( document ).ready(function() {
-    jQuery.getJSON('/products/test-product2.js', function(product) {
-        productId = product.variants[0].id;
-	} );
-
+//        productId = product.variants[0].id;
+  $( document ).ready(function() {
+    //getVarients();
 
     scarf = new Template();
     scarf.image = $("#template2Background").find('img')[0]
     scarf.width = 1000;
-    scarf.height = parseInt((scarf.width / scarf.image.naturalWidth) * scarf.image.naturalHeight);
-    scarf.variantId = 123;
+    scarf.variantId = 20310089030;
     scarf.templateDiv = $("#template2")[0];
     scarf.handle = "scarf";
+    scarf.options = "test Options"
 
    	tie = new Template();
     tie.image = $("#template3Background").find('img')[0]
     tie.width = 1000;
-    tie.height = parseInt((tie.width / tie.image.naturalWidth) * tie.image.naturalHeight);
     scarf.templateDiv = $("#template3")[0];
-    tie.variantId = 123;
+    tie.variantId = 20310094662;
     tie.handle = "tie";
 
 
     hat = new Template();
     hat.image = $("#template4Background").find('img')[0]
     hat.width = 2000;
-    hat.height = parseInt((hat.width / hat.image.naturalWidth) * hat.image.naturalHeight);
     scarf.templateDiv = $("#template4")[0];
-    hat.variantId = 123;
+    hat.variantId = 20310421190;
     hat.handle = "hat";
 
 
     leggings = new Template();
     leggings.image = $("#template5Background").find('img')[0]
     leggings.width = 2000;
-    leggings.height = parseInt((leggings.width / leggings.image.naturalWidth) * leggings.image.naturalHeight);
     scarf.templateDiv = $("#template5")[0];
-    leggings.variantId = 123;
+    //leggings.variantId = 20310428102; //mens
+    leggings.variantId = 20310426246; //womens
     leggings.handle = "leggings";
  	
  	    // Listener for the checkoutButton gets the current template and layout and call the checkout function
     $(".checkoutBut").click(function(){
 		var layout;
 		var ElementsDiv;
-		$(this).siblings(".templateDiv").each(function() {
+		$(".templateDiv").each(function() {
 			if ($(this).is(":visible")) {
 				ElementsDiv = $(this).children(".templateBackground");
 			}	
@@ -60,6 +55,27 @@ $( document ).ready(function() {
     });
 });
 
+
+function getVarients(){
+
+  jQuery.getJSON('/products/Customized-Scarf.js', function(product) {
+        console.log(product.variants);
+  });
+  jQuery.getJSON('/products/Customized-Tie.js', function(product) {
+        console.log(product.variants);
+  });
+  jQuery.getJSON('/products/Customized-winter-hats-for-babies-kids-and-adults.js', function(product) {
+        console.log(product.variants);
+  });
+  jQuery.getJSON('/products/Customized-Mens-Leggings.js', function(product) {
+        console.log(product.variants);
+  });
+
+   jQuery.getJSON('/products/Customized-Womens-Leggings.js', function(product) {
+    console.log(product.variants);
+  });
+}
+
 function checkout(templateDiv, layout){
 		if($(templateDiv).attr('id') == 'template2Background'){
 			activeTemplate = scarf;
@@ -70,16 +86,10 @@ function checkout(templateDiv, layout){
 		} else if($(templateDiv).attr('id') == 'template5Background'){
 			activeTemplate = leggings;
 		}
-		
-		var canvas = collapseLayout(templateDiv, layout);
-  /*
-    var img = $("#template2Background").find('img')[0];
-    img.crossOrigin = "Anonymous";
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, 5000, 500);
-    */
-		sendToCart(canvas);
+		console.log(activeTemplate.handle);
+    var templateCanvas = collapseLayout(templateDiv, layout);
+    var uploadedImage = $('#uploadedImage')[0];
+		sendToCart(templateCanvas, uploadedImage);
 }
 
 
@@ -94,6 +104,9 @@ function collapseLayout(template, layout){
 	console.log(canvas.width);
 	console.log(canvas.height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = template.parent().css('background-color');
+  ctx.fillRect(0, 0, 100, 100);
+  console.log(layout);
 	$(layout).find(".wrapper").each(function(){
 		var width = $(this).width() * (canvas.width / template.width());
 		var height = $(this).height() * (canvas.height / template.height());
@@ -116,19 +129,22 @@ function collapseLayout(template, layout){
 	return canvas;
 }
 
-function sendToCart(canvas){
+function sendToCart(canvas1, canvas2){
   //var data = new Image();
   //data.crossOrigin = 'Anonymous';
-  var data = canvas.toDataURL("image/png");
+  var data = canvas1.toDataURL("image/png");
+  var templateBlob = dataURItoBlob(data);
 
+  data = canvas2.toDataURL("image/png");
+  var origninalBlob = dataURItoBlob(data);
 
- //localStorage.setItem( "savedImageData", canvas.toDataURL("image/png") );
-
-	var blob = dataURItoBlob(data);
 
   var fd = new FormData();
-	fd.append('id', productId);
-	fd.append('properties[interceptCanvas]', blob, "intercepted_file.png");
+	fd.append('id', activeTemplate.variantId);
+
+  fd.append('properties[options]', activeTemplate.options);
+	fd.append('properties[templateCanvas]', templateBlob, "template.png");
+  fd.append('properties[originalImage]', origninalBlob, "uploadedImage.png");
             
 	$.ajax({
     	type: 'POST',
@@ -142,7 +158,6 @@ function sendToCart(canvas){
 	});
 
 }
-
         //converts dataURI to blob
         function dataURItoBlob(dataURI) {
     		// convert base64/URLEncoded data component to raw binary data held in a string
@@ -188,7 +203,7 @@ var Template = function () {
   	this.handle;
 
     //any additional options for the order, e.g size
-    this.options;
+    this.options = "";
 };
 
 
