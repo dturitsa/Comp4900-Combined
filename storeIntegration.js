@@ -1,11 +1,7 @@
 
         $( document ).ready(function() {
-          var c=document.getElementById("testCanvas");
-			var ctx=c.getContext("2d");
-          ctx.fillRect(0,0,300,300);
-          ctx.fillStyle="#FF0000";
-          ctx.fillRect(50,50,200,200);
-          
+
+
           var productId;
           jQuery.getJSON('/products/test-product2.js', function(product) {
            // console.log('title:' + product.title + " Id:" + product.id);
@@ -16,7 +12,7 @@
           
           //makeNewOrder(productId);
           
-          $("#testBut").click(function() {
+          $("#checkout").click(function() {
             console.log("test Clicked: " + productId);
 				makeNewOrder(productId)
           });
@@ -30,7 +26,7 @@
           
 		});
           function makeNewOrder(productId){
-            var canvas = $("#testCanvas")[0];
+            var canvas = $("#uploadedImage")[0];
             var data = canvas.toDataURL("image/png");
 			var blob = dataURItoBlob(data);
             /*
@@ -108,8 +104,7 @@
 
     		return new Blob([ia], {type:mimeString});
 		}
-/*
-  <canvas id="testCanvas"  width="300" height="300"></canvas>
-	<button id="testBut">test</button>button
 
-     */  
+
+
+

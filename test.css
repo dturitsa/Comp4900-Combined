@@ -365,6 +365,19 @@
 	
 }
 
+.checkoutBut {
+	margin: auto;
+	display:block;
+	position:relative;
+	margin-bottom: 5px;
+	font-weight: bold;
+	background-color: #555555;
+	border: none;
+	padding: 10px;
+	color: white;
+	text-shadow: 2px 2px 8px black;
+}
+
 .shirtOverlay { 
 	position:relative;
 	z-index: 2;
