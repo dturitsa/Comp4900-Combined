@@ -733,6 +733,7 @@ $(document).ready(function() {
 		});
 		$("#templateTitle").text($("#" + value).attr("value"));
 		$('#' + value).css('display', 'block');
+		$("#" + $(LayoutSelect).attr("value")).show();
 		$(".clothESpot").each(function(){
 			fitSize(this);
 		});
@@ -848,13 +849,24 @@ $(document).ready(function() {
 //create elements dynamically
 function freeDrop(ev) {
 	ev.preventDefault();
-	
+//shopify version
+	/*
 	var newElement = $(
+		'<div class="draggable resizable wrapper dynamicElement">\
+			<canvas class="clothESpot dragDest"></canvas>\
+			<img src="https://cdn.shopify.com/s/files/1/1307/6755/files/close_icon.png?2469025223774132373" class="closeButton"/>\	
+		</div>');
+*/
+//local
+		var newElement = $(
 		'<div class="draggable resizable wrapper dynamicElement">\
 			<canvas class="clothESpot dragDest"></canvas>\
 			<img src="img/close_icon.png" class="closeButton"/>\
 		</div>');
 	
+
+
+
 	// checks if there isn't already another element in the drop position
 	if(!$(ev.target).hasClass("clothESpot")){
 		$(ev.target).append(newElement);
