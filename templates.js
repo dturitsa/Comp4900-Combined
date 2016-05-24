@@ -186,6 +186,9 @@ var Template = function () {
   	//shopify's handle for the product this template is associated with
   	//by default this is the product name with spaces replaced with -
   	this.handle;
+
+    //any additional options for the order, e.g size
+    this.options;
 };
 
 
