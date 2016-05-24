@@ -1215,9 +1215,6 @@ function drop(ev, canvas = ev.target) {
 	}
 }
 
-function multipaste(canvas){
-
-}
 
 // collapse canvas and create preview
 function previewClothing(template, curLayout, previewCanvas = $("#clothingPreviewCanvas")[0]){
