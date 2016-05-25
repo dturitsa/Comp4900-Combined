@@ -620,6 +620,22 @@ td {
 	display: none;
 }
 
+#sizeText {
+	background-color:#555555;
+	color:white;
+	font-weight:bold;
+	text-shadow: 2px 2px 8px black;
+	position:absolute;
+	width:80px;
+	height:40px;
+	float:right;
+	top: 4px;
+	right: 60px;
+	display: none;
+	padding-top:10px;
+	text-align: center;
+}
+
 .hatSize {
 	background-color:#555555;
 	position:absolute;

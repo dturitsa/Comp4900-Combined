@@ -591,18 +591,19 @@ $(document).ready(function() {
 		
 		if(currentTemplate == "template4") {
 			$(".hatSize").css('display', 'block');
-		} else {
-			$(".hatSize").css('display', 'none');
-		}
-
-		if(currentTemplate == "template5") {
+			$("#sizeText").css('display', 'block');
+		} else if(currentTemplate == "template5") {
 			$(".legSize").css('display', 'block');
+			$("#sizeText").css('display', 'block');
 		} else {
-			$(".legSize").css('display', 'none');
+			$("legSize").css('display', 'none');
+			$("#sizeText").css('display', 'none');
 		}
 
 		$(".dropdown-content").slideUp();
 		makeLabels(value);
+		$("#sizeText").text("Select a");
+		$("#sizeText").css({ paddingTop: 10});
     });
 
     $('.legBtn, .legDiv').click(function(evt){
@@ -610,7 +611,10 @@ $(document).ready(function() {
 		var value;
 
 		value = $(this).attr("value");
-		leggings.option = value;
+		leggings.options = value;
+		$("#sizeText").text(value);
+		$("#sizeText").css({ paddingTop: 0});
+		//console.log(leggings.options);
 		$('.legSize-content').stop().slideUp();
     });
 
@@ -619,7 +623,10 @@ $(document).ready(function() {
 		var value;
 
 		value = $(this).attr("value");
-		hat.option = value;
+		hat.options = value;
+		//console.log(hat.options);
+		$("#sizeText").text(value);
+		$("#sizeText").css({ paddingTop: 0});
 		$('.hatSize-content').stop().slideUp();
     });
 	
