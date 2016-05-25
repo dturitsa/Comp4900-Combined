@@ -278,6 +278,20 @@
 	z-index: 5;
 }
 
+.legSize-content {
+	display:none;
+	position: absolute;
+	min-width: 40px;
+	z-index: 5;
+}
+
+.hatSize-content {
+	display:none;
+	position: absolute;
+	min-width: 40px;
+	z-index: 5;
+}
+
 .dropdown, .dropdown2, .previewBut, .checkoutBut {
 	position:relative;
 	display: inline-block;
@@ -294,6 +308,58 @@
 	border: 1px solid black;
 	border-top: none;
 	cursor: pointer;
+}
+
+.legDiv {
+	z-index: 5;
+	background-color: #555555;
+	padding:5px 12px;
+	border: 1px solid black;
+	border-top: none;
+	cursor: pointer;
+	position: relative;
+	right: 150px;
+	top: -40px;
+	width:150px;
+}
+
+.legDiv:nth-child(even) {
+	background-color: #555555;
+}
+
+.legDiv:nth-child(even) {
+	background-color: #888888;
+}
+
+.legBtn {
+	background-color: transparent;
+	border: none;
+}
+
+.hatDiv {
+	z-index: 5;
+	background-color: #555555;
+	padding:5px 12px;
+	border: 1px solid black;
+	border-top: none;
+	cursor: pointer;
+	position: relative;
+	right: 150px;
+	top: -40px;
+	width:150px;
+}
+
+.hatDiv:nth-child(even) {
+	background-color: #555555;
+}
+
+.hatDiv:nth-child(even) {
+	background-color: #888888;
+}
+
+.hatBtn {
+	background-color: transparent;
+	border: none;
 }
 
 .templateButtons {
@@ -526,6 +592,56 @@ td {
 	font-weight:bold;
 	border:none;
 	cursor:pointer;
+}
+
+.legSize {
+	background-color:#555555;
+	position:absolute;
+	width:60px;
+	height:40px;
+	float:right;
+	top: 4px;
+	right: 0px;
+	z-index: 4;
+	text-shadow: 2px 2px 8px black;
+	color:white;
+	font-weight:bold;
+	border:none;
+	cursor:pointer;
+	display: none;
+}
+
+#sizeText {
+	background-color:#555555;
+	color:white;
+	font-weight:bold;
+	text-shadow: 2px 2px 8px black;
+	position:absolute;
+	width:80px;
+	height:40px;
+	float:right;
+	top: 4px;
+	right: 60px;
+	display: none;
+	padding-top:10px;
+	text-align: center;
+}
+
+.hatSize {
+	background-color:#555555;
+	position:absolute;
+	width:60px;
+	height:40px;
+	float:right;
+	top: 4px;
+	right: 0px;
+	z-index: 4;
+	text-shadow: 2px 2px 8px black;
+	color:white;
+	font-weight:bold;
+	border:none;
+	cursor:pointer;
+	display: none;
 }
 
 #CName {

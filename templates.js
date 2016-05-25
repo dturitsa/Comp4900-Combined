@@ -149,7 +149,7 @@ function sendToCart(canvas1, canvas2){
 
   var fd = new FormData();
 	fd.append('id', activeTemplate.variantId);
-  activeTemplate.options = "test";
+ // activeTemplate.options = "test";
   fd.append('properties[OrderOptions]', activeTemplate.options);
 	fd.append('properties[templateCanvas]', templateBlob, "template.png");
   fd.append('properties[originalImage]', origninalBlob, "uploadedImage.png");

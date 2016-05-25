@@ -588,8 +588,46 @@ $(document).ready(function() {
 			popup('popUpDiv');
 			tieMessage = !tieMessage;
 		}
+		
+		if(currentTemplate == "template4") {
+			$(".hatSize").css('display', 'block');
+			$("#sizeText").css('display', 'block');
+		} else if(currentTemplate == "template5") {
+			$(".legSize").css('display', 'block');
+			$("#sizeText").css('display', 'block');
+		} else {
+			$("legSize").css('display', 'none');
+			$("#sizeText").css('display', 'none');
+		}
+
 		$(".dropdown-content").slideUp();
 		makeLabels(value);
+		$("#sizeText").text("Select a");
+		$("#sizeText").css({ paddingTop: 10});
+    });
+
+    $('.legBtn, .legDiv').click(function(evt){
+    	evt.stopPropagation();
+		var value;
+
+		value = $(this).attr("value");
+		leggings.options = value;
+		$("#sizeText").text(value);
+		$("#sizeText").css({ paddingTop: 0});
+		//console.log(leggings.options);
+		$('.legSize-content').stop().slideUp();
+    });
+
+    $('.hatBtn, .hatDiv').click(function(evt){
+    	evt.stopPropagation();
+		var value;
+
+		value = $(this).attr("value");
+		hat.options = value;
+		//console.log(hat.options);
+		$("#sizeText").text(value);
+		$("#sizeText").css({ paddingTop: 0});
+		$('.hatSize-content').stop().slideUp();
     });
 	
 	// mouseOver listner for the Clothing drop down menu,
@@ -611,7 +649,7 @@ $(document).ready(function() {
 	
 	// mouseOver Listener for the default layout,
 	// displays the drop down when moused over and hides otherwise
-	$("#layoutsMenu")
+	$("#layoutsTitle")
 		.mouseenter(function() {
 			$(".LayoutNames").stop().slideDown();
 		})
@@ -664,14 +702,14 @@ $(document).ready(function() {
 	// mouseOver Listeners for the buttons in the Clothing
 	// selection drop down, Applys CSS styling to each of the
 	// elements based on even/odd position when moused over
-	$('.buttonDiv:odd, .LayoutNames:odd')
+	$('.buttonDiv:odd, .LayoutNames:odd, .legDiv:odd, .hatDiv:odd')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
 	.mouseleave(function() {
 		$(this).css({"backgroundColor":"#888888"})
 	});
-	$('.buttonDiv:even, .LayoutNames:even')
+	$('.buttonDiv:even, .LayoutNames:even, .legDiv:even, .hatDiv:even')
 	.mouseenter(function() {
 		$(this).css({"backgroundColor":"#444444"})
 	})
@@ -706,6 +744,26 @@ $(document).ready(function() {
 		$(".clothESpot").each(function(){
 			fitSize(this);
 		});
+	});
+
+	$(".legSize, .legSize-content").mouseenter(function() {
+		$('.legSize-content').stop().slideDown();
+	});
+	$('.legSize, .legSize-content').click(function() {
+		$('.legSize-content').stop().slideUp();
+	});
+	$('.legSize').mouseleave(function() {
+		$('.legSize-content').stop().slideUp();
+	});
+
+	$(".hatSize, .hatSize-content").mouseenter(function() {
+		$('.hatSize-content').stop().slideDown();
+	});
+	$('.hatSize, .hatSize-content').click(function() {
+		$('.hatSize-content').stop().slideUp();
+	});
+	$('.hatSize').mouseleave(function() {
+		$('.hatSize-content').stop().slideUp();
 	});
 	
 	// Listener for the color selection menu button,

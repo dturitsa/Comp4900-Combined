@@ -12,7 +12,8 @@
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript" src="test.js"></script>
 	<script type="text/javascript" src="templates.js"></script>
-	<link href='https://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'> <!--google font-->
+	<link href='https://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'> 
+	<link href='https://fonts.googleapis.com/css?family=Quicksand|Amatic+SC' rel='stylesheet' type='text/css'><!--google font-->
 	<link rel="stylesheet" type="text/css" href="test.css">
 </head>
 <body>
@@ -148,8 +149,8 @@
 					<input type="text" id="signature" placeholder="Signature">
 					<select id="fontSelect">
 						<option value="Gochi Hand">Gochi Hand</option>
-						<option value="Arial">Arial</option>
-      					<option value="Verdana">Verdana</option>
+						<option value="Quicksand">Quicksand</option>
+      					<option value="Amatic SC">Amatic SC</option>
 					</select>
 
 					<div id="fontStyleButtons">
@@ -413,6 +414,86 @@
 							</tr>
 						</table>
 					</div>
+
+					<!-- new drop downs -->
+					<div id="sizeText">Select a</div>
+					<div class="legSize">
+						<button id="legDropdown" class="btnFocus templateHover">Size</button>
+						<div id="myDropdown" class="legSize-content" style="z-index: 5;">
+							<div class="legDiv" width="80px" height="20px" value="Woman Small">
+								<button class="legBtn" value="Woman Small">
+									Woman's Small (Waist 26")
+								</button>
+							</div>
+							<div class="legDiv" width="80px" height="20px" value="Woman Medium">
+								<button class="legBtn" value="Woman Medium">
+									Woman's Medium (Waist 28")
+								</button>
+							</div>
+							<div class="legDiv" width="80px" height="20px" value="Woman Large">
+								<button class="legBtn" value="Woman Large">
+									Woman's Large (Waist 31")
+								</button>
+							</div>
+							<div class="legDiv" width="80px" height="20px" value="Man Small">
+								<button class="legBtn" value="Man Small">
+									Man's Small (Waist 28")
+								</button>
+							</div>
+							<div class="legDiv" width="80px" height="20px" value="Man Medium">
+								<button class="legBtn" value="Man Medium">
+									Man's Medium (Waist 31")
+								</button>
+							</div>
+							<div class="legDiv" width="80px" height="20px" value="Man Large">
+								<button class="legBtn" value="Man Large">
+									Man's Large (Waist 33")
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="hatSize">
+						<button id="hatDropdown" class="btnFocus templateHover">Size</button>
+						<div id="myDropdown" class="hatSize-content" style="z-index: 5;">
+							<div class="hatDiv" width="80px" height="20px" value="Baby Small">
+								<button class="hatBtn" value="Baby Small">
+									Baby/Toddler Small
+								</button>
+							</div>
+							<div class="hatDiv" width="80px" height="20px" value="Baby Large">
+								<button class="hatBtn" value="Baby Large">
+									Baby/Toddler Large
+								</button>
+							</div>
+							<div class="hatDiv" width="80px" height="20px" value="Youth Small">
+								<button class="hatBtn" value="Youth Small">
+									Youth Small
+								</button>
+							</div>
+							<div class="hatDiv" width="80px" height="20px" value="Youth Large">
+								<button class="hatBtn" value="Youth Large">
+									Youth Large
+								</button>
+							</div>
+							<div class="hatDiv" width="80px" height="20px" value="Adult Small">
+								<button class="hatBtn" value="Adult Small">
+									Adult Small
+								</button>
+							</div>
+							<div class="hatDiv" width="80px" height="20px" value="Adult Medium">
+								<button class="hatBtn" value="Adult Medium">
+									Adult Medium
+								</button>
+							</div>
+							<div class="hatDiv" width="80px" height="20px" value="Adult Large">
+								<button class="hatBtn" value="Adult Large">
+									Adult Large
+								</button>
+							</div>
+						</div>
+					</div>
+
+
 				</div>
 			</div>
 			<div id="centerBeam">
