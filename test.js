@@ -112,7 +112,7 @@ $(document).ready(function() {
 	// Listener for the hide button on the toolbar for the main canvas
 	$("#hideToolButton").click(function() {
 		toolFlag = false;
-		$('#tool2, #tool1, #tool4').css({"backgroundColor":"black"});
+		$('#tool2, #tool1, #tool4').css({"backgroundColor":"#067341"});
 		$("#toolBar").slideUp( function() {
 			$("#toolButton").fadeIn();
 			$("#content").stop().animate({paddingLeft: 0},
@@ -181,9 +181,9 @@ $(document).ready(function() {
 			.promise().done(function() {
 				$('#cropOut2').slideUp();
 		});
-		$('#tool2').css({"backgroundColor":"black"});
-		$('#tool4').css({"backgroundColor":"black"});
-		$('#eraserButton').css({"backgroundColor":"black"});
+		$('#tool2').css({"backgroundColor":"#067341"});
+		$('#tool4').css({"backgroundColor":"#067341"});
+		$('#eraserButton').css({"backgroundColor":"#067341"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -210,9 +210,9 @@ $(document).ready(function() {
 			.promise().done(function() {
 				$('#cropOut2').slideUp();
 		});
-		$('#tool1').css({"backgroundColor":"black"});
-		$('#tool4').css({"backgroundColor":"black"});
-		$('#eraserButton').css({"backgroundColor":"black"});
+		$('#tool1').css({"backgroundColor":"#067341"});
+		$('#tool4').css({"backgroundColor":"#067341"});
+		$('#eraserButton').css({"backgroundColor":"#067341"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -241,10 +241,10 @@ $(document).ready(function() {
 			.promise().done(function() {
 				$('#cropOut2').slideUp();
 		});
-		$('#tool1').css({"backgroundColor":"black"});
-		$('#tool4').css({"backgroundColor":"black"});
-		$('#tool2').css({"backgroundColor":"black"});
-		$('#eraserButton').css({"backgroundColor":"black"});
+		$('#tool1').css({"backgroundColor":"#067341"});
+		$('#tool4').css({"backgroundColor":"#067341"});
+		$('#tool2').css({"backgroundColor":"#067341"});
+		$('#eraserButton').css({"backgroundColor":"#067341"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: ''});
 		$('#brightnessSlider').css({display: ''});
@@ -267,11 +267,11 @@ $(document).ready(function() {
 		wandFlag = false;
 		erasing = false;
 		$('#uploadedImage').imgAreaSelect({remove:true});
-		$('#tool1').css({"backgroundColor":"black"});
-		$('#tool2').css({"backgroundColor":"black"});
-		$('#tool3').css({"backgroundColor":"black"});
-		$('#tool4').css({"backgroundColor":"black"});
-		$('#eraserButton').css({"backgroundColor":"black"});
+		$('#tool1').css({"backgroundColor":"#067341"});
+		$('#tool2').css({"backgroundColor":"#067341"});
+		$('#tool3').css({"backgroundColor":"#067341"});
+		$('#tool4').css({"backgroundColor":"#067341"});
+		$('#eraserButton').css({"backgroundColor":"#067341"});
 		$('#cropOut').css({display: 'none'});
 		$('#thresSlider').css({display: 'none'});
 		$('#cropOut2').css({display: 'none'});
@@ -316,11 +316,11 @@ $(document).ready(function() {
 			.promise().done(function() {
 				$('#thresSlider2').slideDown();
 		});
-		$('#tool1').css({"backgroundColor":"black"});
-		$('#tool3').css({"backgroundColor":"black"});
-		$('#tool2').css({"backgroundColor":"black"});
-		$('#tool5').css({"backgroundColor":"black"});
-		$('#eraserButton').css({"backgroundColor":"black"});
+		$('#tool1').css({"backgroundColor":"#067341"});
+		$('#tool3').css({"backgroundColor":"#067341"});
+		$('#tool2').css({"backgroundColor":"#067341"});
+		$('#tool5').css({"backgroundColor":"#067341"});
+		$('#eraserButton').css({"backgroundColor":"#067341"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#brightLabel').css({display: 'none'});
 		$('#brightnessSlider').css({display: 'none'});
@@ -347,11 +347,11 @@ $(document).ready(function() {
 		colorElimFlag = false;
 		wandFlag = false;
 		erasing = true;
-		$('#tool1').css({"backgroundColor":"black"});
-		$('#tool3').css({"backgroundColor":"black"});
-		$('#tool2').css({"backgroundColor":"black"});
-		$('#tool4').css({"backgroundColor":"black"});
-		$('#tool5').css({"backgroundColor":"black"});
+		$('#tool1').css({"backgroundColor":"#067341"});
+		$('#tool3').css({"backgroundColor":"#067341"});
+		$('#tool2').css({"backgroundColor":"#067341"});
+		$('#tool4').css({"backgroundColor":"#067341"});
+		$('#tool5').css({"backgroundColor":"#067341"});
 		$(this).css({"backgroundColor":"#444444"});
 		$('#uploadedImage').imgAreaSelect({remove:true});
 		$("#previewCanvas").attr("draggable", "false");
@@ -378,9 +378,9 @@ $(document).ready(function() {
 		$('#thresSlider4').css({display: 'none'});
 		$('#thresSlider3').css({display: 'none'});
 		$('#eraseSlider').css({display: 'inline'});
-		$('#wand').css({"backgroundColor":"black","bottom": "0px"});
-		$('#color').css({"backgroundColor":"black","bottom": "0px"});
-		$('#colorElim').css({"backgroundColor":"black","bottom": "0px"});
+		$('#wand').css({"backgroundColor":"#067341","bottom": "0px"});
+		$('#color').css({"backgroundColor":"#067341","bottom": "0px"});
+		$('#colorElim').css({"backgroundColor":"#067341","bottom": "0px"});
 		$(this).css({"backgroundColor":"#444444", "bottom": "0px"});
 		$('#editRedSlider').css({display: 'none'});
 		$('#editGreenSlider').css({display: 'none'});
@@ -403,11 +403,11 @@ $(document).ready(function() {
 		$('#thresSlider4').css({display: 'none'});
 		$('#thresSlider3').css({display: 'none'});
 		$('#eraseSlider').css({display: 'none'});
-		$('#wand').css({"backgroundColor":"black", "position":"relative",
+		$('#wand').css({"backgroundColor":"#067341", "position":"relative",
 	"bottom": "14px"});
-		$('#colorElim').css({"backgroundColor":"black", "position":"relative",
+		$('#colorElim').css({"backgroundColor":"#067341", "position":"relative",
 	"bottom": "14px"});
-		$('#erase').css({"backgroundColor":"black", "position":"relative",
+		$('#erase').css({"backgroundColor":"#067341", "position":"relative",
 	"bottom": "14px"});
 		$(this).css({"backgroundColor":"#444444", "position":"relative",
 	"bottom": "14px"});
@@ -429,9 +429,9 @@ $(document).ready(function() {
 		$('#editCrop').css({display: ''});
 		$('#thresSlider4').css({display: 'none'});
 		$('#editCrop2').css({display: 'none'});
-		$('#erase').css({"backgroundColor":"black","bottom": "0px"});
-		$('#colorElim').css({"backgroundColor":"black","bottom": "0px"});
-		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$('#erase').css({"backgroundColor":"#067341","bottom": "0px"});
+		$('#colorElim').css({"backgroundColor":"#067341","bottom": "0px"});
+		$('#color').css({"backgroundColor":"#067341","bottom": "0px"});
 		$(this).css({"backgroundColor":"#444444","bottom": "0px"});
 		$('#thresSlider3').css({display: 'inline'});
 		$('#eraseSlider').css({display: 'none'});
@@ -453,9 +453,9 @@ $(document).ready(function() {
 		$('#editCrop2').css({display: ''});
 		$('#thresSlider3').css({display: 'none'});
 		$('#editCrop').css({display: 'none'});
-		$('#wand').css({"backgroundColor":"black","bottom": "0px"});
-		$('#erase').css({"backgroundColor":"black","bottom": "0px"});
-		$('#color').css({"backgroundColor":"black","bottom": "0px"});
+		$('#wand').css({"backgroundColor":"#067341","bottom": "0px"});
+		$('#erase').css({"backgroundColor":"#067341","bottom": "0px"});
+		$('#color').css({"backgroundColor":"#067341","bottom": "0px"});
 		$(this).css({"backgroundColor":"#444444","bottom": "0px"});
 		$('#thresSlider4').css({display: 'inline'});
 		$('#eraseSlider').css({display: 'none'});
@@ -541,7 +541,7 @@ $(document).ready(function() {
     	$( "#finalPreviewDiv" ).dialog();
 		var layout;
 		var ElementsDiv;
-		$(this).siblings(".templateDiv").each(function() {
+		$(".templateDiv").each(function() {
 			if ($(this).is(":visible")) {
 				ElementsDiv = $(this).children(".templateBackground");
 			}	
@@ -799,21 +799,20 @@ $(document).ready(function() {
 function freeDrop(ev) {
 	ev.preventDefault();
 //shopify version
-	/*
 	var newElement = $(
 		'<div class="draggable resizable wrapper dynamicElement">\
 			<canvas class="clothESpot dragDest"></canvas>\
-			<img src="https://cdn.shopify.com/s/files/1/1307/6755/files/close_icon.png?2469025223774132373" class="closeButton"/>\	
+			<img src="https://cdn.shopify.com/s/files/1/1307/6755/files/close_icon.png?2469025223774132373" class="closeButton"/>\
 		</div>');
-*/
-//local
+
+//local version
+/*
 		var newElement = $(
 		'<div class="draggable resizable wrapper dynamicElement">\
 			<canvas class="clothESpot dragDest"></canvas>\
 			<img src="img/close_icon.png" class="closeButton"/>\
 		</div>');
-	
-
+	*/
 
 
 	// checks if there isn't already another element in the drop position

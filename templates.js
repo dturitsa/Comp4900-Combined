@@ -104,12 +104,12 @@ function collapseLayout(template, layout){
 	console.log(canvas.width);
 	console.log(canvas.height);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   ctx.fillStyle = template.parent().css('background-color');
-  ctx.fillRect(0, 0, 100, 100);
-  console.log(layout);
+  ctx.fillRect(5, 5, canvas.width, canvas.height);
 	$(layout).find(".wrapper").each(function(){
 		var width = $(this).width() * (canvas.width / template.width());
-		var height = $(this).height() * (canvas.height / template.height());
+    var height = $(this).height() * (canvas.height / template.height());
 		var leftOffset = $(this).position().left * (canvas.width / template.width());
 		var topOffset = $(this).position().top * (canvas.height / template.height());
 
@@ -125,7 +125,15 @@ function collapseLayout(template, layout){
     		ctx.drawImage($(this).find("canvas")[0], leftOffset, topOffset, width, height);
     	}
 	});
+
 	ctx.drawImage($(template).find('img')[0], 0, 0, canvas.width, canvas.height);
+
+ 
+  /*
+  ctx.fillStyle = "black";
+  ctx.rect(5,5,100,100)
+  ctx.stroke();
+  */
 	return canvas;
 }
 
@@ -141,8 +149,8 @@ function sendToCart(canvas1, canvas2){
 
   var fd = new FormData();
 	fd.append('id', activeTemplate.variantId);
-
-  fd.append('properties[options]', activeTemplate.options);
+  activeTemplate.options = "test";
+  fd.append('properties[OrderOptions]', activeTemplate.options);
 	fd.append('properties[templateCanvas]', templateBlob, "template.png");
   fd.append('properties[originalImage]', origninalBlob, "uploadedImage.png");
             
@@ -154,8 +162,10 @@ function sendToCart(canvas1, canvas2){
     	contentType: false,
          mimeType: "multipart/form-data"
 	}).done(function(data) {
-       		console.log(data);
+       	//	console.log(data);
+        window.location="/cart";
 	});
+
 
 }
         //converts dataURI to blob
